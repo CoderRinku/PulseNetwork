@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseNetwork - Online Blood Donation & Blood Bank Finder</title>
+    <meta name="description" content="A real-time responsive web application to find nearest blood donors, manage blood inventories, predict demand, and chat securely.">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Leaflet.js Mapping Library CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo" id="logo-home">
+                <div class="logo-icon">🩸</div>
+                <span>PulseNetwork</span>
+            </a>
+            
+            <ul class="nav-links" id="navigation-bar">
+                <li><a class="nav-link active" onclick="switchView('home-view')">Home</a></li>
+                <li><a class="nav-link" onclick="switchView('inventory-view')">Blood Stock</a></li>
+                <li><a class="nav-link" onclick="switchView('requests-view')">Emergency Feed</a></li>
+                <li class="auth-required" style="display: none;"><a class="nav-link" onclick="switchView('chat-view')">Messages <span class="badge badge-danger" id="nav-chat-badge" style="display: none;">0</span></a></li>
+                <li class="auth-required" style="display: none;"><a class="nav-link" id="dashboard-nav" onclick="navigateToDashboard()">Dashboard</a></li>
+            </ul>
+
+            <div class="user-menu" id="auth-buttons-header">
+                <button class="btn btn-secondary" onclick="openAuthModal('login')">Sign In</button>
+                <button class="btn btn-primary" onclick="openAuthModal('register')">Register</button>
+            </div>
+            <div class="user-menu" id="user-badge-header" style="display: none;">
+                <div class="user-badge" id="header-username">User Name</div>
+                <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Emergency Announcement Ticker -->
+    <div class="ticker-wrap" id="emergency-alert-ticker">
+        <div class="ticker">
+            <div class="ticker-item-container" id="ticker-alerts-list">
+                <div class="ticker-item"><span class="alert-tag">Urgent</span> Seeding active requests... Connecting to system feed.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main>
+
+        <!-- ============================================ -->
+        <!-- VIEW 1: HOME / LANDING PAGE VIEW -->
+        <!-- ============================================ -->
+        <section id="home-view" class="view-panel">
+            <div class="hero" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; text-align: left; gap: 40px; margin-bottom: 40px; flex-wrap: wrap;">
+                <div style="flex: 1.2; min-width: 320px; position: relative;">
+                    <div id="hero-particles-container" style="position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;"></div>
+                    <div class="hero-bg-glow"></div>
+                    <div class="hero-tag-pill" style="display:inline-flex; align-items:center; gap:8px; background: rgba(255,59,92,0.1); border:1px solid rgba(255,59,92,0.3); border-radius:30px; padding:6px 14px; margin-bottom:18px; animation: pulseGlow 2.5s infinite alternate;">
+                        <span style="width:8px; height:8px; border-radius:50%; background:var(--primary); box-shadow:0 0 12px var(--primary); display:inline-block; animation: sonarPinPulse 1.5s infinite;"></span>
+                        <span style="font-size:12px; font-weight:700; color:#fda4af; letter-spacing:0.8px;">🇧🇩 BANGLADESH BLOOD NETWORK — LIVE</span>
+                    </div>
+                    <h1 style="font-size: clamp(32px, 4vw, 52px); line-height: 1.1; font-weight: 900; margin-bottom: 16px; letter-spacing: -1px;">
+                        রক্ত দিন, জীবন বাঁচান<br>
+                        <span id="hero-slider-text" style="background: linear-gradient(135deg, #ff3b5c 0%, #d946ef 50%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display:inline-block; min-width: 200px;">In Real-Time</span>
+                    </h1>
+                    <p style="color: var(--text-muted); font-size: 16px; line-height: 1.7; margin-bottom: 24px; max-width: 480px;">Bangladesh-এর সবচেয়ে বড় blood donation network। AI-powered matching দিয়ে নিকটতম donor খুঁজুন এবং verified blood banks-এর সাথে সংযুক্ত হন।</p>
+                    
+                    <!-- Quick Search Filter Widget -->
+                    <div class="glass-panel" style="width: 100%; padding: 24px; margin-top: 10px; border-color: rgba(255,59,92,0.15);">
+                        <!-- Live Rotating Match Badge -->
+                        <div style="margin-bottom: 20px; display: inline-flex; align-items: center; gap: 10px; background: rgba(255, 59, 92, 0.08); border: 1px solid rgba(255, 59, 92, 0.2); padding: 8px 16px; border-radius: 30px; animation: pulseGlow 2s infinite alternate;">
+                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary-glow); animation: sonarPinPulse 1.5s infinite alternate;"></span>
+                            <span id="hero-live-notification" style="font-size: 12px; font-weight: 700; color: #fda4af; letter-spacing: 0.5px; transition: opacity 0.3s ease;">⚡ Live ML Scan: 24 active donors online matching patients...</span>
+                        </div>
+                        
+                        <h3 style="margin-bottom: 15px; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px;">🔍 Search Nearby Donors</h3>
+                        <form id="landing-search-form" onsubmit="handleDonorSearch(event)">
+                            <div class="form-row">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label for="search-division">Division</label>
+                                    <select id="search-division" onchange="populateSearchDistricts()" required>
+                                        <option value="">Select Division</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label for="search-district">District</label>
+                                    <select id="search-district" onchange="populateSearchThanas()" required>
+                                        <option value="">Select District</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label for="search-thana">Thana</label>
+                                    <select id="search-thana" required>
+                                        <option value="">Select Thana</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label for="search-blood-group">Blood Group</label>
+                                    <select id="search-blood-group" required>
+                                        <option value="">Choose</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="text-align: right; margin-top: 10px;">
+                                <button type="submit" class="btn btn-primary" style="padding: 10px 24px;">Search Donors</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Quick Demo Roles Access Bar -->
+                    <div class="glass-panel" style="margin-top: 20px; padding: 12px 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-color: rgba(239, 68, 68, 0.25);">
+                        <span style="font-weight: 700; color: var(--primary); font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase;">⚡ Quick Access Demo Dashboards:</span>
+                        <button class="btn btn-secondary btn-sm" style="font-size: 12px; padding: 6px 12px;" onclick="quickLogin('admin')">Admin Panel</button>
+                        <button class="btn btn-secondary btn-sm" style="font-size: 12px; padding: 6px 12px;" onclick="quickLogin('donor')">Donor Hub</button>
+                        <button class="btn btn-secondary btn-sm" style="font-size: 12px; padding: 6px 12px;" onclick="quickLogin('hospital')">Hospital Stock</button>
+                        <button class="btn btn-secondary btn-sm" style="font-size: 12px; padding: 6px 12px;" onclick="quickLogin('patient')">Patient View</button>
+                    </div>
+                </div>
+                
+                <!-- Right Side: Animated Live Stats Dashboard -->
+                <div class="glass-panel floating-graphic" style="flex: 0.9; min-width: 340px; padding: 0; position: relative; border-color: rgba(255, 59, 92, 0.2); box-shadow: 0 0 80px rgba(255,59,92,0.08), var(--shadow-premium); border-radius: 24px; background: linear-gradient(160deg, rgba(8,5,20,0.98) 0%, rgba(3,3,8,0.99) 100%); overflow: hidden;">
+                    <!-- Top glow accent line -->
+                    <div style="position:absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, transparent 5%, rgba(255,59,92,0.9) 30%, rgba(217,70,239,0.7) 60%, rgba(59,130,246,0.5) 80%, transparent 95%); pointer-events:none; z-index:2;"></div>
+                    
+                    <!-- Header Bar -->
+                    <div style="padding: 18px 24px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center;">
+                        <h4 style="font-weight: 700; color: white; display: flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: 0.8px; text-transform: uppercase; margin: 0;"><span style="color: var(--primary); animation: pulseGlow 1.5s infinite alternate; font-size: 16px;">●</span> Live Network Console</h4>
+                        <span style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10px; padding: 3px 10px; border: 1px solid rgba(16,185,129,0.35); border-radius: 20px; font-weight: 700; letter-spacing: 0.5px;">● ONLINE</span>
+                    </div>
+
+                    <!-- Animated ECG Heartbeat Line -->
+                    <div style="padding: 0 24px; overflow: hidden; height: 80px; position: relative;">
+                        <svg viewBox="0 0 400 60" width="100%" height="80" preserveAspectRatio="none" style="display: block;">
+                            <defs>
+                                <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#ff3b5c" stop-opacity="0" />
+                                    <stop offset="40%" stop-color="#ff3b5c" stop-opacity="1" />
+                                    <stop offset="60%" stop-color="#d946ef" stop-opacity="1" />
+                                    <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.5" />
+                                </linearGradient>
+                            </defs>
+                            <path class="ecg-line" d="M 0,30 L 40,30 L 55,30 L 65,30 L 75,28 L 85,32 L 95,30 L 105,30 L 115,30 L 120,30 L 125,10 L 130,50 L 135,5 L 140,45 L 145,30 L 155,30 L 165,30 L 200,30 L 215,30 L 225,30 L 235,28 L 245,32 L 255,30 L 265,30 L 275,30 L 280,30 L 285,8 L 290,52 L 295,3 L 300,47 L 305,30 L 315,30 L 400,30" fill="none" stroke="url(#ecgGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div style="position: absolute; top: 10px; right: 24px; font-size: 28px; font-weight: 900; color: var(--primary); font-family: 'Outfit', monospace; text-shadow: 0 0 20px rgba(255,59,92,0.5);">
+                            <span id="hero-heartrate">72</span>
+                            <span style="font-size: 12px; color: var(--text-muted); font-weight: 500;"> BPM</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Stats Grid -->
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(255,255,255,0.04); margin: 0 24px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06);">
+                        <div class="hero-stat-cell" style="padding: 18px 16px; background: rgba(5,5,10,0.9);">
+                            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Total Donors</div>
+                            <div style="font-size: 28px; font-weight: 900; color: white; font-family: 'Outfit', monospace;" id="hero-stat-donors">12,847</div>
+                            <div style="font-size: 11px; color: #10b981; margin-top: 4px;">↑ 23% this month</div>
+                        </div>
+                        <div class="hero-stat-cell" style="padding: 18px 16px; background: rgba(5,5,10,0.9);">
+                            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Blood Banks</div>
+                            <div style="font-size: 28px; font-weight: 900; color: white; font-family: 'Outfit', monospace;" id="hero-stat-banks">642</div>
+                            <div style="font-size: 11px; color: #10b981; margin-top: 4px;">↑ 8 new verified</div>
+                        </div>
+                        <div class="hero-stat-cell" style="padding: 18px 16px; background: rgba(5,5,10,0.9);">
+                            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Lives Saved</div>
+                            <div style="font-size: 28px; font-weight: 900; color: var(--primary); font-family: 'Outfit', monospace;" id="hero-stat-lives">4,291</div>
+                            <div style="font-size: 11px; color: #fda4af; margin-top: 4px;">🩸 Every drop counts</div>
+                        </div>
+                        <div class="hero-stat-cell" style="padding: 18px 16px; background: rgba(5,5,10,0.9);">
+                            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Active Now</div>
+                            <div style="font-size: 28px; font-weight: 900; color: #10b981; font-family: 'Outfit', monospace;" id="hero-stat-active">38</div>
+                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">● Online donors</div>
+                        </div>
+                    </div>
+
+                    <!-- Live Match Feed -->
+                    <div style="padding: 16px 24px 20px;">
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Recent Matches</div>
+                        <div id="hero-match-feed" style="display: flex; flex-direction: column; gap: 8px;">
+                            <div class="hero-feed-item" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid rgba(255,255,255,0.04);">
+                                <span style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #ff3b5c, #d946ef); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">🩸</span>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-size: 12px; font-weight: 600; color: white;">A+ matched in Dhaka</div>
+                                    <div style="font-size: 10px; color: var(--text-muted);">Mirpur → DMC Hospital • 2 min ago</div>
+                                </div>
+                                <span style="font-size: 10px; color: #10b981; font-weight: 700;">✓ Done</span>
+                            </div>
+                            <div class="hero-feed-item" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid rgba(255,255,255,0.04);">
+                                <span style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #10b981); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">🏥</span>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-size: 12px; font-weight: 600; color: white;">O- urgent in Chittagong</div>
+                                    <div style="font-size: 10px; color: var(--text-muted);">Agrabad → CMC Hospital • 5 min ago</div>
+                                </div>
+                                <span style="font-size: 10px; color: #f59e0b; font-weight: 700;">⏳ Active</span>
+                            </div>
+                            <div class="hero-feed-item" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid rgba(255,255,255,0.04);">
+                                <span style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #ef4444); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">⚡</span>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-size: 12px; font-weight: 600; color: white;">B+ matched in Sylhet</div>
+                                    <div style="font-size: 10px; color: var(--text-muted);">Zindabazar → MAG Hospital • 8 min ago</div>
+                                </div>
+                                <span style="font-size: 10px; color: #10b981; font-weight: 700;">✓ Done</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-panel" style="margin-top: 40px; padding: 24px; position: relative;">
+                <div class="panel-header" style="margin-bottom: 15px;">
+                    <div>
+                        <h2 style="font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px;">🔴 Live Donor & Blood Bank Coverage</h2>
+                        <p style="color: var(--text-muted); font-size: 14px;">Interactive geographical map showing active registered donors and verified blood banks across divisions.</p>
+                    </div>
+                    <div style="display: flex; gap: 12px; font-size: 13px;">
+                        <span style="display: flex; align-items: center; gap: 6px;"><span class="pulsing-donor-icon" style="display: inline-block; position: relative; width: 10px; height: 10px; border: none; background-color: var(--primary);"></span> Active Donor</span>
+                        <span style="display: flex; align-items: center; gap: 6px;"><span style="color: #3b82f6;">📍</span> Blood Bank</span>
+                    </div>
+                </div>
+                
+                <div class="glass-panel" id="home-coverage-map" style="height: auto; min-height: 520px; display: flex; flex-direction: row; gap: 30px; align-items: center; justify-content: center; padding: 24px; border: none; background: transparent; flex-wrap: wrap; box-shadow: none;">
+                    <!-- Left: Interactive Vector Map -->
+                    <div style="flex: 1.2; min-width: 320px; display: flex; justify-content: center; position: relative;">
+                        <svg viewBox="0 0 437.8 601.2" width="100%" height="560px" style="overflow: visible; filter: drop-shadow(0 0 30px rgba(255,59,92,0.18));">
+                            <defs>
+                                <linearGradient id="divHoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="rgba(0, 242, 254, 0.45)" />
+                                    <stop offset="100%" stop-color="rgba(79, 172, 254, 0.25)" />
+                                </linearGradient>
+                            </defs>
+
+<!-- Rangpur -->
+<path id="path-Rangpur" class="bg-map-poly" d="M 113.29,51.9 L 119.3,58.81 L 126.44,63.97 L 133.04,63.44 L 136.25,64.94 L 143.69,64.17 L 152.22,58.36 L 151.81,53.15 L 149.62,51.95 L 150.44,46.64 L 155.98,42.36 L 159.55,48.85 L 163.09,48.73 L 167.56,56.17 L 170,63.56 L 174.3,66.56 L 172.65,70.59 L 175.38,72.5 L 171.06,77.97 L 170.43,84.04 L 171.89,89.35 L 171.23,93.7 L 174.68,99.19 L 175.75,103.81 L 170.42,124.42 L 165.51,123.27 L 166.16,127.2 L 160.79,130.27 L 163.26,139.12 L 163.12,142.79 L 158.74,143.09 L 154.1,152.13 L 153.73,162 L 141.27,162.65 L 135.47,159.11 L 126.73,160 L 124.09,154.23 L 116.53,156.83 L 114.63,152.04 L 111.34,148.32 L 112.11,143.49 L 106.08,141.6 L 101.93,142.18 L 99.5,139.25 L 93.66,139.47 L 93.8,136.43 L 87.21,136.09 L 84.13,132.3 L 81.25,132.36 L 77.69,129.22 L 77.65,118.54 L 74.45,113.28 L 65.47,115.78 L 64.37,118.49 L 50.49,113.92 L 46.01,110.59 L 45.98,107.2 L 40.83,104.17 L 41.7,99.1 L 36.76,98.17 L 34.22,94.11 L 24.25,87.14 L 17.21,85.01 L 15.23,86.54 L 9.9,85.35 L 7.11,73.39 L 11.22,65.09 L 15.27,61.56 L 16.46,58.32 L 13.96,54.86 L 16.32,49.13 L 22.34,45.37 L 29.07,44.09 L 31.7,42.15 L 31.85,36.09 L 39.94,30.54 L 40.96,27.56 L 47.73,28.91 L 46.94,23.42 L 44.2,17.79 L 32.91,15.34 L 31.53,13.25 L 34.69,3.78 L 38.02,0.21 L 39.53,8.68 L 44.52,9.73 L 48.82,15.7 L 51.9,18.12 L 57.52,16.74 L 58.23,20.45 L 62.71,24.66 L 64.3,29.68 L 61.72,37.04 L 66.82,35.93 L 69.14,33.06 L 75.94,34.74 L 75.35,38.59 L 80.87,40.91 L 81.26,35.55 L 85.99,35.84 L 88.52,40.1 L 97.24,40.23 L 97.11,36.29 L 91.5,34.13 L 91.72,29.29 L 84.65,27.44 L 85.69,21.61 L 90.57,18.9 L 96.46,24.02 L 101.11,24.22 L 102.32,30.47 L 105.71,32.13 L 104.67,37.91 L 106.9,43.34 L 105.64,45.68 L 107.99,50.99 L 113.29,51.9 Z" onclick="selectDivisionFromMap('Rangpur')" onmouseover="showDetailedMapTooltip('Rangpur', event)" onmouseout="hideDetailedMapTooltip()"/>
+
+<!-- Rajshahi -->
+<path id="path-Rajshahi" class="bg-map-poly" d="M 153.73,162 L 156.02,173.91 L 154.95,178.18 L 157.39,184.47 L 166.25,190.89 L 165.42,194.91 L 167.88,199.54 L 166.56,204.95 L 166.99,210.38 L 163.08,213.91 L 162.62,220.69 L 167.13,241.71 L 166.42,244.53 L 168.25,252.42 L 169.87,254.4 L 169.57,262.3 L 165.63,265.94 L 158.46,269.13 L 158.43,280.43 L 161.7,285.54 L 157.88,287.77 L 146.57,288.31 L 136.34,284.79 L 129.56,278.45 L 126.28,280.38 L 122.21,281.55 L 117.55,277.94 L 113.22,269.92 L 106.84,273.79 L 99.75,271 L 97.44,266.74 L 95.31,259.2 L 92.88,256.48 L 87.14,255.31 L 82.14,258.36 L 78.25,255.91 L 72.7,254.98 L 67.9,248.97 L 68.6,242.84 L 67.08,238.37 L 64.43,236.58 L 54.25,236.93 L 51.15,238.82 L 46.73,233.81 L 39.45,229.61 L 35.6,230.82 L 29.87,229.48 L 23.77,223.26 L 18.24,221.89 L 8.97,213.03 L 2.75,202.98 L -0.14,200.63 L 4.95,195.15 L 5.22,192.18 L 9.87,185.41 L 14.63,180.69 L 12.22,175.52 L 15.03,171.81 L 20.17,170.84 L 23.37,174.28 L 23.92,177.7 L 30.31,179.93 L 29.49,175.15 L 34.96,173 L 38.67,166.05 L 41.54,162.99 L 40.48,153.75 L 42.16,150.35 L 40.53,147.81 L 44.11,145.2 L 53.46,148.72 L 57.13,145.85 L 67.89,146.37 L 73.99,149.3 L 77,145.81 L 81.26,148.51 L 88.19,148.28 L 88.28,141.88 L 93.66,139.47 L 99.5,139.25 L 101.93,142.18 L 106.08,141.6 L 112.11,143.49 L 111.34,148.32 L 114.63,152.04 L 116.53,156.83 L 124.09,154.23 L 126.73,160 L 135.47,159.11 L 141.27,162.65 L 153.73,162 Z" onclick="selectDivisionFromMap('Rajshahi')" onmouseover="showDetailedMapTooltip('Rajshahi', event)" onmouseout="hideDetailedMapTooltip()"/>
+
+<!-- Mymensingh -->
+<path id="path-Mymensingh" class="bg-map-poly" d="M 170.42,124.42 L 170.02,130.5 L 171.81,134.23 L 176,137.39 L 178.25,135.34 L 183.65,135.78 L 184.97,138.11 L 197.87,143.97 L 215.92,147.5 L 228.18,152.02 L 233.64,149.56 L 245.64,149.09 L 248.03,147.51 L 252.39,150.76 L 256.1,150.69 L 258.98,148.13 L 267.05,150.66 L 277.35,149.24 L 275.89,152.71 L 277.91,159.55 L 274.04,160.24 L 278.07,170.86 L 276.28,175.03 L 282.1,178.09 L 287.71,176.84 L 290.87,179.88 L 291.21,185.39 L 293.34,191.53 L 303.26,198.17 L 302.23,201.98 L 298.97,204.38 L 292.6,204.58 L 282.32,207.24 L 266.62,207.9 L 264.43,209.24 L 261.16,215.91 L 257.99,216.63 L 255.27,220.13 L 250.63,221.03 L 244.67,218.36 L 240.72,219.61 L 241.92,223.05 L 247.41,226.25 L 245.27,234.27 L 246.97,237.56 L 245.21,241.35 L 240.95,243.68 L 229.55,234.08 L 224.7,239.75 L 217.24,238.25 L 211.7,239.31 L 208.33,233.11 L 210.16,226.4 L 206.64,221.67 L 206.3,216.76 L 203.25,215.91 L 199.27,208.7 L 200.63,202.37 L 198.68,195.45 L 195.28,193.57 L 193.9,188.4 L 188.88,190.21 L 184.33,194.93 L 180.76,191.72 L 175.65,193.09 L 175.46,199.5 L 169.55,209.87 L 166.99,210.38 L 166.56,204.95 L 167.88,199.54 L 165.42,194.91 L 166.25,190.89 L 157.39,184.47 L 154.95,178.18 L 156.02,173.91 L 153.73,162 L 154.1,152.13 L 158.74,143.09 L 163.12,142.79 L 163.26,139.12 L 160.79,130.27 L 166.16,127.2 L 165.51,123.27 L 170.42,124.42 Z" onclick="selectDivisionFromMap('Mymensingh')" onmouseover="showDetailedMapTooltip('Mymensingh', event)" onmouseout="hideDetailedMapTooltip()"/>
+
+<!-- Sylhet -->
+<path id="path-Sylhet" class="bg-map-poly" d="M 356.72,246.59 L 350.58,243.55 L 351.96,254.23 L 349.01,254.12 L 344.93,251.83 L 344.44,249.03 L 342.36,250.42 L 340.19,254.65 L 340.57,258.08 L 336.13,261.1 L 331.83,261.16 L 325.34,258.49 L 315.79,257.92 L 317.87,263.67 L 314.69,270.45 L 309.1,269.04 L 309.9,264.74 L 305.91,259.06 L 307.09,245.61 L 300.06,244.59 L 296.94,241.7 L 296.62,236.61 L 302.59,236.58 L 300.82,232.24 L 303.29,230.14 L 302.05,219.73 L 298.58,217.68 L 302.61,210.74 L 299.97,209.88 L 298.97,204.38 L 302.23,201.98 L 303.26,198.17 L 293.34,191.53 L 291.21,185.39 L 290.87,179.88 L 287.71,176.84 L 282.1,178.09 L 276.28,175.03 L 278.07,170.86 L 274.04,160.24 L 277.91,159.55 L 275.89,152.71 L 277.35,149.24 L 288.21,146.68 L 305.03,146.25 L 312.29,149.06 L 319.56,149.3 L 324.43,153.06 L 332.83,151.49 L 334.81,149.21 L 340.52,154.26 L 347.9,151.22 L 350.44,151.36 L 358.8,148.6 L 368.21,148.35 L 372.69,149.25 L 380.32,147.68 L 386.98,150.42 L 389.91,153.97 L 406.6,161.78 L 414.48,163.83 L 413.88,170.07 L 420.31,172.39 L 420.69,179.21 L 415.48,181.33 L 410.66,181.64 L 403.3,175.89 L 397.75,176 L 397.27,183.02 L 399.79,184.11 L 402.29,193.62 L 397.7,201.96 L 396.18,214.67 L 394.46,217.37 L 390.06,214.54 L 388.84,219.63 L 390.21,224.39 L 387.35,225.39 L 383.61,230.64 L 373.41,230.08 L 372.46,232.26 L 367,234.32 L 368.95,241.39 L 365.66,254.59 L 356.72,246.59 Z" onclick="selectDivisionFromMap('Sylhet')" onmouseover="showDetailedMapTooltip('Sylhet', event)" onmouseout="hideDetailedMapTooltip()"/>
+
+<!-- Dhaka -->
+<path id="path-Dhaka" class="bg-map-poly" d="M 298.97,204.38 L 299.97,209.88 L 302.61,210.74 L 298.58,217.68 L 302.05,219.73 L 303.29,230.14 L 300.82,232.24 L 302.59,236.58 L 296.62,236.61 L 296.94,241.7 L 292.96,244.01 L 288.64,244.15 L 284.2,247.31 L 279.26,253.18 L 284.8,257.53 L 284.55,262.02 L 280.46,264.4 L 277.48,268.11 L 277.98,272.06 L 271.11,282.74 L 267.33,281.08 L 265.03,282.68 L 258.75,282.59 L 258.66,288.94 L 254.72,294.58 L 256.35,300.09 L 255.33,302.96 L 250.13,301.37 L 246.66,302.48 L 249.43,312.41 L 251.3,313.88 L 252.58,319.9 L 247.51,319.5 L 241.63,321.76 L 237.35,332.06 L 242.23,336.46 L 237.23,336.14 L 233.92,339.94 L 238,341.82 L 242.93,347.02 L 242.86,347.12 L 242.78,347.26 L 243.22,347.6 L 243.31,347.87 L 243.83,348.95 L 240.45,355.18 L 239,356.94 L 233.58,363.68 L 233.51,365.75 L 229.8,369.1 L 225.96,369.99 L 226.46,366.75 L 222.75,364.98 L 216.42,365.33 L 216.81,372.61 L 208.39,372.9 L 209.16,366.98 L 206.85,363.59 L 199.6,366.23 L 198.67,370.14 L 195.03,371.87 L 190.05,377.47 L 188.24,384.16 L 181.51,385.36 L 179.26,382.88 L 174.96,382.29 L 169.51,377.17 L 164.05,369.33 L 161.71,362.93 L 157.75,360.66 L 162.25,357.51 L 161.68,351.73 L 156.66,352.03 L 157.27,347.55 L 153.17,347.02 L 152.41,341.25 L 149.64,336.28 L 150.81,330.55 L 149.95,323.1 L 146.65,319.93 L 139.99,317.59 L 139.78,313.81 L 131.52,301.19 L 127.33,303 L 120.96,295.45 L 123.91,291.33 L 126.28,280.38 L 129.56,278.45 L 136.34,284.79 L 146.57,288.31 L 157.88,287.77 L 161.7,285.54 L 158.43,280.43 L 158.46,269.13 L 165.63,265.94 L 169.57,262.3 L 169.87,254.4 L 168.25,252.42 L 166.42,244.53 L 167.13,241.71 L 162.62,220.69 L 163.08,213.91 L 166.99,210.38 L 169.55,209.87 L 175.46,199.5 L 175.65,193.09 L 180.76,191.72 L 184.33,194.93 L 188.88,190.21 L 193.9,188.4 L 195.28,193.57 L 198.68,195.45 L 200.63,202.37 L 199.27,208.7 L 203.25,215.91 L 206.3,216.76 L 206.64,221.67 L 210.16,226.4 L 208.33,233.11 L 211.7,239.31 L 217.24,238.25 L 224.7,239.75 L 229.55,234.08 L 240.95,243.68 L 245.21,241.35 L 246.97,237.56 L 245.27,234.27 L 247.41,226.25 L 241.92,223.05 L 240.72,219.61 L 244.67,218.36 L 250.63,221.03 L 255.27,220.13 L 257.99,216.63 L 261.16,215.91 L 264.43,209.24 L 266.62,207.9 L 282.32,207.24 L 292.6,204.58 L 298.97,204.38 Z" onclick="selectDivisionFromMap('Dhaka')" onmouseover="showDetailedMapTooltip('Dhaka', event)" onmouseout="hideDetailedMapTooltip()"/>
+
+<!-- Khulna -->
+<path id="path-Khulna" class="bg-map-poly" d="M 118.8,497.63 L 118.97,502.98 L 115.13,503.71 L 113.55,499.42 L 118.8,497.63 Z M 112.82,490.88 L 119.6,496.48 L 113.44,497.97 L 110.76,494.04 L 112.82,490.88 Z M 144.07,488.05 L 149.53,492.85 L 148.17,498.29 L 145.05,500.71 L 143.43,496.97 L 144.07,488.05 Z M 128.98,485.67 L 130.57,487.99 L 135.17,488.31 L 137.35,492.3 L 135.52,496.66 L 131.44,500.79 L 126.72,498.01 L 125.65,492.7 L 128.98,485.67 Z M 124.44,494.16 L 122.11,487.72 L 126.41,484.9 L 124.44,494.16 Z M 102.71,495.02 L 106.35,497.66 L 102.97,500.99 L 97.1,494.37 L 98.37,490.08 L 102.71,495.02 Z M 150.62,478.13 L 153.53,481.73 L 151.65,486.6 L 158.62,495.57 L 155.8,497.67 L 150.19,496.74 L 150,491.99 L 146.06,488.86 L 144.41,485.24 L 146.74,479.3 L 150.62,478.13 Z M 131.92,474.11 L 134.72,481.31 L 137.1,482.61 L 136.82,487.23 L 130.78,481.27 L 131.92,474.11 Z M 121.17,489.22 L 120.25,484.96 L 122.92,481.46 L 120.18,478.93 L 121.99,473.56 L 125.6,478.59 L 126.69,482.89 L 123.24,485.04 L 121.17,489.22 Z M 159.98,475.08 L 161.11,479.76 L 159.66,482.12 L 162.46,486.37 L 159.39,489.61 L 155.45,488.13 L 156.6,482.39 L 159.98,475.08 Z M 110.31,470.47 L 112.78,475.95 L 112.92,479.51 L 116.32,481.71 L 118.62,487.42 L 116.21,491.26 L 111.12,490.03 L 112.11,480.56 L 106.94,480 L 106.49,476.38 L 110.31,470.47 Z M 146.76,478.65 L 144.42,476.67 L 146.28,468.87 L 147.65,469.34 L 149.78,470.51 L 149.83,471.81 L 148.01,474.03 L 145.77,475.08 L 145.61,475.41 L 146.03,476.01 L 147.6,477.87 L 146.76,478.65 Z M 172.72,485.63 L 172.14,483.11 L 169.17,481.26 L 172.06,477.55 L 172.22,476.82 L 171.44,475.82 L 168.63,473.98 L 173.69,472.44 L 175.11,483.11 L 172.72,485.63 Z M 138.82,472.91 L 140.64,477.09 L 140.17,481.59 L 136.33,479.88 L 132.52,475.61 L 134.13,473.49 L 133.36,467.83 L 137.15,467.98 L 138.82,472.91 Z M 129.54,467.02 L 132.99,469.94 L 129.11,480.53 L 126.95,476.82 L 126.12,469.41 L 129.54,467.02 Z M 104.53,467.99 L 105.07,473 L 101.89,474.88 L 101.66,468.77 L 104.53,467.99 Z M 106.96,469.83 L 108.18,473.39 L 105.24,477.88 L 107.38,481.5 L 111.8,481.68 L 108.65,492.78 L 102.22,491.7 L 102.77,488.33 L 100.62,480.67 L 103.04,475.24 L 105.26,472.95 L 104.9,467.09 L 107.66,466.96 L 106.96,469.83 Z M 169.65,467.01 L 171.76,470.55 L 168.37,473.97 L 171.42,476.26 L 172,477.27 L 169.56,478.59 L 168.8,479.49 L 168.81,481.25 L 172.22,483.69 L 171.38,487.97 L 165.24,489.13 L 161.45,483.17 L 162.35,476.09 L 162.33,473.56 L 163.63,472.58 L 162.66,471.08 L 163.02,470.64 L 164.1,470.12 L 162.57,467.49 L 165.57,464.43 L 169.65,467.01 Z M 117.45,464.46 L 121.61,472.64 L 120.02,478.87 L 117.46,481.24 L 113.33,476.84 L 113.67,472.06 L 117.45,464.46 Z M 152.67,462.76 L 155.47,467.08 L 151.67,477.97 L 147.99,477.77 L 145.81,475.25 L 148.12,474.17 L 149.79,472.31 L 150.08,471.34 L 149.74,470.28 L 146.3,468.7 L 148.84,463.57 L 149.21,463.99 L 150.35,463.36 L 152.67,462.76 Z M 163.04,459.03 L 163.79,459.16 L 165.55,463.64 L 162.28,467.61 L 162.72,470.63 L 162.53,471.07 L 162.66,471.48 L 163.26,472.37 L 161.76,473.84 L 159.39,474.08 L 158.58,468.57 L 159.84,459.61 L 163.04,459.03 Z M 134.51,456.4 L 138.45,463.62 L 135.02,465.05 L 132.91,468.29 L 129.56,466.89 L 129.1,460.6 L 131.19,459.77 L 132.08,456.49 L 134.51,456.4 Z M 150.98,455.7 L 154.99,458.79 L 155.26,462.38 L 156.76,465.78 L 158.49,469.62 L 156.46,473.65 L 157.24,477.8 L 154.57,482.61 L 151.91,478.32 L 155.62,467.01 L 153.53,462.42 L 149.08,463.65 L 149.59,459.92 L 150.21,459.07 L 150.57,457.54 L 150.32,456.75 L 150.98,455.7 Z M 124.22,460.01 L 127.63,462.97 L 128.96,463.37 L 125.29,468.94 L 123.86,474 L 120.12,466.55 L 125.26,466.14 L 122.8,461.64 L 119.26,461 L 120.25,457.11 L 124.07,454.16 L 124.22,460.01 Z M 135.86,449.87 L 137.26,455.92 L 133.57,455.74 L 130.87,451.61 L 135.86,449.87 Z M 151.1,444.39 L 149.27,450.17 L 150.94,452.46 L 149.73,454.54 L 150.5,455.61 L 150.2,456.45 L 150.45,457.39 L 148.98,458.24 L 145.12,452.68 L 148.82,448.94 L 151.1,444.39 Z M 135.85,447.05 L 132.32,448.59 L 135.04,439.75 L 137.87,444.91 L 135.85,447.05 Z M 126.28,280.38 L 123.91,291.33 L 120.96,295.45 L 127.33,303 L 131.52,301.19 L 139.78,313.81 L 139.99,317.59 L 146.65,319.93 L 149.95,323.1 L 150.81,330.55 L 149.64,336.28 L 152.41,341.25 L 153.17,347.02 L 157.27,347.55 L 156.66,352.03 L 161.68,351.73 L 162.25,357.51 L 157.75,360.66 L 161.71,362.93 L 164.05,369.33 L 169.51,377.17 L 174.96,382.29 L 179.26,382.88 L 181.51,385.36 L 177.9,393.73 L 180.44,398.71 L 180.88,403.41 L 179.34,410.89 L 182.82,411.66 L 182.85,415.17 L 179.6,420.44 L 176.61,421.01 L 178.41,427.09 L 175.06,431.28 L 177.43,435.86 L 173.87,443.01 L 173.44,446.58 L 176.07,454.62 L 175.9,460.99 L 172.18,466.23 L 165.78,463.37 L 164.07,458.97 L 162.76,458.58 L 159.92,459.38 L 158.08,454.11 L 159.92,452.44 L 158.09,450.83 L 157.67,454.7 L 159.46,459.48 L 158.98,465.49 L 155.49,462.64 L 156.48,458.17 L 154.05,457.55 L 149.89,454.45 L 151.01,452.95 L 151.29,450.78 L 151.59,444.44 L 147.96,443.27 L 147.09,448.08 L 144.1,453.74 L 147.4,458.9 L 142.98,466.7 L 137.61,448.96 L 139.36,445.58 L 133.62,436.28 L 131.11,440.99 L 132.95,443.69 L 130.67,451.39 L 133.18,455.69 L 131.05,457.18 L 130.93,459.5 L 129.22,460.1 L 127.59,462.48 L 124.87,457.49 L 124.06,451.11 L 117.7,458.78 L 115.95,466.66 L 111.87,472.42 L 107.79,464.58 L 101.73,467.57 L 98.15,466.11 L 97.42,462.98 L 100.1,453.27 L 96.94,449.9 L 96.14,446.37 L 92.68,443.82 L 91.75,439.77 L 93.07,429.04 L 89.31,416.63 L 87.44,415.9 L 86.22,406.26 L 89.38,401.81 L 86.15,399.47 L 84.56,395.42 L 88.96,391.53 L 89.97,386.68 L 87.73,382.9 L 83.37,381.14 L 82.89,375.53 L 79.31,374.89 L 81.81,366.58 L 79.87,362.82 L 86.43,356.11 L 87.5,349.68 L 84.17,346.65 L 79.43,346.73 L 75.09,344.72 L 72.15,348.04 L 66.53,344.73 L 70.35,331.49 L 70.92,324.93 L 69.81,321.86 L 60.46,313.95 L 58.96,309.78 L 55.51,308.82 L 52.92,302.73 L 52.82,290.82 L 55.47,287.67 L 54.46,283.64 L 56.55,281.44 L 61.71,282.04 L 65.47,277.27 L 68.08,277.44 L 68.72,265.34 L 65.56,256.5 L 69.12,253.74 L 67.9,248.97 L 72.7,254.98 L 78.25,255.91 L 82.14,258.36 L 87.14,255.31 L 92.88,256.48 L 95.31,259.2 L 97.44,266.74 L 99.75,271 L 106.84,273.79 L 113.22,269.92 L 117.55,277.94 L 122.21,281.55 L 126.28,280.38 Z" onclick="selectDivisionFromMap('Khulna')" onmouseover="showDetailedMapTooltip('Khulna', event)" onmouseout="hideDetailedMapTooltip()"/>
+
+<!-- Barisal -->
+<path id="path-Barisal" class="bg-map-poly" d="M 255.18,487.15 L 253.61,485.78 L 255.69,480.3 L 258.27,481.69 L 255.18,487.15 Z M 250.84,475.13 L 251.05,479.08 L 247.55,483.23 L 244.53,483.85 L 246.14,475.36 L 250.84,475.13 Z M 240.98,474.29 L 243.42,475.56 L 240.88,484.69 L 235.33,483.76 L 234.38,480.46 L 236.52,477.08 L 240.98,474.29 Z M 214.99,477.42 L 211.06,488.61 L 207.39,492.46 L 204.15,493.33 L 196.23,490.78 L 194.56,487.97 L 197.15,485.09 L 197.88,480.33 L 201.88,474.57 L 206.71,474.37 L 210.23,477.62 L 214.99,477.42 Z M 232.26,473.96 L 233.57,476.75 L 230.39,480.98 L 225.56,483.25 L 220.39,487.84 L 216.2,487.54 L 215.58,484.62 L 220.21,474.83 L 226.26,469.31 L 230.32,467.12 L 232.26,473.96 Z M 243.49,454.38 L 243.83,461.71 L 242.14,466.72 L 234.51,476.68 L 232.31,471.49 L 232.32,465.18 L 240.98,453.97 L 243.49,454.38 Z M 245.99,447.87 L 244.84,452.55 L 240.99,453.26 L 242.12,448.13 L 245.99,447.87 Z M 279.84,439.14 L 280.74,444.35 L 279.62,452.33 L 274.4,461.61 L 271.27,460.37 L 275.7,449.74 L 278.02,441.89 L 279.84,439.14 Z M 274.45,422.35 L 266.33,415.65 L 270.68,415.56 L 274.45,422.35 Z M 237.91,401.24 L 239.94,406.57 L 235.57,406.82 L 235.49,402.05 L 237.91,401.24 Z M 236.03,399.14 L 232.4,395.97 L 236.44,392.4 L 236.03,399.14 Z M 244.36,390.69 L 248.41,392.9 L 250.67,401.49 L 253.91,408.28 L 258.05,412.27 L 260.02,420.78 L 267.58,428.62 L 265.29,437.44 L 265.74,445.59 L 262.87,459.96 L 260.09,464.8 L 251.04,472.72 L 245.85,473.31 L 242.81,469.18 L 244.87,462.42 L 245.12,454.39 L 247.87,450.66 L 250.4,444.27 L 249.38,416.92 L 243.13,414.46 L 237.16,408.28 L 240.5,406.52 L 236.49,394.4 L 240.12,391.17 L 244.36,390.69 Z M 247.93,386.21 L 248.39,386.55 L 247.77,390.41 L 241.77,389.8 L 237.53,391.69 L 233.41,390.95 L 232.86,386.15 L 236.87,382.04 L 245.26,384 L 247.93,386.21 Z M 250.32,377.72 L 251.31,379.04 L 251.43,379.27 L 249.33,376.48 L 250.32,377.72 Z M 231.44,369.95 L 232.76,368.42 L 234.67,367.25 L 241.88,376.3 L 236.91,377.84 L 232.12,373.29 L 231.44,369.95 Z M 225.96,369.99 L 235.24,376.57 L 236.45,380.99 L 231.4,384.45 L 231.28,395.77 L 234.04,400.29 L 234.78,413.48 L 242.31,418.72 L 243.98,423.14 L 247.19,426.32 L 247.15,433.81 L 249.46,434.05 L 248.79,440.31 L 244.8,442.61 L 236.47,451.56 L 235.45,454.7 L 228.16,464.16 L 223.47,463.58 L 217.7,468.44 L 215.65,474.51 L 213.43,473.44 L 210.77,477.43 L 206.53,474.14 L 201.21,474.52 L 197.88,479.97 L 197.52,482.47 L 193.97,486.74 L 189.04,484.55 L 188.33,474.39 L 184.39,477.93 L 181,476.9 L 180.78,473.22 L 177.49,465.25 L 178.5,459.18 L 176.07,454.62 L 173.44,446.58 L 173.87,443.01 L 177.43,435.86 L 175.06,431.28 L 178.41,427.09 L 176.61,421.01 L 179.6,420.44 L 182.85,415.17 L 182.82,411.66 L 179.34,410.89 L 180.88,403.41 L 180.44,398.71 L 177.9,393.73 L 181.51,385.36 L 188.24,384.16 L 190.05,377.47 L 195.03,371.87 L 198.67,370.14 L 199.6,366.23 L 206.85,363.59 L 209.16,366.98 L 208.39,372.9 L 216.81,372.61 L 216.42,365.33 L 222.75,364.98 L 226.46,366.75 L 225.96,369.99 Z" onclick="selectDivisionFromMap('Barisal')" onmouseover="showDetailedMapTooltip('Barisal', event)" onmouseout="hideDetailedMapTooltip()"/>
+
+<!-- Chittagong -->
+<path id="path-Chittagong" class="bg-map-poly" d="M 362.33,480.54 L 364.62,486.9 L 359.81,501.04 L 358.85,497.15 L 360.49,490.92 L 360.09,482.96 L 362.33,480.54 Z M 283.56,464.15 L 283.97,468.36 L 278.7,469.62 L 278.12,465.39 L 280.51,462.54 L 283.56,464.15 Z M 282.09,447.96 L 281.93,445.18 L 282.47,442.84 L 282.43,438.81 L 283.89,439.65 L 282.09,447.96 Z M 293.88,434.64 L 297.08,433.57 L 298.47,439.39 L 298.32,448.96 L 296.24,455.29 L 286.07,464.62 L 281.2,461.7 L 285.71,453.23 L 287.14,447.62 L 286.3,437.32 L 287.21,431.25 L 293.88,434.64 Z M 281.86,435.94 L 279.44,426.48 L 284.88,428.08 L 281.86,435.94 Z M 274.45,422.35 L 270.68,415.56 L 276.06,416.89 L 278.94,420.39 L 274.45,422.35 Z M 330.37,432.89 L 325.75,431.93 L 321.42,423.76 L 320.07,419.44 L 320.14,411.79 L 324.02,410.77 L 327.45,414.78 L 333.62,424.52 L 334,430.95 L 330.37,432.89 Z M 313.82,411.56 L 313.71,419.01 L 307.83,423.17 L 305.57,419.47 L 306.35,416.12 L 309.92,411.16 L 313.82,411.56 Z M 316.33,401.38 L 319.13,403.68 L 317.72,408.29 L 311.46,407.3 L 307.54,400.81 L 311.99,398 L 316.33,401.38 Z M 243.27,369.71 L 242.88,369.21 L 242.76,369.05 L 242.13,368.19 L 243.27,369.71 Z M 354.31,346.87 L 352.22,339.87 L 359.27,332.9 L 359.97,329.44 L 368.69,323.89 L 371.79,319.46 L 368.31,300.92 L 369.86,296.66 L 372.45,296.14 L 374.51,302.26 L 378.3,304.56 L 385.85,300.07 L 388.05,295.95 L 393.94,299.27 L 400.63,297.55 L 401.82,300.26 L 400.17,305.05 L 403.43,311.8 L 403.32,316.06 L 405.36,324.83 L 407.02,326.52 L 409.07,337.51 L 410.72,339.49 L 412.18,346.58 L 407.43,346.83 L 408.55,354.37 L 408.14,359.93 L 411.32,365.23 L 409.5,376.82 L 416.59,383.26 L 418.99,395.24 L 423.08,399.7 L 425.02,414.03 L 423.72,415.81 L 425.57,422.25 L 428.5,437.78 L 430.5,454.81 L 428.5,460.85 L 430.39,466.36 L 430.59,471.38 L 433.82,486.65 L 432.14,487.81 L 430.99,502.91 L 433.12,526.25 L 435.63,538.11 L 438.37,545.55 L 430.33,549.61 L 426.62,535.48 L 421.36,537.86 L 415.7,537.44 L 414.7,531.48 L 410.28,525.74 L 406.75,527.07 L 405.49,531.83 L 399.77,531.01 L 398.81,537.74 L 393.08,542.08 L 394.98,551.03 L 390.71,556.2 L 393.23,558.23 L 393.94,562.55 L 399.39,568.33 L 398.1,572.07 L 399.87,582.89 L 402.61,585.96 L 405.97,595.93 L 402.89,596.88 L 400.54,591.5 L 395.61,583.61 L 390.85,571.92 L 379.62,557.65 L 378.85,555.86 L 379.02,545.49 L 376.15,537.13 L 369.73,527.92 L 368.84,523.34 L 364.44,525.73 L 360.52,520.39 L 363.36,514.23 L 363.7,510.63 L 361,506.16 L 365.79,491.92 L 366.7,486.71 L 365.92,479.81 L 362.67,472.4 L 363,467.48 L 361.6,460.75 L 359.63,460.62 L 356.9,451.47 L 352.51,444.94 L 352.74,441.93 L 347.17,422.91 L 335.24,408.03 L 329.94,402.36 L 325.73,399.8 L 323,394.88 L 308.71,396.71 L 305.28,402.85 L 307.69,409.62 L 301.97,419.07 L 293.22,427.53 L 289.36,425.13 L 286.06,418.24 L 269.68,404.98 L 266.64,404.37 L 259.98,393.08 L 260.25,387.89 L 256.33,381.66 L 254.5,382.95 L 247.35,371.32 L 246.76,347.12 L 249.04,341.72 L 246.77,336.72 L 242.23,336.46 L 237.35,332.06 L 241.63,321.76 L 247.51,319.5 L 252.58,319.9 L 251.3,313.88 L 249.43,312.41 L 246.66,302.48 L 250.13,301.37 L 255.33,302.96 L 256.35,300.09 L 254.72,294.58 L 258.66,288.94 L 258.75,282.59 L 265.03,282.68 L 267.33,281.08 L 271.11,282.74 L 277.98,272.06 L 277.48,268.11 L 280.46,264.4 L 284.55,262.02 L 284.8,257.53 L 279.26,253.18 L 284.2,247.31 L 288.64,244.15 L 292.96,244.01 L 296.94,241.7 L 300.06,244.59 L 307.09,245.61 L 305.91,259.06 L 309.9,264.74 L 309.1,269.04 L 309.12,269.06 L 309.13,269.08 L 303.31,276.61 L 302.2,280.91 L 304.5,285.25 L 300.39,294.31 L 296.38,294.26 L 295.12,300.51 L 300.04,300.87 L 295.48,307.3 L 300.18,315.33 L 301.11,319.77 L 304.32,321.66 L 308.44,335.95 L 307.85,338.23 L 311.02,346.49 L 311.12,353.51 L 313.21,360.27 L 317.8,364.98 L 319.74,362.4 L 316.76,354.78 L 316.92,347.5 L 319.65,343.84 L 323.31,344.46 L 327.88,351.12 L 326.73,354.63 L 332.3,366.79 L 331.57,370.76 L 334.62,373.91 L 339.5,375.21 L 341.17,373.17 L 347.39,372.49 L 352.07,367.71 L 353.34,363.61 L 357.44,363.19 L 357.06,355.87 L 354.31,346.87 Z" onclick="selectDivisionFromMap('Chittagong')" onmouseover="showDetailedMapTooltip('Chittagong', event)" onmouseout="hideDetailedMapTooltip()"/>
+
+<!-- Labels and Pins -->
+<text class="bg-map-label" x="93.21" y="83.14">Rangpur</text>
+<text id="map-lbl-Rangpur" class="bg-map-count" x="93.21" y="100.14">0 Donors</text>
+<circle class="map-sonar-pin" cx="93.21" cy="71.14" r="5" />
+<text class="bg-map-label" x="81.24" y="205.86">Rajshahi</text>
+<text id="map-lbl-Rajshahi" class="bg-map-count" x="81.24" y="222.86">0 Donors</text>
+<circle class="map-sonar-pin" cx="81.24" cy="193.86" r="5" />
+<text class="bg-map-label" x="219.88" y="174.18">Mymensingh</text>
+<text id="map-lbl-Mymensingh" class="bg-map-count" x="219.88" y="191.18">0 Donors</text>
+<circle class="map-sonar-pin" cx="219.88" cy="162.18" r="5" />
+<text class="bg-map-label" x="341.83" y="204.1">Sylhet</text>
+<text id="map-lbl-Sylhet" class="bg-map-count" x="341.83" y="221.1">0 Donors</text>
+<circle class="map-sonar-pin" cx="341.83" cy="192.1" r="5" />
+<text class="bg-map-label" x="207.56" y="298.65">Dhaka</text>
+<text id="map-lbl-Dhaka" class="bg-map-count" x="207.56" y="315.65">0 Donors</text>
+<circle class="map-sonar-pin" cx="207.56" cy="286.65" r="5" />
+<text class="bg-map-label" x="121.99" y="381.19">Khulna</text>
+<text id="map-lbl-Khulna" class="bg-map-count" x="121.99" y="398.19">0 Donors</text>
+<circle class="map-sonar-pin" cx="121.99" cy="369.19" r="5" />
+<text class="bg-map-label" x="206.31" y="434.02">Barisal</text>
+<text id="map-lbl-Barisal" class="bg-map-count" x="206.31" y="451.02">0 Donors</text>
+<circle class="map-sonar-pin" cx="206.31" cy="422.02" r="5" />
+<text class="bg-map-label" x="359.97" y="416.03">Chittagong</text>
+<text id="map-lbl-Chittagong" class="bg-map-count" x="359.97" y="433.03">0 Donors</text>
+<circle class="map-sonar-pin" cx="359.97" cy="404.03" r="5" />
+                        </svg>
+
+                        <!-- Tooltip Panel overlay on hover -->
+                        <div id="detailed-map-tooltip" style="display: none; position: absolute; background: rgba(8,8,12,0.96); border: 1.5px solid var(--primary); padding: 16px; border-radius: 16px; z-index: 100; font-size: 13px; min-width: 220px; box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px var(--primary-glow); pointer-events: none;">
+                            <h4 id="det-tooltip-div-name" style="font-weight: 800; color: white; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; margin-bottom: 10px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">Dhaka Division</h4>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-muted);">👥 Active Donors:</span><strong id="det-tooltip-donors" style="color: white;">12</strong></div>
+                                <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-muted);">🏥 Blood Banks:</span><strong id="det-tooltip-banks" style="color: #3b82f6;">4</strong></div>
+                                <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-muted);">⚠️ Urgent Requests:</span><strong id="det-tooltip-reqs" style="color: #ef4444;">2</strong></div>
+                                
+                                <div style="margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 8px;">
+                                    <span style="color: var(--primary); font-weight: 700; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 4px;">🩸 Positive Donors Breakdown:</span>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; font-size: 11px; text-align: center;" id="det-tooltip-breakdown">
+                                        <!-- Blood group details -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Info Panel Card displaying selected division info & positive donors counts -->
+                    <div class="glass-panel" style="flex: 0.8; min-width: 300px; padding: 24px; border-color: rgba(255,255,255,0.04); display: flex; flex-direction: column; gap: 15px; background: rgba(255,255,255,0.01); box-shadow: none;">
+                        <h3 style="font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px; display: flex; align-items: center; gap: 8px;">📊 Coverage Statistics</h3>
+                        
+                        <div id="coverage-info-prompt" style="color: var(--text-muted); font-size: 14px; text-align: center; padding: 30px 10px;">
+                            <span style="font-size: 28px; display: block; margin-bottom: 10px;">🗺️</span>
+                            Hover over or click any division on the map of Bangladesh to view regional counts, verified blood banks, and detailed positive donor groups.
+                        </div>
+
+                        <div id="coverage-info-details" style="display: none; flex-direction: column; gap: 15px;">
+                            <h4 id="cov-division-title" style="font-size: 16px; color: var(--primary); font-weight: 800; text-transform: uppercase;">Dhaka Division</h4>
+                            
+                            <div class="glass-panel" style="padding: 12px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: space-between; box-shadow: none;">
+                                <span style="font-size: 13px; color: var(--text-muted);">Total Active Donors</span>
+                                <h3 id="cov-active-donors" style="font-size: 24px; font-weight: 800; color: white;">12</h3>
+                            </div>
+
+                            <div>
+                                <span style="font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">🩸 Active Positive Donors Count:</span>
+                                <div class="inventory-grid" id="cov-pos-breakdown" style="grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                                    <!-- Blood Group Pills -->
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary btn-sm" id="cov-filter-btn" style="width: 100%; font-size: 12px; padding: 10px;">Apply Search Filters</button>
+                        </div>
+                    </div>
+                </div></div>
+
+            <!-- Live Search Results & Leaflet Map Grid -->
+            <div id="search-results-container" style="display: none; margin-top: 40px; scroll-margin-top: 100px;">
+                <div class="panel-header">
+                    <h2>Matched Eligible Donors (ML Ranked)</h2>
+                    <button class="btn btn-secondary btn-sm" onclick="clearSearchResults()">Clear Results</button>
+                </div>
+                <div class="dashboard-grid" style="margin-top: 20px;">
+                    <!-- Left Column: Map -->
+                    <div class="map-container" id="donor-search-map"></div>
+                    
+                    <!-- Right Column: Donor List -->
+                    <div class="glass-panel" style="max-height: 400px; overflow-y: auto;">
+                        <h4 style="margin-bottom: 15px;">Smart Ranking Matches</h4>
+                        <div class="request-feed" id="donor-results-list">
+                            <!-- Populated dynamically via app.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Statistics -->
+            <div class="stats-grid" id="stats-dashboard" style="margin-top: 60px;">
+                <div class="glass-panel stat-card primary">
+                    <h3 id="stat-lives-saved">3,248</h3>
+                    <p>Lives Saved</p>
+                </div>
+                <div class="glass-panel stat-card">
+                    <h3 id="stat-active-donors">1,482</h3>
+                    <p>Active Donors</p>
+                </div>
+                <div class="glass-panel stat-card">
+                    <h3 id="stat-blood-banks">48</h3>
+                    <p>Verified Blood Banks</p>
+                </div>
+                <div class="glass-panel stat-card">
+                    <h3 id="stat-emergency-requests">142</h3>
+                    <p>Active Requests</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- VIEW 2: BLOOD STOCK INVENTORY VIEW -->
+        <!-- ============================================ -->
+        <section id="inventory-view" class="view-panel" style="display: none;">
+            <div class="panel-header">
+                <h2>Verified Blood Stock Inventories</h2>
+                <p style="color: var(--text-muted);">View live inventories of approved hospitals and blood banks.</p>
+            </div>
+            
+            <div class="dashboard-grid" style="margin-top: 30px;">
+                <!-- Map of Blood Banks -->
+                <div class="map-container" id="inventory-banks-map"></div>
+
+                <!-- Stock inventory listing -->
+                <div class="glass-panel" style="display: flex; flex-direction: column; gap: 20px;">
+                    <h3>Central Stocks Feed</h3>
+                    <div id="central-stocks-list" style="display: flex; flex-direction: column; gap: 20px; max-height: 400px; overflow-y: auto;">
+                        <!-- Seeding Blood Banks inventory details -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- VIEW 3: EMERGENCY BLOOD FEED VIEW -->
+        <!-- ============================================ -->
+        <section id="requests-view" class="view-panel" style="display: none;">
+            <div class="panel-header">
+                <h2>Emergency Blood Requests</h2>
+                <div class="user-menu">
+                    <button class="btn btn-primary" onclick="openPostRequestModal()">Post Emergency Request</button>
+                </div>
+            </div>
+            
+            <div class="request-feed" id="public-emergency-requests-feed" style="margin-top: 30px;">
+                <!-- Dynamic request feed -->
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- VIEW 4: SECURE REAL-TIME MESSAGING WORKSPACE -->
+        <!-- ============================================ -->
+        <section id="chat-view" class="view-panel" style="display: none;">
+            <div class="glass-panel chat-workspace">
+                <!-- Inbox sidebar list -->
+                <div class="chat-inbox">
+                    <div class="inbox-header">Active Dialogs</div>
+                    <div class="inbox-list" id="chat-inbox-list">
+                        <!-- Populated via messages in app.js -->
+                    </div>
+                </div>
+                
+                <!-- Active Chat area -->
+                <div class="chat-box" id="active-chat-box">
+                    <!-- Default State -->
+                    <div id="chat-box-default" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; color: var(--text-muted); padding: 40px;">
+                        <span style="font-size: 48px; margin-bottom: 16px;">💬</span>
+                        <h3>No Active Conversation Selected</h3>
+                        <p>Select a contact from the inbox or start a chat from the donor directory to send messages securely.</p>
+                    </div>
+
+                    <!-- Chat Active State -->
+                    <div id="chat-box-active" style="display: none; flex-direction: column; height: 100%;">
+                        <div class="chat-header">
+                            <div class="chat-header-info">
+                                <h4 id="chat-partner-name">Tanvir Rahman</h4>
+                                <p id="chat-partner-role">Donor • A+</p>
+                            </div>
+                            <div class="feed-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="reportConversation()">Report Convers.</button>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-history" id="chat-messages-log">
+                            <!-- Bubbles populated dynamically -->
+                        </div>
+                        
+                        <form class="chat-input-area" onsubmit="handleSendChatMessage(event)">
+                            <input type="text" id="chat-message-input" placeholder="Type secure message..." required autocomplete="off">
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- DASHBOARD PANELS (ROLE SPECIFIC) -->
+        <!-- ============================================ -->
+
+        <!-- A. DONOR DASHBOARD -->
+        <section id="dashboard-donor-view" class="view-panel" style="display: none;">
+            <div class="dashboard-grid">
+                <div class="dashboard-sidebar">
+                    <div class="glass-panel" style="padding: 16px;">
+                        <h4 style="margin-bottom: 15px;">Donor Hub</h4>
+                        <button class="sidebar-btn active" onclick="switchDashboardTab('donor', 'donor-profile')">Profile details</button>
+                        <button class="sidebar-btn" onclick="switchDashboardTab('donor', 'donor-history')">Donation Logs</button>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <!-- Tab: Profile Details & Cooldown -->
+                    <div id="tab-donor-profile" class="dashboard-tab-content">
+                        <div class="glass-panel" style="margin-bottom: 20px;">
+                            <h3>Profile & Eligibility Status</h3>
+                            
+                            <!-- Eligibility Status Indicator -->
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin: 20px 0; padding: 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color);" id="donor-status-box">
+                                <div>
+                                    <h4 style="font-size: 20px; font-weight: 700;" id="donor-eligibility-title">Eligible to Donate</h4>
+                                    <p style="color: var(--text-muted);" id="donor-eligibility-desc">You can donate blood immediately.</p>
+                                </div>
+                                <span class="badge" id="donor-eligibility-badge" style="font-size: 14px; padding: 6px 14px;">Active</span>
+                            </div>
+
+                            <!-- Availability Toggle -->
+                            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0;">
+                                <div>
+                                    <label style="margin: 0; font-size: 16px; color: white;">Visible in search feeds</label>
+                                    <p style="font-size: 13px; color: var(--text-muted);">Toggle your donor search status.</p>
+                                </div>
+                                <select id="donor-availability-toggle" style="width: auto;" onchange="handleDonorToggleStatus()">
+                                    <option value="Active">Active (Searchable)</option>
+                                    <option value="Inactive">Inactive (Invisible)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Progress countdown bar for cooldown -->
+                        <div class="glass-panel" id="cooldown-countdown-card" style="display: none;">
+                            <h3>90-Day Donation Cooldown Countdown</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 20px;">To ensure donor health, you must wait 90 days after each donation. Status returns to Active automatically.</p>
+                            <div class="bar-wrapper" style="height: 24px; border-radius: 12px; margin-bottom: 10px;">
+                                <div class="bar-current" id="cooldown-progress" style="width: 40%; background: var(--primary);"></div>
+                            </div>
+                            <p id="cooldown-remaining-text" style="font-weight: 700; text-align: right;">54 Days Remaining</p>
+                        </div>
+                    </div>
+
+                    <!-- Tab: History -->
+                    <div id="tab-donor-history" class="dashboard-tab-content" style="display: none;">
+                        <div class="glass-panel">
+                            <h3>Personal Donation Logs</h3>
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Recipient ID</th>
+                                        <th>Recipient Type</th>
+                                        <th>Units</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="donor-history-table">
+                                    <!-- Seed records -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B. PATIENT DASHBOARD -->
+        <section id="dashboard-patient-view" class="view-panel" style="display: none;">
+            <div class="glass-panel" style="text-align: center; padding: 40px; max-width: 600px; margin: 0 auto;">
+                <span style="font-size: 48px;">🏥</span>
+                <h2 style="margin-top: 20px;">Welcome to Patient Center</h2>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">Request blood matching, track emergency postings, and communicate directly with nearest eligible donors.</p>
+                <div style="display: flex; justify-content: center; gap: 20px;">
+                    <button class="btn btn-primary" onclick="openPostRequestModal()">Post Emergency Request</button>
+                    <button class="btn btn-secondary" onclick="switchView('home-view')">Search Donor Map</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- C. BLOOD BANK DASHBOARD -->
+        <section id="dashboard-bb-view" class="view-panel" style="display: none;">
+            <div class="dashboard-grid">
+                <div class="dashboard-sidebar">
+                    <div class="glass-panel" style="padding: 16px;">
+                        <h4 style="margin-bottom: 15px;">Hospital Console</h4>
+                        <button class="sidebar-btn active" onclick="switchDashboardTab('bb', 'bb-inventory')">Manage Inventory</button>
+                        <button class="sidebar-btn" onclick="switchDashboardTab('bb', 'bb-requests')">Verify Area Requests</button>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <!-- Tab: Manage Inventory -->
+                    <div id="tab-bb-inventory" class="dashboard-tab-content">
+                        <div class="glass-panel">
+                            <div class="panel-header">
+                                <h3>Blood Stock Inventory Levels</h3>
+                                <p style="color: var(--text-muted);">Manage real-time blood stock counts.</p>
+                            </div>
+                            <div class="inventory-grid" id="bb-inventory-grid" style="margin-top: 20px;">
+                                <!-- Seeding dynamic blood group inputs -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Requests -->
+                    <div id="tab-bb-requests" class="dashboard-tab-content" style="display: none;">
+                        <div class="glass-panel">
+                            <h3>Area Emergency Request Moderation</h3>
+                            <div class="request-feed" id="bb-moderated-requests-list" style="margin-top: 20px;">
+                                <!-- Area-based request list -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- D. ADMIN DASHBOARD -->
+        <section id="dashboard-admin-view" class="view-panel" style="display: none;">
+            <div class="dashboard-grid">
+                <div class="dashboard-sidebar">
+                    <div class="glass-panel" style="padding: 16px;">
+                        <h4 style="margin-bottom: 15px;">Admin Control</h4>
+                        <button class="sidebar-btn active" onclick="switchDashboardTab('admin', 'admin-users')">Manage Users</button>
+                        <button class="sidebar-btn" onclick="switchDashboardTab('admin', 'admin-verify')">Verify Blood Banks</button>
+                        <button class="sidebar-btn" onclick="switchDashboardTab('admin', 'admin-ml')">ML Demand Analytics</button>
+                        <button class="sidebar-btn" onclick="switchDashboardTab('admin', 'admin-log')">Record Donation</button>
+                        <button class="sidebar-btn" onclick="switchDashboardTab('admin', 'admin-chats')">Moderation Chat</button>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <!-- Tab: Users -->
+                    <div id="tab-admin-users" class="dashboard-tab-content">
+                        <div class="glass-panel">
+                            <h3>Registered Users List</h3>
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-users-table">
+                                    <!-- Seed records -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Verify Blood Banks -->
+                    <div id="tab-admin-verify" class="dashboard-tab-content" style="display: none;">
+                        <div class="glass-panel">
+                            <h3>Pending Blood Bank Verification Approval</h3>
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Blood Bank Name</th>
+                                        <th>License NID</th>
+                                        <th>Phone</th>
+                                        <th>Location</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-verify-table">
+                                    <!-- List elements -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab: ML Demand Analytics -->
+                    <div id="tab-admin-ml" class="dashboard-tab-content" style="display: none;">
+                        <div class="glass-panel" style="margin-bottom: 20px;">
+                            <h3>Blood Demand Forecast Analysis (ML Predictive Modeling)</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 20px;">Using autoregressive trend forecasting based on regional blood request records over 60 days.</p>
+                            
+                            <div class="ai-forecast-grid">
+                                <!-- Demand Bars -->
+                                <div class="demand-chart-container" id="admin-ml-demand-chart">
+                                    <!-- Custom CSS chart bars -->
+                                </div>
+
+                                <!-- Narrative Explanation Card -->
+                                <div class="glass-panel" style="background: rgba(255,255,255,0.01);">
+                                    <h4 style="color: var(--primary);">AI Insights Summary</h4>
+                                    <ul style="margin-top: 15px; margin-left: 20px; display: flex; flex-direction: column; gap: 10px;">
+                                        <li>High-demand clusters detected in <strong>Dhaka Division</strong>.</li>
+                                        <li>Shortage risk flagged for group <strong>O-</strong> (universal donor).</li>
+                                        <li>Recommended actions: Toggle inactive O- donors to active, schedule donation camp campaigns.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Log Donation -->
+                    <div id="tab-admin-log" class="dashboard-tab-content" style="display: none;">
+                        <div class="glass-panel" style="max-width: 600px;">
+                            <h3>Record New Blood Donation</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 20px;">Logs a donation, increments stats, updates inventories, and resets donor 90-day cooldown status.</p>
+                            <form id="admin-log-donation-form" onsubmit="handleRecordDonation(event)">
+                                <div class="form-group">
+                                    <label for="log-donor-id">Select Donor (Verified & Registered)</label>
+                                    <select id="log-donor-id" required>
+                                        <option value="">Choose Donor</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="log-units">Units Donated</label>
+                                        <input type="number" id="log-units" min="1" max="5" value="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="log-recipient-id">Target Blood Bank ID / Recipient ID</label>
+                                        <select id="log-recipient-id" required>
+                                            <option value="">Choose Recipient</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Log Donation</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Chat Moderation Monitoring -->
+                    <div id="tab-admin-chats" class="dashboard-tab-content" style="display: none;">
+                        <div class="glass-panel">
+                            <h3>Conversations Moderation Desk</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 20px;">Allows system administrators to review messaging threads reported for violations while maintaining privacy of contact details.</p>
+                            <div class="request-feed" id="admin-chats-list">
+                                <!-- Group chats view -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================ -->
+    <!-- DIALOG MODALS -->
+    <!-- ============================================ -->
+
+    <!-- 1. Authentication Modal -->
+    <div id="auth-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+        <div class="glass-panel auth-container" style="position: relative; width: 100%; border-color: rgba(255, 255, 255, 0.15);">
+            <span style="position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text-muted);" onclick="closeAuthModal()">&times;</span>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="tab-login-btn" onclick="toggleAuthTab('login')">Sign In</div>
+                <div class="auth-tab" id="tab-register-btn" onclick="toggleAuthTab('register')">Register</div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="auth-login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" required placeholder="name@domain.com">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Sign In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="auth-register-form" onsubmit="handleRegister(event)" style="display: none;">
+                <div class="form-group">
+                    <label for="reg-name">Full Name / Entity Name</label>
+                    <input type="text" id="reg-name" required placeholder="John Doe">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" required placeholder="email@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="text" id="reg-phone" required placeholder="+88017XXXXXXXX">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-role">Role Category</label>
+                        <select id="reg-role" onchange="toggleRegRoleFields()" required>
+                            <option value="Donor">Donor</option>
+                            <option value="Patient">Patient (Receiver)</option>
+                            <option value="Blood Bank / Hospital">Blood Bank / Hospital</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reg-nid" id="reg-nid-label">NID / Birth Certificate ID</label>
+                    <input type="text" id="reg-nid" required placeholder="Upload ID simulation...">
+                </div>
+
+                <!-- Registration Location Fields -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-division">Division</label>
+                        <select id="reg-division" onchange="populateRegDistricts()" required>
+                            <option value="">Choose</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-district">District</label>
+                        <select id="reg-district" onchange="populateRegThanas()" required>
+                            <option value="">Choose</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-thana">Thana</label>
+                        <select id="reg-thana" required>
+                            <option value="">Choose</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dynamic Extra Donor Fields -->
+                <div id="reg-donor-fields" class="form-row">
+                    <div class="form-group">
+                        <label for="reg-blood-group">Blood Group</label>
+                        <select id="reg-blood-group">
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-age">Age (Years)</label>
+                        <input type="number" id="reg-age" min="18" max="65" value="25">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-weight">Weight (kg)</label>
+                        <input type="number" id="reg-weight" min="45" max="150" value="65">
+                    </div>
+                </div>
+
+                <div class="form-group" id="reg-donor-area-field">
+                    <label for="reg-area-details">Permanent Area Address</label>
+                    <input type="text" id="reg-area-details" placeholder="House 12, Road 4, Sector 6...">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Complete Registration</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Post Emergency Request Modal -->
+    <div id="post-request-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+        <div class="glass-panel" style="position: relative; width: 100%; max-width: 600px; border-color: rgba(255, 255, 255, 0.15);">
+            <span style="position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text-muted);" onclick="closePostRequestModal()">&times;</span>
+            
+            <h3 style="margin-bottom: 24px;">Post Emergency Blood Request</h3>
+            
+            <form id="post-request-form" onsubmit="handlePostRequest(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="req-blood-group">Required Blood Group</label>
+                        <select id="req-blood-group" required>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="req-units">Units (Bags) Needed</label>
+                        <input type="number" id="req-units" min="1" max="10" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="req-urgency">Urgency Level</label>
+                        <select id="req-urgency" required>
+                            <option value="High">High (Immediate)</option>
+                            <option value="Medium">Medium (Within 24h)</option>
+                            <option value="Low">Low (Scheduled)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="req-hospital">Hospital Name</label>
+                    <input type="text" id="req-hospital" required placeholder="e.g. Dhaka Medical College Hospital">
+                </div>
+
+                <div class="form-group">
+                    <label for="req-location-details">Exact Ward / Bed Location Details</label>
+                    <input type="text" id="req-location-details" required placeholder="e.g. Ward 4, Bed 12, Hospital Building 2">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="req-division">Division</label>
+                        <select id="req-division" onchange="populateReqDistricts()" required>
+                            <option value="">Choose</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="req-district">District</label>
+                        <select id="req-district" onchange="populateReqThanas()" required>
+                            <option value="">Choose</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="req-thana">Thana</label>
+                        <select id="req-thana" required>
+                            <option value="">Choose</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Post Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaflet.js Mapping Library JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="app.js"></script>
+</body>
+</html>

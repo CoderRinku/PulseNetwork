@@ -1,0 +1,278 @@
+{
+    "users": [
+        {
+            "id": "user-admin",
+            "name": "Super Administrator",
+            "email": "admin@blooddonation.org",
+            "password": "$2b$10$xT03ecaizIgKvS1YX1RsqO8MbuGFNjEv511v9akLLWKVnX1cucWge",
+            "role": "Admin",
+            "phone": "+8801711111111",
+            "nid_birth_cert": "123456789012",
+            "status": "Active",
+            "created_at": "2026-06-09T17:53:22.313Z"
+        },
+        {
+            "id": "user-donor-1",
+            "name": "Tanvir Rahman",
+            "email": "tanvir@gmail.com",
+            "password": "$2b$10$xT03ecaizIgKvS1YX1RsqO8MbuGFNjEv511v9akLLWKVnX1cucWge",
+            "role": "Donor",
+            "phone": "+8801722222222",
+            "nid_birth_cert": "987654321098",
+            "status": "Active",
+            "created_at": "2026-06-14T17:53:22.314Z"
+        },
+        {
+            "id": "user-donor-2",
+            "name": "Anika Tasnim",
+            "email": "anika@gmail.com",
+            "password": "$2b$10$xT03ecaizIgKvS1YX1RsqO8MbuGFNjEv511v9akLLWKVnX1cucWge",
+            "role": "Donor",
+            "phone": "+8801733333333",
+            "nid_birth_cert": "456789012345",
+            "status": "Active",
+            "created_at": "2026-06-19T17:53:22.314Z"
+        },
+        {
+            "id": "user-donor-3",
+            "name": "Rakib Hasan",
+            "email": "rakib@gmail.com",
+            "password": "$2b$10$xT03ecaizIgKvS1YX1RsqO8MbuGFNjEv511v9akLLWKVnX1cucWge",
+            "role": "Donor",
+            "phone": "+8801744444444",
+            "nid_birth_cert": "654321098765",
+            "status": "Active",
+            "created_at": "2026-06-24T17:53:22.314Z"
+        },
+        {
+            "id": "user-patient-1",
+            "name": "Sajjad Hossain",
+            "email": "sajjad@gmail.com",
+            "password": "$2b$10$xT03ecaizIgKvS1YX1RsqO8MbuGFNjEv511v9akLLWKVnX1cucWge",
+            "role": "Patient",
+            "phone": "+8801755555555",
+            "nid_birth_cert": "321098765432",
+            "status": "Active",
+            "created_at": "2026-06-29T17:53:22.314Z"
+        },
+        {
+            "id": "user-bb-1",
+            "name": "Dhaka Central Blood Bank",
+            "email": "dhakabb@pulsenetwork.org",
+            "password": "$2b$10$xT03ecaizIgKvS1YX1RsqO8MbuGFNjEv511v9akLLWKVnX1cucWge",
+            "role": "Blood Bank / Hospital",
+            "phone": "+8801766666666",
+            "nid_birth_cert": "BB-VERIFY-1002",
+            "status": "Active",
+            "created_at": "2026-05-30T17:53:22.314Z"
+        },
+        {
+            "id": "user-bb-2",
+            "name": "Sylhet Red Crescent Society",
+            "email": "sylhetred@pulsenetwork.org",
+            "password": "$2b$10$xT03ecaizIgKvS1YX1RsqO8MbuGFNjEv511v9akLLWKVnX1cucWge",
+            "role": "Blood Bank / Hospital",
+            "phone": "+8801777777777",
+            "nid_birth_cert": "BB-VERIFY-1003",
+            "status": "Pending",
+            "created_at": "2026-07-09T17:53:22.314Z"
+        }
+    ],
+    "donors": [
+        {
+            "user_id": "user-donor-1",
+            "blood_group": "A+",
+            "age": 26,
+            "weight": 72,
+            "permanent_area": "Mirpur-10, Dhaka",
+            "division": "Dhaka",
+            "district": "Dhaka",
+            "thana": "Mirpur",
+            "lat": 23.8041,
+            "lng": 90.3626,
+            "last_donation_date": "2026-04-05T17:53:22.314Z",
+            "is_eligible": true,
+            "response_rate": 92,
+            "activity_score": 85,
+            "total_donations": 4
+        },
+        {
+            "user_id": "user-donor-2",
+            "blood_group": "O-",
+            "age": 24,
+            "weight": 58,
+            "permanent_area": "Dhanmondi 27, Dhaka",
+            "division": "Dhaka",
+            "district": "Dhaka",
+            "thana": "Dhanmondi",
+            "lat": 23.7461,
+            "lng": 90.3742,
+            "last_donation_date": "2026-06-09T17:53:22.314Z",
+            "is_eligible": false,
+            "response_rate": 98,
+            "activity_score": 95,
+            "total_donations": 8
+        },
+        {
+            "user_id": "user-donor-3",
+            "blood_group": "B+",
+            "age": 31,
+            "weight": 80,
+            "permanent_area": "Amberkhana Point, Sylhet",
+            "division": "Sylhet",
+            "district": "Sylhet",
+            "thana": "Amberkhana",
+            "lat": 24.908,
+            "lng": 91.865,
+            "last_donation_date": "2026-03-21T17:53:22.314Z",
+            "is_eligible": true,
+            "response_rate": 75,
+            "activity_score": 70,
+            "total_donations": 2
+        }
+    ],
+    "blood_banks": [
+        {
+            "user_id": "user-bb-1",
+            "name": "Dhaka Central Blood Bank",
+            "verification_status": "Verified",
+            "division": "Dhaka",
+            "district": "Dhaka",
+            "thana": "Gulshan",
+            "lat": 23.7925,
+            "lng": 90.4078,
+            "contact_no": "+88029999999"
+        },
+        {
+            "user_id": "user-bb-2",
+            "name": "Sylhet Red Crescent Society",
+            "verification_status": "Pending",
+            "division": "Sylhet",
+            "district": "Sylhet",
+            "thana": "Zindabazar",
+            "lat": 24.8949,
+            "lng": 91.8687,
+            "contact_no": "+88082177777"
+        }
+    ],
+    "blood_inventory": [
+        {
+            "blood_bank_id": "user-bb-1",
+            "blood_group": "A+",
+            "quantity": 25,
+            "updated_at": "2026-07-09T17:53:22.314Z"
+        },
+        {
+            "blood_bank_id": "user-bb-1",
+            "blood_group": "A-",
+            "quantity": 8,
+            "updated_at": "2026-07-09T17:53:22.314Z"
+        },
+        {
+            "blood_bank_id": "user-bb-1",
+            "blood_group": "B+",
+            "quantity": 18,
+            "updated_at": "2026-07-09T17:53:22.314Z"
+        },
+        {
+            "blood_bank_id": "user-bb-1",
+            "blood_group": "B-",
+            "quantity": 5,
+            "updated_at": "2026-07-09T17:53:22.314Z"
+        },
+        {
+            "blood_bank_id": "user-bb-1",
+            "blood_group": "AB+",
+            "quantity": 12,
+            "updated_at": "2026-07-09T17:53:22.314Z"
+        },
+        {
+            "blood_bank_id": "user-bb-1",
+            "blood_group": "AB-",
+            "quantity": 2,
+            "updated_at": "2026-07-09T17:53:22.314Z"
+        },
+        {
+            "blood_bank_id": "user-bb-1",
+            "blood_group": "O+",
+            "quantity": 30,
+            "updated_at": "2026-07-09T17:53:22.314Z"
+        },
+        {
+            "blood_bank_id": "user-bb-1",
+            "blood_group": "O-",
+            "quantity": 4,
+            "updated_at": "2026-07-09T17:53:22.314Z"
+        }
+    ],
+    "emergency_requests": [
+        {
+            "id": "req-1",
+            "patient_id": "user-patient-1",
+            "blood_group": "A+",
+            "units_needed": 2,
+            "hospital_name": "Dhaka Medical College Hospital",
+            "location_details": "Ward 12, Bed 15, DMCH, Dhaka",
+            "division": "Dhaka",
+            "district": "Dhaka",
+            "thana": "Motijheel",
+            "lat": 23.733,
+            "lng": 90.4172,
+            "urgency_level": "High",
+            "status": "Pending",
+            "created_at": "2026-07-09T15:53:22.314Z"
+        },
+        {
+            "id": "req-2",
+            "patient_id": "user-patient-1",
+            "blood_group": "AB-",
+            "units_needed": 1,
+            "hospital_name": "Sylhet MAG Osmani Medical College",
+            "location_details": "ICU, Bed 4, Sylhet",
+            "division": "Sylhet",
+            "district": "Sylhet",
+            "thana": "Zindabazar",
+            "lat": 24.8949,
+            "lng": 91.8687,
+            "urgency_level": "High",
+            "status": "Approved",
+            "created_at": "2026-07-08T17:53:22.314Z"
+        }
+    ],
+    "messages": [
+        {
+            "id": "msg-1",
+            "sender_id": "user-patient-1",
+            "receiver_id": "user-donor-1",
+            "message": "Hello Tanvir, I see you are an eligible A+ donor near Mirpur. We urgently need 2 bags of A+ blood at DMCH. Can you help?",
+            "is_read": false,
+            "timestamp": "2026-07-09T17:23:22.314Z"
+        },
+        {
+            "id": "msg-2",
+            "sender_id": "user-donor-1",
+            "receiver_id": "user-patient-1",
+            "message": "Hi Sajjad, yes, I am available. I can come to DMCH by 5 PM today.",
+            "is_read": false,
+            "timestamp": "2026-07-09T17:28:22.314Z"
+        }
+    ],
+    "donation_history": [
+        {
+            "id": "don-h-1",
+            "donor_id": "user-donor-1",
+            "recipient_id": "user-bb-1",
+            "recipient_type": "BloodBank",
+            "donation_date": "2026-04-05T17:53:22.314Z",
+            "units_donated": 1
+        },
+        {
+            "id": "don-h-2",
+            "donor_id": "user-donor-2",
+            "recipient_id": "user-patient-1",
+            "recipient_type": "Patient",
+            "donation_date": "2026-06-09T17:53:22.314Z",
+            "units_donated": 1
+        }
+    ]
+}
