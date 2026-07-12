@@ -1125,12 +1125,57 @@ polygon:hover + text, .bg-map-poly:hover ~ text {
 /* ========================================================
    16. RESPONSIVE MEDIA QUERIES
    ======================================================== */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column-reverse !important;
+        gap: 30px !important;
+    }
+    .hero > div {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 768px) {
     body {
-        padding-top: 120px;
+        padding-top: 10px !important;
     }
     header {
-        position: absolute;
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        transform: none !important;
+        left: 0 !important;
+        margin: 0 0 20px 0 !important;
+        border-radius: 0 0 20px 20px !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: none !important;
+    }
+    .nav-container {
+        flex-direction: column !important;
+        gap: 12px !important;
+        padding: 14px 16px !important;
+    }
+    .nav-links {
+        width: 100% !important;
+        justify-content: center !important;
+        overflow-x: auto !important;
+        padding-bottom: 6px !important;
+        gap: 4px !important;
+        scrollbar-width: none; /* Hide scrollbar for clean menu look */
+    }
+    .nav-links::-webkit-scrollbar {
+        display: none;
+    }
+    .nav-link {
+        padding: 6px 12px !important;
+        font-size: 13px !important;
+        white-space: nowrap !important;
+    }
+    .user-menu {
+        width: 100% !important;
+        justify-content: center !important;
     }
     .dashboard-grid {
         grid-template-columns: 1fr;
@@ -1143,6 +1188,15 @@ polygon:hover + text, .bg-map-poly:hover ~ text {
     }
     .ai-forecast-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .glass-panel {
+        padding: 16px !important;
+    }
+    .hero-stat-grid {
+        grid-template-columns: 1fr !important;
     }
 }
 
@@ -1182,8 +1236,8 @@ polygon:hover + text, .bg-map-poly:hover ~ text {
     font-family: var(--font-main);
     font-weight: 900 !important;
     letter-spacing: -0.03em !important;
-    line-height: 1.2 !important;
-    margin-bottom: 22px !important;
+    line-height: 1.45 !important;
+    margin-bottom: 24px !important;
 }
 
 .hero p {
