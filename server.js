@@ -3,10 +3,12 @@ const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
 const crypto = require('crypto');
+const cors = require('cors');
 const db = require('./db');
 const ml = require('./ml');
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
