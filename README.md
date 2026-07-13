@@ -65,3 +65,93 @@ npm start
 
 ### ২. সার্ভারে ডেপ্লয় করার নিয়ম (Render Deploy):
 প্রজেক্টের রুটে একটি `render.yaml` ফাইল দেওয়া আছে। রেন্ডারের **Blueprints** অপশনে গিয়ে এই গিটহাব রিপোজিটরিটি কানেক্ট করলেই রেন্ডার নিজে থেকে বিল্ড ও ডেপ্লয় করে নেবে।
+
+---
+
+## 💻 প্রেজেন্টেশনের জন্য কোড উদাহরণ (Presentation Code Snippets)
+
+আপনার প্রেজেন্টেশনে প্রজেক্টের টেকনিক্যাল গভীরতা ও জটিল ফিচারগুলো ব্যাখ্যা করার জন্য নিচে তিনটি প্রধান কোড উদাহরণ বাংলা বিবরণ সহ দেওয়া হলো:
+
+### ১. রিয়েল-টাইম চ্যাট সিস্টেম (WebSocket Server Logic)
+এটি আমাদের এক্সপ্রেস সার্ভারে চ্যাট মেসেজগুলো কীভাবে হ্যান্ডেল করে তা দেখায়। যখন কোনো রোগী রোগীকে মেসেজ পাঠায়, সার্ভার পেজ রিফ্রেশ না করেই সরাসরি কানেক্টেড ডোনারের স্ক্রিনে মেসেজটি পাঠিয়ে দেয়।
+
+```javascript
+// server.js - WebSocket মেসেজ রাউটিং
+ws.on('message', (message) => {
+    const data = JSON.parse(message);
+
+    if (data.type === 'CHAT_MSG') {
+        const { receiver_id, message: text } = data;
+
+        // ১. মেসেজ অবজেক্ট তৈরি করা
+        const messageObj = {
+            id: `msg-${crypto.randomBytes(4).toString('hex')}`,
+            sender_id: authenticatedUserId,
+            receiver_id,
+            message: text,
+            timestamp: new Date().toISOString()
+        };
+
+        // ২. ডেটাবেজে চ্যাটটি সেভ করা
+        dbData.messages.push(messageObj);
+        db.write(dbData);
+
+        // ৩. রিসিভার যদি অনলাইন থাকে, তাকে সরাসরি মেসেজটি পুশ করা
+        const receiverSocket = CLIENTS[receiver_id];
+        if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
+            receiverSocket.send(JSON.stringify({ 
+                type: 'CHAT_MSG_INCOMING', 
+                message: messageObj 
+            }));
+        }
+    }
+});
+```
+
+### ২. ইন্টারেক্টিভ ম্যাপ হ্যান্ডলার (React Component Event)
+এটি আমাদের ফ্রন্টএন্ডে ম্যাপে কোনো বিভাগে মাউস হোভার বা ক্লিক করলে ম্যাপের প্যানেল ও লাইভ ডোনার ড্যাশবোর্ড কীভাবে রি-রেন্ডার হয় তা দেখায়।
+
+```jsx
+// Pages/index.jsx - React Interactive SVG Division click handler
+const handleDivisionClick = async (divisionName) => {
+  setSelectedDivision(divisionName);
+  
+  // এপিআই থেকে ওই বিভাগের লাইভ ডোনারের তালিকা সার্চ করা
+  try {
+    const response = await fetch(`/api/donors?division=${divisionName}`);
+    if (response.ok) {
+      const donorsList = await response.json();
+      setSearchResults(donorsList); // রিঅ্যাক্ট স্টেট আপডেট
+      setCurrentView('search-results-view'); // রেজাল্ট পেজে রিডাইরেক্ট
+    }
+  } catch (error) {
+    console.error("লাইভ ডোনার ডেটা লোড করতে ব্যর্থ:", error);
+  }
+};
+```
+
+### ৩. স্বয়ংক্রিয় ডোনার কুলডাউন পলিসি (Date Arithmetic Check)
+রোগী ও ডোনারদের সুরক্ষার জন্য, কেউ একবার রক্ত দান করলে তার প্রোফাইল ৯০ দিনের জন্য সার্চে হাইড থাকে। নিচে এই চেক করার লজিকটি দেওয়া হলো:
+
+```javascript
+// server.js - ডোনারের এলিজিবিলিটি বাযোগ্যতা পরীক্ষা করা
+function checkDonorEligibilityCooldown() {
+    const data = db.read();
+    const now = new Date();
+
+    data.donors.forEach(donor => {
+        if (!donor.is_eligible) {
+            const lastDonation = new Date(donor.last_donation_date);
+            const diffTime = Math.abs(now - lastDonation);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            // ৯০ দিন পার হয়ে গেলে ডোনার আবার রক্ত দেওয়ার যোগ্য হবেন
+            if (diffDays >= 90) {
+                donor.is_eligible = true;
+            }
+        }
+    });
+    db.write(data);
+}
+```
+
