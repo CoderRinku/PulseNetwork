@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseNetwork — Interactive Presentation Slide Deck</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff3b5c',
+                        secondary: '#10b981',
+                        darkBg: '#09090b',
+                        cardBg: '#18181b',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .slide { display: none; }
+        .slide.active { display: block; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col font-sans selection:bg-primary selection:text-white">
+
+    <!-- Top Glow Header -->
+    <header class="border-b border-zinc-800 bg-zinc-950/60 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl animate-pulse">🩸</span>
+                <span class="text-xl font-black bg-gradient-to-r from-white via-slate-200 to-primary bg-clip-text text-transparent">PulseNetwork Presentation</span>
+            </div>
+            <div class="flex items-center gap-4 text-sm text-zinc-400">
+                <span class="bg-secondary/15 text-secondary border border-secondary/30 px-3 py-1 rounded-full font-semibold">Interactive Mode</span>
+                <a href="https://pulsenetwork.onrender.com" target="_blank" class="hover:text-primary transition-all font-medium">Live Website ↗</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex gap-8">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-80 shrink-0 flex flex-col gap-2">
+            <div class="text-xs font-bold text-zinc-500 uppercase tracking-widest px-3 mb-2">স্লাইডসমূহ (Slides)</div>
+            
+            <button onclick="gotoSlide(1)" id="btn-slide-1" class="slide-nav-btn active w-full text-left px-4 py-3 rounded-xl border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800/50 hover:border-zinc-700 transition-all flex items-center gap-3">
+                <span class="text-zinc-500 font-bold text-sm">০১.</span>
+                <span class="font-medium text-[15px]">প্রজেক্ট পরিচিতি</span>
+            </button>
+            <button onclick="gotoSlide(2)" id="btn-slide-2" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
+                <span class="text-zinc-500 font-bold text-sm">০২.</span>
+                <span class="font-medium text-[15px]">সমস্যা ও সমাধান</span>
+            </button>
+            <button onclick="gotoSlide(3)" id="btn-slide-3" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
+                <span class="text-zinc-500 font-bold text-sm">০৩.</span>
+                <span class="font-medium text-[15px]">বর্তমান অবস্থা ও ফিচার</span>
+            </button>
+            <button onclick="gotoSlide(4)" id="btn-slide-4" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
+                <span class="text-zinc-500 font-bold text-sm">০৪.</span>
+                <span class="font-medium text-[15px]">প্রেজেন্টেশন কোড ডেমো</span>
+            </button>
+            <button onclick="gotoSlide(5)" id="btn-slide-5" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
+                <span class="text-zinc-500 font-bold text-sm">০৫.</span>
+                <span class="font-medium text-[15px]">ভবিষ্যৎ রোডম্যাপ</span>
+            </button>
+            <button onclick="gotoSlide(6)" id="btn-slide-6" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
+                <span class="text-zinc-500 font-bold text-sm">০৬.</span>
+                <span class="font-medium text-[15px]">প্রযুক্তি নির্বাচন ও যুক্তি</span>
+            </button>
+        </aside>
+
+        <!-- Presentation Slides Content Window -->
+        <section class="flex-1 bg-zinc-950/40 border border-zinc-800 rounded-3xl p-8 relative flex flex-col justify-between shadow-[0_0_80px_rgba(255,59,92,0.02)] min-h-[500px]">
+            
+            <!-- Slide 1: Title -->
+            <div id="slide-1" class="slide active flex-1">
+                <div class="flex flex-col justify-center items-center text-center h-full pt-16">
+                    <span class="text-6xl mb-6 select-none animate-bounce">🩸</span>
+                    <h1 class="text-5xl font-black text-white tracking-tight mb-4">PulseNetwork</h1>
+                    <h2 class="text-xl font-bold text-primary mb-6">রিয়েল-টাইম রক্তদান এবং জরুরি যোগাযোগ নেটওয়ার্ক</h2>
+                    <p class="text-zinc-400 max-w-xl leading-relaxed text-[15px]">
+                        বাংলাদেশ জুড়ে রক্তদাতা, ব্লাড ব্যাংক এবং রোগীদের মধ্যে সরাসরি সংযোগ তৈরি করার জন্য একটি অত্যন্ত দ্রুতগতির এবং প্রিমিয়াম প্ল্যাটফর্ম।
+                    </p>
+                    <div class="mt-12 flex gap-4">
+                        <span class="text-xs bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-xl text-zinc-500">Press Right Arrow / Next to navigate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Problem & Solution -->
+            <div id="slide-2" class="slide flex-1">
+                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 02 / 06</span>
+                <h2 class="text-2xl font-black text-white mb-6">প্রজেক্টটি কী এবং কেন এটি দরকার?</h2>
+                
+                <div class="grid grid-cols-2 gap-8 mt-4">
+                    <!-- Left: The Problem -->
+                    <div class="bg-red-500/5 border border-red-500/10 rounded-2xl p-6">
+                        <h3 class="text-primary font-bold text-lg mb-3 flex items-center gap-2">❌ মূল সমস্যাসমূহ</h3>
+                        <ul class="space-y-3.5 text-sm text-zinc-400">
+                            <li class="flex gap-2"><span class="text-primary">•</span> ফেসবুকে বা ফোন বুকে রক্ত খুঁজতে গিয়ে পুরোনো বা বন্ধ নাম্বার পাওয়া যায়।</li>
+                            <li class="flex gap-2"><span class="text-primary">•</span> রোগীরা মানচিত্রে কাছাকাছি সক্রিয় ডোনারদের তালিকা দেখতে পারে না।</li>
+                            <li class="flex gap-2"><span class="text-primary">•</span> ব্লাড ব্যাংকে কী গ্রুপের রক্ত রেডি আছে তা তাৎক্ষণিক জানার উপায় ছিল না।</li>
+                        </ul>
+                    </div>
+
+                    <!-- Right: The Solution -->
+                    <div class="bg-secondary/5 border border-secondary/10 rounded-2xl p-6">
+                        <h3 class="text-secondary font-bold text-lg mb-3 flex items-center gap-2">✅ আমাদের সমাধান</h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed mb-4">
+                            PulseNetwork একটি সহজ ডিজিটাল মানচিত্রের মতো, যেখানে আপনি এক ক্লিকেই দেখতে পাবেন আপনার সবচেয়ে কাছাকাছি এই মুহূর্তে কোন রক্তদাতার কী গ্রুপ আছে এবং সরাসরি তার সাথে মেসেজে কথা বলতে পারবেন।
+                        </p>
+                        <ul class="space-y-2 text-sm text-zinc-400">
+                            <li class="flex gap-2"><span class="text-secondary">✔</span> ১-ক্লিকে ম্যাপে ক্লিক করে ডোনার খোঁজা</li>
+                            <li class="flex gap-2"><span class="text-secondary">✔</span> ওয়ান-টু-ওয়ান ইনস্ট্যান্ট চ্যাটিং</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Current Status -->
+            <div id="slide-3" class="slide flex-1">
+                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 03 / 06</span>
+                <h2 class="text-2xl font-black text-white mb-6">প্রজেক্টের বর্তমান অবস্থা (Current Status)</h2>
+                
+                <div class="grid grid-cols-2 gap-6 mt-4">
+                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5">
+                        <h4 class="font-bold text-white mb-1.5 text-base">🗺️ নিখুঁত বাংলাদেশ ম্যাপ</h4>
+                        <p class="text-xs text-zinc-400 leading-relaxed">৮টি প্রশাসনিক বিভাগ আলাদা সীমানা সহ glowing নিওন থিমে ম্যাপে দৃশ্যমান। বিভাগে মাউস রাখলে লাইভ ডোনার সংখ্যা দেখা যায়।</p>
+                    </div>
+                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5">
+                        <h4 class="font-bold text-white mb-1.5 text-base">💬 লাইভ চ্যাট সিস্টেম</h4>
+                        <p class="text-xs text-zinc-400 leading-relaxed">কোনো পেজ রিফ্রেশ না করেই রোগী ও রক্তদাতার মধ্যে সরাসরি মেসেজ আদান-প্রদান করা যায় (হোয়াটসঅ্যাপের মতো দ্রুত)।</p>
+                    </div>
+                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5">
+                        <h4 class="font-bold text-white mb-1.5 text-base">🩸 ডোনার কুলডাউন পলিসি</h4>
+                        <p class="text-xs text-zinc-400 leading-relaxed">কেউ একবার রক্ত দান করলে তার প্রোফাইল স্বয়ংক্রিয়ভাবে ৯০ দিনের জন্য সার্চে লক থাকবে, যা ডোনারদের স্বাস্থ্য সুরক্ষিত রাখে।</p>
+                    </div>
+                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5">
+                        <h4 class="font-bold text-white mb-1.5 text-base">⚡ ওয়ান-ক্লিক ডেমো লগইন</h4>
+                        <p class="text-xs text-zinc-400 leading-relaxed">এডমিন, ডোনার এবং হাসপাতাল ড্যাশবোর্ডের সব ফিচার সাথে সাথে পরীক্ষা করার জন্য কাস্টম বাটন যোগ করা হয়েছে।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Code Demo -->
+            <div id="slide-4" class="slide flex-1">
+                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 04 / 06</span>
+                <h2 class="text-2xl font-black text-white mb-4">প্রেজেন্টেশনের জন্য কোড উদাহরণ</h2>
+                
+                <div class="flex gap-4 mb-4 text-xs">
+                    <button onclick="showCodeTab('server-code')" id="tab-server-code" class="code-tab-btn active px-3.5 py-1.5 rounded-lg bg-zinc-800 text-white font-semibold">১. চ্যাট সার্ভার (WebSocket)</button>
+                    <button onclick="showCodeTab('map-code')" id="tab-map-code" class="code-tab-btn px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-white font-semibold">২. ইন্টারেক্টিভ ম্যাপ (React)</button>
+                </div>
+
+                <!-- Code Content Box -->
+                <div id="code-container" class="bg-zinc-950 border border-zinc-800/80 rounded-xl p-4 font-mono text-[11px] leading-relaxed text-zinc-300 overflow-x-auto max-h-72">
+                    <!-- Tab 1: WebSocket -->
+                    <pre id="server-code-pre" class="code-pre">
+// server.js - WebSocket মেসেজ রাউটিং ও চ্যাট ডিস্ট্রিবিউশন
+ws.on('message', (message) => {
+    const data = JSON.parse(message);
+    if (data.type === 'CHAT_MSG') {
+        const { receiver_id, message: text } = data;
+        const messageObj = {
+            id: `msg-${crypto.randomBytes(4).toString('hex')}`,
+            sender_id: authenticatedUserId,
+            receiver_id,
+            message: text,
+            timestamp: new Date().toISOString()
+        };
+        dbData.messages.push(messageObj);
+        db.write(dbData);
+
+        // রিসিভার যদি অনলাইন থাকে, তাকে সরাসরি মেসেজটি পুশ করা
+        const receiverSocket = CLIENTS[receiver_id];
+        if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
+            receiverSocket.send(JSON.stringify({ type: 'CHAT_MSG_INCOMING', message: messageObj }));
+        }
+    }
+});</pre>
+                    <!-- Tab 2: React click -->
+                    <pre id="map-code-pre" class="code-pre hidden">
+// pages/index.jsx - React Interactive SVG Click Handler
+const handleDivisionClick = async (divisionName) => {
+  setSelectedDivision(divisionName);
+  try {
+    const response = await fetch(`/api/donors?division=${divisionName}`);
+    if (response.ok) {
+      const donorsList = await response.json();
+      setSearchResults(donorsList); // রিঅ্যাক্ট স্টেট আপডেট
+      setCurrentView('search-results-view'); // সার্চ পেজে নেভিগেশন
+    }
+  } catch (error) {
+    console.error("লাইভ ডোনার লোড করতে ব্যর্থ:", error);
+  }
+};</pre>
+                </div>
+            </div>
+
+            <!-- Slide 5: Future Roadmap -->
+            <div id="slide-5" class="slide flex-1">
+                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 05 / 06</span>
+                <h2 class="text-2xl font-black text-white mb-6">ভবিষ্যৎ রোডম্যাপ (Future Roadmap)</h2>
+                
+                <div class="space-y-4 mt-4">
+                    <div class="flex items-start gap-4 bg-zinc-900/40 p-4 rounded-xl border border-zinc-800/80">
+                        <span class="bg-secondary/15 text-secondary text-xs px-2.5 py-1 rounded-md font-bold mt-0.5">পরিকল্পনা ১</span>
+                        <div>
+                            <h4 class="font-bold text-white text-[15px] mb-1">📞 অফলাইন এসএমএস এলার্ট (Offline SMS System)</h4>
+                            <p class="text-xs text-zinc-400">বাংলাদেশের অনেক প্রত্যন্ত অঞ্চলের রক্তদাতাদের কাছে ইন্টারনেট থাকে না। আমরা এমন একটি এসএমএস এলার্ট সিস্টেম তৈরি করব যা দিয়ে ইন্টারনেট ছাড়াই সাধারণ বাটনে প্রেস করে মেসেজে রক্ত খোঁজা ও পাঠানো যাবে।</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 bg-zinc-900/40 p-4 rounded-xl border border-zinc-800/80">
+                        <span class="bg-secondary/15 text-secondary text-xs px-2.5 py-1 rounded-md font-bold mt-0.5">পরিকল্পনা ২</span>
+                        <div>
+                            <h4 class="font-bold text-white text-[15px] mb-1">📱 অ্যান্ড্রয়েড এবং আইওএস ডেডিকেটেড মোবাইল অ্যাপ</h4>
+                            <p class="text-xs text-zinc-400">সহজ পুশ নোটিফিকেশন এবং রোগীকে সরাসরি ম্যাপে ডোনারের লাইভ ডিরেকশন দেখানোর জন্য আমরা রিয়্যাক্ট নেটিভ মোবাইল অ্যাপ তৈরি করব।</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 bg-zinc-900/40 p-4 rounded-xl border border-zinc-800/80">
+                        <span class="bg-secondary/15 text-secondary text-xs px-2.5 py-1 rounded-md font-bold mt-0.5">পরিকল্পনা ৩</span>
+                        <div>
+                            <h4 class="font-bold text-white text-[15px] mb-1">🔒 NID ভেরিফিকেশন ও সম্মাননা ব্যাজ</h4>
+                            <p class="text-xs text-zinc-400">ভুয়া রিকোয়েস্ট পুরোপুরি বন্ধ করতে জাতীয় পরিচয়পত্র দিয়ে প্রোফাইল ভেরিফিকেশন এবং নিয়মিত সক্রিয় ডোনারদের জন্য সম্মাননা ব্যাজ চালু করা হবে।</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Tech Selection & Rationale -->
+            <div id="slide-6" class="slide flex-1">
+                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 06 / 06</span>
+                <h2 class="text-2xl font-black text-white mb-6">প্রযুক্তি নির্বাচন ও তার পেছনের কারণ</h2>
+                
+                <div class="grid grid-cols-2 gap-6 mt-4 text-[13px] text-zinc-300">
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-bold text-primary mb-1">🚀 কেন Next.js ও React?</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">পেজ রিলোড বা বাফারিং ছাড়াই চোখের পলকে যেন রোগীরা এক ভিউ থেকে অন্য ভিউতে শিফট করতে পারেন (Single Page Application এক্সপেরিয়েন্স)।</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-primary mb-1">🎨 কেন Tailwind CSS?</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">খুব কম পেজ সাইজে মোবাইল এবং কম্পিউটার প্রতিটি স্ক্রিনের জন্য সুন্দর নিওন-থিমযুক্ত ডিজাইন ও লেআউট রেসপন্সিভ নিশ্চিত করা।</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-bold text-primary mb-1">⚡ কেন Node.js ও WebSockets?</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">মেসেঞ্জারের মতো দ্রুত মেসেজ পাঠানোর জন্য এবং লাইভ ডোনারের কাউন্ট আপডেট কোনো প্রকার বাফারিং বা ডেটা ডিলে ছাড়াই সচল রাখার জন্য।</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-primary mb-1">📂 কেন JSON ফাইল ডাটাবেজ?</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">শুরুর দিকে জটিল ডাটাবেজ প্রসেসিং ও হোস্টিংয়ের খরচ এড়াতে কাস্টম JSON ইঞ্জিন ও রেন্ডার পারসিস্টেন্ট স্টোরেজ ডিরেক্টরি মাউন্টিং পদ্ধতি ব্যবহার করা হয়েছে।</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation Bar inside Content Window -->
+            <div class="border-t border-zinc-800/80 pt-6 mt-8 flex justify-between items-center bg-zinc-950/20">
+                <button onclick="prevSlide()" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-5 py-2.5 rounded-xl font-bold hover:bg-zinc-800 hover:text-white transition-all text-sm">◀ Previous Slide</button>
+                <div class="text-xs text-zinc-500 font-bold" id="slide-indicator">Slide 1 of 6</div>
+                <button onclick="nextSlide()" class="bg-gradient-to-r from-primary to-rose-600 text-white px-6 py-2.5 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(255,59,92,0.4)] transition-all text-sm">Next Slide ▶</button>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Interactive Navigation Logic Scripts -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
+
+        function showSlide(index) {
+            // Validate limits
+            if (index < 1) index = 1;
+            if (index > totalSlides) index = totalSlides;
+
+            currentSlide = index;
+
+            // Hide all slides
+            for (let i = 1; i <= totalSlides; i++) {
+                document.getElementById('slide-' + i).classList.remove('active');
+                document.getElementById('btn-slide-' + i).classList.remove('active', 'border-zinc-800', 'bg-zinc-900/40');
+                document.getElementById('btn-slide-' + i).classList.add('border-transparent');
+            }
+
+            // Show active slide
+            document.getElementById('slide-' + currentSlide).classList.add('active');
+            
+            // Activate button style
+            const activeBtn = document.getElementById('btn-slide-' + currentSlide);
+            activeBtn.classList.remove('border-transparent');
+            activeBtn.classList.add('active', 'border-zinc-800', 'bg-zinc-900/40');
+
+            // Update indicator
+            document.getElementById('slide-indicator').innerText = 'Slide ' + currentSlide + ' of ' + totalSlides;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function gotoSlide(index) {
+            showSlide(index);
+        }
+
+        function showCodeTab(tabName) {
+            // Manage button styles
+            document.querySelectorAll('.code-tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-zinc-800', 'text-white');
+                btn.classList.add('text-zinc-400');
+            });
+            
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.classList.add('active', 'bg-zinc-800', 'text-white');
+            activeBtn.classList.remove('text-zinc-400');
+
+            // Manage pre styles
+            document.querySelectorAll('.code-pre').forEach(pre => {
+                pre.classList.add('hidden');
+            });
+            document.getElementById(tabName + '-pre').classList.remove('hidden');
+        }
+
+        // Listen for keyboard arrow keys
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>

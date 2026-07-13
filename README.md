@@ -4,7 +4,8 @@
 PulseNetwork হলো বাংলাদেশ জুড়ে রক্তদাতা, ব্লাড ব্যাংক এবং জরুরি রক্তের প্রয়োজনে থাকা রোগীদের মধ্যে সরাসরি সংযোগ তৈরি করার জন্য একটি সহজ এবং প্রিমিয়াম প্ল্যাটফর্ম। এটি সম্পূর্ণ রিয়েল-টাইম লাইভ ডাটার ওপর ভিত্তি করে কাজ করে।
 
 🌐 **লাইভ ওয়েবসাইট লিংক:** [https://pulsenetwork.onrender.com](https://pulsenetwork.onrender.com)  
-📄 **প্রেজেন্টেশন স্লাইড পিডিএফ:** [PulseNetwork_Presentation.pdf](PulseNetwork_Presentation.pdf)
+📄 **প্রেজেন্টেশন স্লাইড পিডিএফ:** [PulseNetwork_Presentation.pdf](PulseNetwork_Presentation.pdf)  
+🖥️ **ইন্টারেক্টিভ প্রেজেন্টেশন (HTML স্লাইড):** [presentation.html](presentation.html) (ডাউনলোড করে যেকোনো ব্রাউজারে ওপেন করুন)
 
 ---
 
