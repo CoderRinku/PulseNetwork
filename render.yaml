@@ -3,6 +3,7 @@ services:
     name: pulsenetwork
     env: node
     plan: free
+    autoDeploy: false
     buildCommand: npm install
     startCommand: node server.js
     envVars:
