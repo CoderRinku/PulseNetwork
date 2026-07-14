@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "next build && node scripts/post-build.js",
+    "build": "node scripts/pre-build.js && next build && node scripts/post-build.js",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

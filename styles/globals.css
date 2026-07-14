@@ -8,36 +8,36 @@
    1. PREMIUM DESIGN SYSTEM VARIABLES
    ======================================================== */
 :root {
-    --bg-main: #030303;        /* Deep obsidian black */
-    --bg-surface: #0b0b0f;     /* Slate dark gray */
-    --bg-card: rgba(11, 11, 15, 0.85); /* Translucent glass */
-    --bg-input: rgba(18, 18, 26, 0.7);
-    --border-color: rgba(255, 255, 255, 0.05);
-    --border-hover: rgba(255, 59, 92, 0.25);
-    --border-focus: #ff3b5c;
+    --bg-main: #f8fafc;        /* Soft clinical slate/white */
+    --bg-surface: #ffffff;     /* Pure white card surface */
+    --bg-card: #ffffff;        /* Pure white */
+    --bg-input: #ffffff;
+    --border-color: #e2e8f0;    /* Light border gray */
+    --border-hover: #fca5a5;    /* Light red border */
+    --border-focus: #dc2626;    /* True crimson red focus */
     
-    --primary: #ff3b5c;        /* Vibrant neon blood crimson */
-    --primary-glow: rgba(255, 59, 92, 0.35);
-    --secondary: #10b981;      /* Emerald green */
-    --secondary-glow: rgba(16, 185, 129, 0.25);
+    --primary: #dc2626;        /* True crimson blood red */
+    --primary-glow: rgba(220, 38, 38, 0.12);
+    --secondary: #059669;      /* Forest/emerald green */
+    --secondary-glow: rgba(5, 150, 105, 0.1);
     
-    --text-primary: #ffffff;
-    --text-secondary: #f3f4f6;
-    --text-muted: #8e939e;      /* Cool gray text */
+    --text-primary: #0f172a;   /* Slate 900 (deep charcoal) */
+    --text-secondary: #334155; /* Slate 700 */
+    --text-muted: #64748b;     /* Slate 500 (muted) */
     
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --info: #3b82f6;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --info: #2563eb;
     
     --font-main: 'Outfit', sans-serif;
-    --glass-blur: blur(20px);
-    --shadow-premium: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    --shadow-glow: 0 0 40px rgba(255, 59, 92, 0.15);
-    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --glass-blur: none;
+    --shadow-premium: 0 4px 20px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.05);
+    --shadow-glow: none;
+    --transition-smooth: all 0.3s ease;
 }
 
 /* ========================================================
-   2. GLOBAL LAYOUTS & BG GRID OVERLAY
+   2. GLOBAL LAYOUTS & BG OVERLAY
    ======================================================== */
 * {
     box-sizing: border-box;
@@ -57,37 +57,14 @@ body {
     padding-top: 100px;
 }
 
-/* Cosmic Grid Overlay */
+/* Light Grey Subtle Texture Overlay */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-color: #f8fafc;
     z-index: -2;
     pointer-events: none;
-}
-
-/* Animated Floating Aurora Nebula */
-body::after {
-    content: '';
-    position: fixed;
-    top: -20%;
-    left: -10%;
-    width: 60vw;
-    height: 60vh;
-    background: radial-gradient(circle, rgba(255, 59, 92, 0.07) 0%, rgba(139, 92, 246, 0.03) 50%, transparent 80%);
-    z-index: -1;
-    filter: blur(80px);
-    pointer-events: none;
-    animation: driftBackground 25s infinite alternate ease-in-out;
-}
-
-@keyframes driftBackground {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(10%, 8%) scale(1.2); }
 }
 
 /* Custom Scrollbar */

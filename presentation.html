@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PulseNetwork — Academic Presentation Slide Deck</title>
+    <title>PulseNetwork — Presentation Slide Deck</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,10 +11,10 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#ff3b5c',
-                        secondary: '#10b981',
-                        darkBg: '#09090b',
-                        cardBg: '#18181b',
+                        primary: '#dc2626',
+                        secondary: '#059669',
+                        bgMain: '#f8fafc',
+                        cardBg: '#ffffff',
                     },
                     fontFamily: {
                         sans: ['Outfit', 'sans-serif'],
@@ -31,29 +31,29 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #09090b;
+            background: #f8fafc;
         }
         ::-webkit-scrollbar-thumb {
-            background: #27272a;
+            background: #cbd5e1;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #3f3f46;
+            background: #94a3b8;
         }
     </style>
 </head>
-<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col font-sans selection:bg-primary selection:text-white">
+<body class="bg-bgMain text-slate-800 min-h-screen flex flex-col font-sans selection:bg-primary selection:text-white">
 
     <!-- Top Header -->
-    <header class="border-b border-zinc-850 bg-zinc-950/70 backdrop-blur-md sticky top-0 z-50">
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <span class="text-2xl animate-pulse">🩸</span>
-                <span class="text-xl font-black bg-gradient-to-r from-white via-slate-200 to-primary bg-clip-text text-transparent">PulseNetwork — Academic Project Presentation</span>
+                <span class="text-2xl">🩸</span>
+                <span class="text-xl font-black text-slate-900">PulseNetwork — প্রজেক্ট প্রেজেন্টেশন</span>
             </div>
-            <div class="flex items-center gap-4 text-sm text-zinc-400">
-                <span class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-semibold">University Assignment Mode</span>
-                <a href="https://pulsenetwork.onrender.com" target="_blank" class="hover:text-primary transition-all font-medium">Live System ↗</a>
+            <div class="flex items-center gap-4 text-sm text-slate-500">
+                <span class="bg-red-50 text-primary border border-red-200 px-3 py-1 rounded-full font-semibold">University Assignment Mode</span>
+                <a href="https://pulsenetwork.onrender.com" target="_blank" class="hover:text-primary transition-all font-medium">Live Website ↗</a>
             </div>
         </div>
     </header>
@@ -62,67 +62,67 @@
     <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex gap-8">
         
         <!-- Sidebar Navigation (7 Slides) -->
-        <aside class="w-80 shrink-0 flex flex-col gap-2">
-            <div class="text-xs font-bold text-zinc-500 uppercase tracking-widest px-3 mb-2">স্লাইডসমূহ (Slides)</div>
+        <aside class="w-80 shrink-0 flex flex-col gap-2 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm h-fit">
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">স্লাইডসমূহ (Slides)</div>
             
-            <button onclick="gotoSlide(1)" id="btn-slide-1" class="slide-nav-btn active w-full text-left px-4 py-3 rounded-xl border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800/50 hover:border-zinc-700 transition-all flex items-center gap-3">
-                <span class="text-zinc-500 font-bold text-xs">০১.</span>
+            <button onclick="gotoSlide(1)" id="btn-slide-1" class="slide-nav-btn active w-full text-left px-4 py-3 rounded-xl bg-slate-100 text-slate-900 font-bold border border-slate-200 transition-all flex items-center gap-3">
+                <span class="text-slate-500 font-bold text-xs">০১.</span>
                 <span class="font-medium text-[14px]">পরিচিতি (Introduction)</span>
             </button>
-            <button onclick="gotoSlide(2)" id="btn-slide-2" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
-                <span class="text-zinc-500 font-bold text-xs">০২.</span>
+            <button onclick="gotoSlide(2)" id="btn-slide-2" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-3">
+                <span class="text-slate-500 font-bold text-xs">০২.</span>
                 <span class="font-medium text-[14px]">সমস্যা ও সমাধান</span>
             </button>
-            <button onclick="gotoSlide(3)" id="btn-slide-3" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
-                <span class="text-zinc-500 font-bold text-xs">০৩.</span>
+            <button onclick="gotoSlide(3)" id="btn-slide-3" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-3">
+                <span class="text-slate-500 font-bold text-xs">০৩.</span>
                 <span class="font-medium text-[14px]">সিস্টেম আর্কিটেকচার (Data Flow)</span>
             </button>
-            <button onclick="gotoSlide(4)" id="btn-slide-4" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
-                <span class="text-zinc-500 font-bold text-xs">০৪.</span>
+            <button onclick="gotoSlide(4)" id="btn-slide-4" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-3">
+                <span class="text-slate-500 font-bold text-xs">০৪.</span>
                 <span class="font-medium text-[14px]">ডেটাবেজ স্কিমা (DB Schema)</span>
             </button>
-            <button onclick="gotoSlide(5)" id="btn-slide-5" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
-                <span class="text-zinc-500 font-bold text-xs">০৫.</span>
+            <button onclick="gotoSlide(5)" id="btn-slide-5" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-3">
+                <span class="text-slate-500 font-bold text-xs">০৫.</span>
                 <span class="font-medium text-[14px]">প্রধান ফিচারসমূহ (Features)</span>
             </button>
-            <button onclick="gotoSlide(6)" id="btn-slide-6" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
+            <button onclick="gotoSlide(6)" id="btn-slide-6" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-3">
                 <span class="text-zinc-500 font-bold text-xs">০৬.</span>
                 <span class="font-medium text-[14px]">কোড উদাহরণ (Code Snippets)</span>
             </button>
-            <button onclick="gotoSlide(7)" id="btn-slide-7" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-zinc-900/40 hover:border-zinc-800 transition-all flex items-center gap-3">
-                <span class="text-zinc-500 font-bold text-xs">০৭.</span>
+            <button onclick="gotoSlide(7)" id="btn-slide-7" class="slide-nav-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-3">
+                <span class="text-slate-500 font-bold text-xs">০৭.</span>
                 <span class="font-medium text-[14px]">প্রযুক্তি বিশ্লেষণ ও রোডম্যাপ</span>
             </button>
         </aside>
 
         <!-- Presentation Slides Content Window -->
-        <section class="flex-1 bg-zinc-950/40 border border-zinc-800 rounded-3xl p-8 relative flex flex-col justify-between shadow-[0_0_80px_rgba(255,59,92,0.02)] min-h-[560px]">
+        <section class="flex-1 bg-white border border-slate-200 rounded-3xl p-8 relative flex flex-col justify-between shadow-sm min-h-[560px]">
             
             <!-- Slide 1: Title -->
             <div id="slide-1" class="slide active flex-1">
-                <div class="flex flex-col justify-center items-center text-center h-full pt-12">
+                <div class="flex flex-col justify-center items-center text-center h-full pt-16">
                     <span class="text-6xl mb-6 select-none animate-bounce">🩸</span>
-                    <h1 class="text-5xl font-black text-white tracking-tight mb-3">PulseNetwork</h1>
+                    <h1 class="text-5xl font-black text-slate-900 tracking-tight mb-3">PulseNetwork</h1>
                     <h2 class="text-xl font-bold text-primary mb-5">রিয়েল-টাইম রক্তদান এবং ব্লাড ব্যাংক নেটওয়ার্কিং প্ল্যাটফর্ম</h2>
-                    <p class="text-zinc-400 max-w-xl leading-relaxed text-[14px]">
+                    <p class="text-slate-500 max-w-xl leading-relaxed text-[14px]">
                         একটি মডার্ন ফুল-স্ট্যাক ওয়েব অ্যাপ্লিকেশন যা বাংলাদেশ জুড়ে রক্তদাতা, ব্লাড ব্যাংক এবং রোগীদের মধ্যে ইনস্ট্যান্ট ডেটা শেয়ারিং ও লাইভ চ্যাট সুবিধা নিশ্চিত করে।
                     </p>
                     <div class="mt-8 flex flex-col gap-1 items-center">
-                        <span class="text-xs bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-xl text-zinc-500">কীবোর্ডের Left/Right Arrow কী ব্যবহার করে স্লাইড পরিবর্তন করা যাবে</span>
+                        <span class="text-xs bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-slate-500">কীবোর্ডের Left/Right Arrow কী ব্যবহার করে স্লাইড পরিবর্তন করা যাবে</span>
                     </div>
                 </div>
             </div>
 
             <!-- Slide 2: Problem & Solution -->
             <div id="slide-2" class="slide flex-1">
-                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 02 / 07</span>
-                <h2 class="text-2xl font-black text-white mb-6">প্রজেক্টটির প্রয়োজনীয়তা (Problem Statement vs Solution)</h2>
+                <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 02 / 07</span>
+                <h2 class="text-2xl font-black text-slate-900 mb-6">প্রজেক্টটির প্রয়োজনীয়তা (Problem Statement vs Solution)</h2>
                 
                 <div class="grid grid-cols-2 gap-6 mt-2">
                     <!-- The Problem -->
-                    <div class="bg-red-500/5 border border-red-500/10 rounded-2xl p-5">
+                    <div class="bg-red-50/50 border border-red-100 rounded-2xl p-5">
                         <h3 class="text-primary font-bold text-base mb-3 flex items-center gap-2">🚨 বর্তমান সমস্যাসমূহ (The Challenges)</h3>
-                        <ul class="space-y-3 text-xs text-zinc-400">
+                        <ul class="space-y-3 text-xs text-slate-600">
                             <li class="flex gap-2"><span class="text-primary">•</span> রক্ত খোঁজার চিরাচরিত পদ্ধতিগুলো (যেমন: ফেসবুক পোস্ট, ডিরেক্টরি) ধীরগতির এবং অনেক সময় তথ্য ভুল থাকে।</li>
                             <li class="flex gap-2"><span class="text-primary">•</span> রোগীরা মানচিত্রে ভৌগোলিকভাবে নিকটতম ডোনারদের অবস্থান দেখতে পারে না।</li>
                             <li class="flex gap-2"><span class="text-primary">•</span> হাসপাতাল ও ব্লাড ব্যাংকগুলোর কাছে রক্তের স্টক কত ব্যাগ আছে তা লাইভ ট্র্যাক করার উপায় নেই।</li>
@@ -130,12 +130,12 @@
                     </div>
 
                     <!-- The Solution -->
-                    <div class="bg-secondary/5 border border-secondary/10 rounded-2xl p-5">
+                    <div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-5">
                         <h3 class="text-secondary font-bold text-base mb-3 flex items-center gap-2">✅ PulseNetwork-এর সমাধান (The Solution)</h3>
-                        <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
                             একটি সমন্বিত লাইভ ইকোসিস্টেম তৈরি করা, যেখানে ভৌগোলিক মানচিত্র এবং রিয়েল-টাইম যোগাযোগের মাধ্যমে তাত্ক্ষণিকভাবে রক্তের উৎস খুঁজে বের করা যায়।
                         </p>
-                        <ul class="space-y-2 text-xs text-zinc-400">
+                        <ul class="space-y-2 text-xs text-slate-600">
                             <li class="flex gap-2"><span class="text-secondary">✔</span> নিখুঁত ৮টি প্রশাসনিক বিভাগের ইন্টারেক্টিভ SVG ম্যাপ।</li>
                             <li class="flex gap-2"><span class="text-secondary">✔</span> রোগীদের সাথে ডোনারদের সংযোগের জন্য লাইভ WebSocket চ্যাট।</li>
                         </ul>
@@ -143,36 +143,36 @@
                 </div>
             </div>
 
-            <!-- Slide 3: System Architecture (Data Flow Diagram representation) -->
+            <!-- Slide 3: System Architecture -->
             <div id="slide-3" class="slide flex-1">
-                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 03 / 07</span>
-                <h2 class="text-2xl font-black text-white mb-5">সিস্টেম আর্কিটেকচার ও ডেটা ফ্লো (Architecture & Data Flow)</h2>
+                <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 03 / 07</span>
+                <h2 class="text-2xl font-black text-slate-900 mb-5">সিস্টেম আর্কিটেকচার ও ডেটা ফ্লো (Architecture & Data Flow)</h2>
                 
                 <div class="mt-4 flex flex-col gap-6">
                     <!-- Flow Diagram Grid -->
                     <div class="grid grid-cols-3 gap-4 text-center text-xs">
-                        <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
                             <span class="text-lg block mb-1">🖥️</span>
-                            <h4 class="font-bold text-white mb-1">Frontend Layer (React/Next.js)</h4>
-                            <p class="text-zinc-400 text-[11px]">ইউজার ইন্টারফেস, মানচিত্র এবং লাইভ চ্যাট উইন্ডো রেন্ডার করে। REST API এবং WebSocket ক্লায়েন্ট ধারণ করে।</p>
+                            <h4 class="font-bold text-slate-900 mb-1">Frontend Layer (React/Next.js)</h4>
+                            <p class="text-slate-600 text-[11px]">ইউজার ইন্টারফেস, মানচিত্র এবং লাইভ চ্যাট উইন্ডো রেন্ডার করে। REST API এবং WebSocket ক্লায়েন্ট ধারণ করে।</p>
                         </div>
-                        <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl relative">
-                            <div class="absolute top-1/2 -right-4 -translate-y-1/2 text-zinc-600 text-lg hidden md:block">→</div>
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl relative">
+                            <div class="absolute top-1/2 -right-4 -translate-y-1/2 text-slate-400 text-lg hidden md:block">→</div>
                             <span class="text-lg block mb-1">⚙️</span>
                             <h4 class="font-bold text-primary mb-1">Backend Server (Node.js/Express)</h4>
-                            <p class="text-zinc-400 text-[11px]">সার্ভার প্রসেস, যা CORS পলিসি মেনে রিকোয়েস্ট নেয়, WebSocket কানেকশন নিয়ন্ত্রণ করে এবং ML অ্যালগরিদম রান করে।</p>
+                            <p class="text-slate-600 text-[11px]">সার্ভার প্রসেস, যা CORS পলিসি মেনে রিকোয়েস্ট নেয়, WebSocket কানেকশন নিয়ন্ত্রণ করে এবং পরিসংখ্যান হিসাব রান করে।</p>
                         </div>
-                        <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
                             <span class="text-lg block mb-1">💾</span>
                             <h4 class="font-bold text-secondary mb-1">Data Layer (JSON Database)</h4>
-                            <p class="text-zinc-400 text-[11px]">ফাইল-বেসড ডাটাবেজ (`database.json`), যা রেন্ডার ক্লাউডের Persistent Disk-এর মাধ্যমে ডেটা স্থায়ীভাবে ধরে রাখে।</p>
+                            <p class="text-slate-600 text-[11px]">ফাইল-বেসড ডাটাবেজ (`database.json`), যা রেন্ডার ক্লাউডের Persistent Disk-এর মাধ্যমে ডেটা স্থায়ীভাবে ধরে রাখে।</p>
                         </div>
                     </div>
 
                     <!-- Flow Explanation -->
-                    <div class="bg-zinc-900/30 border border-zinc-850 p-4 rounded-xl">
-                        <h4 class="font-bold text-white text-xs mb-2">📊 কীভাবে ডেটা প্রবাহিত হয়? (How Data Flows)</h4>
-                        <ol class="list-decimal list-inside space-y-1.5 text-[11.5px] text-zinc-400">
+                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                        <h4 class="font-bold text-slate-800 text-xs mb-2">📊 কীভাবে ডেটা প্রবাহিত হয়? (How Data Flows)</h4>
+                        <ol class="list-decimal list-inside space-y-1.5 text-[11.5px] text-slate-600">
                             <li>ইউজার ম্যাপে ক্লিক করলে বা ডোনার সার্চ করলে ব্রাউজার থেকে Express API-তে HTTP রিকোয়েস্ট যায়।</li>
                             <li>Express সার্ভার `database.json` ফাইল রিড করে ইনস্ট্যান্ট রেসপন্স ফেরত পাঠায়।</li>
                             <li>রোগী ডোনারকে মেসেজ পাঠালে তা **WebSocket Protocol** ব্যবহার করে সার্ভার সরাসরি কানেক্টেড ডোনারের স্ক্রিনে পৌঁছে দেয়।</li>
@@ -181,47 +181,47 @@
                 </div>
             </div>
 
-            <!-- Slide 4: Database Schema (Academic Entity representation) -->
+            <!-- Slide 4: Database Schema -->
             <div id="slide-4" class="slide flex-1">
-                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 04 / 07</span>
-                <h2 class="text-2xl font-black text-white mb-4">ডেটাবেজ ডিজাইন ও স্কিমা (Database Schema & Entities)</h2>
+                <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 04 / 07</span>
+                <h2 class="text-2xl font-black text-slate-900 mb-4">ডেটাবেজ ডিজাইন ও স্কিমা (Database Schema & Entities)</h2>
                 
                 <div class="mt-2 space-y-4 max-h-[300px] overflow-y-auto pr-2">
                     <!-- Users and Donors Schema -->
-                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
                         <h3 class="text-xs font-bold text-primary uppercase tracking-wider mb-2">1. Users Table (ব্যবহারকারী টেবিল)</h3>
-                        <table class="w-full text-left text-xs text-zinc-400">
+                        <table class="w-full text-left text-xs text-slate-600">
                             <thead>
-                                <tr class="border-b border-zinc-800 text-white">
+                                <tr class="border-b border-slate-200 text-slate-900 font-bold">
                                     <th class="pb-1.5 w-1/4">Field (ফিল্ড)</th>
                                     <th class="pb-1.5 w-1/4">Type (টাইপ)</th>
                                     <th class="pb-1.5">Description (বিবরণ)</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-b border-zinc-850"><td class="py-1">id</td><td class="text-primary font-mono py-1">String (PK)</td><td>ব্যবহারকারীর ইউনিক আইডি</td></tr>
-                                <tr class="border-b border-zinc-850"><td class="py-1">email</td><td class="text-primary font-mono py-1">String</td><td>ইউনিক ইমেইল অ্যাড্রেস</td></tr>
-                                <tr class="border-b border-zinc-850"><td class="py-1">role</td><td class="text-primary font-mono py-1">Enum</td><td>ব্যবহারকারীর ধরন (Donor, Hospital, Admin)</td></tr>
+                                <tr class="border-b border-slate-100"><td class="py-1">id</td><td class="text-primary font-mono py-1">String (PK)</td><td>ব্যবহারকারীর ইউনিক আইডি</td></tr>
+                                <tr class="border-b border-slate-100"><td class="py-1">email</td><td class="text-primary font-mono py-1">String</td><td>ইউনিক ইমেইল অ্যাড্রেস</td></tr>
+                                <tr class="border-b border-slate-100"><td class="py-1">role</td><td class="text-primary font-mono py-1">Enum</td><td>ব্যবহারকারীর ধরন (Donor, Hospital, Admin)</td></tr>
                                 <tr><td class="py-1">status</td><td class="text-primary font-mono py-1">String</td><td>আইডির অবস্থা (Active, Pending)</td></tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- Donors and Inventory Schema -->
-                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
+                    <!-- Donors Table -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
                         <h3 class="text-xs font-bold text-secondary uppercase tracking-wider mb-2">2. Donors Table (রক্তদাতা টেবিল)</h3>
-                        <table class="w-full text-left text-xs text-zinc-400">
+                        <table class="w-full text-left text-xs text-slate-600">
                             <thead>
-                                <tr class="border-b border-zinc-800 text-white">
+                                <tr class="border-b border-slate-200 text-slate-900 font-bold">
                                     <th class="pb-1.5 w-1/4">Field (ফিল্ড)</th>
                                     <th class="pb-1.5 w-1/4">Type (টাইপ)</th>
                                     <th class="pb-1.5">Description (বিবরণ)</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-b border-zinc-850"><td class="py-1">user_id</td><td class="text-secondary font-mono py-1">String (FK)</td><td>Users টেবিলের সাথে রিলেশন আইডি</td></tr>
-                                <tr class="border-b border-zinc-850"><td class="py-1">blood_group</td><td class="text-secondary font-mono py-1">String</td><td>রক্তের গ্রুপ (A+, B+, O+, ইত্যাদি)</td></tr>
-                                <tr class="border-b border-zinc-850"><td class="py-1">is_eligible</td><td class="text-secondary font-mono py-1">Boolean</td><td>রক্তদানের যোগ্যতা (৯০ দিনের কুলডাউন)</td></tr>
+                                <tr class="border-b border-slate-100"><td class="py-1">user_id</td><td class="text-secondary font-mono py-1">String (FK)</td><td>Users টেবিলের সাথে রিলেশন আইডি</td></tr>
+                                <tr class="border-b border-slate-100"><td class="py-1">blood_group</td><td class="text-secondary font-mono py-1">String</td><td>রক্তের গ্রুপ (A+, B+, O+, ইত্যাদি)</td></tr>
+                                <tr class="border-b border-slate-100"><td class="py-1">is_eligible</td><td class="text-secondary font-mono py-1">Boolean</td><td>রক্তদানের যোগ্যতা (৯০ দিনের কুলডাউন)</td></tr>
                                 <tr><td class="py-1">lat, lng</td><td class="text-secondary font-mono py-1">Float</td><td>মানচিত্রে ডোনার দেখানোর ভৌগোলিক স্থানাঙ্ক</td></tr>
                             </tbody>
                         </table>
@@ -231,36 +231,36 @@
 
             <!-- Slide 5: Core Features -->
             <div id="slide-5" class="slide flex-1">
-                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 05 / 07</span>
-                <h2 class="text-2xl font-black text-white mb-6">প্রধান ফিচারের কারিগরি দিক (Core Features & Implementation)</h2>
+                <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 05 / 07</span>
+                <h2 class="text-2xl font-black text-slate-900 mb-6">প্রধান ফিচারের কারিগরি দিক (Core Features & Implementation)</h2>
                 
                 <div class="grid grid-cols-2 gap-4 mt-2">
-                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex gap-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex gap-3">
                         <span class="text-2xl mt-1">🗺️</span>
                         <div>
-                            <h4 class="font-bold text-white text-sm mb-1">ইন্টারেক্টিভ জিও-ম্যাপ</h4>
-                            <p class="text-xs text-zinc-400">বাংলাদেশের GeoJSON বাউন্ডারি কনভার্ট করে তৈরি কাস্টম SVG ম্যাপ, যা রিঅ্যাক্ট স্টেট ও প্রজেক্টেড কোঅর্ডিনেট ব্যবহার করে লাইভ ডোনারের সংখ্যা ম্যাপের ওপর দেখায়।</p>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">ইন্টারেক্টিভ জিо-ম্যাপ</h4>
+                            <p class="text-xs text-slate-600">বাংলাদেশের GeoJSON বাউন্ডারি কনভার্ট করে তৈরি কাস্টম SVG ম্যাপ, যা রিঅ্যাক্ট স্টেট ও প্রজেক্টেড কোঅর্ডিনেট ব্যবহার করে লাইভ ডোনারের সংখ্যা ম্যাপের ওপর দেখায়।</p>
                         </div>
                     </div>
-                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex gap-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex gap-3">
                         <span class="text-2xl mt-1">💬</span>
                         <div>
-                            <h4 class="font-bold text-white text-sm mb-1">রিয়েল-টাইম চ্যাট (WebSockets)</h4>
-                            <p class="text-xs text-zinc-400">Node-ws ব্যবহার করে তৈরি ডাবল-ওয়ে চ্যাট চ্যানেল, যা সেশন টোকেন অথেন্টিকেশনের মাধ্যমে রোগীদের এবং রক্তদাতাদের সরাসরি সংযুক্ত করে।</p>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">রিয়েল-টাইম চ্যাট (WebSockets)</h4>
+                            <p class="text-xs text-slate-600">Node-ws ব্যবহার করে তৈরি চ্যাট চ্যানেল, যা সেশন অথেন্টিকেশনের মাধ্যমে রোগীদের এবং রক্তদাতাদের সরাসরি সংযুক্ত করে।</p>
                         </div>
                     </div>
-                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex gap-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex gap-3">
                         <span class="text-2xl mt-1">⏱️</span>
                         <div>
-                            <h4 class="font-bold text-white text-sm mb-1">৯০ দিনের কুলডাউন লুপ</h4>
-                            <p class="text-xs text-zinc-400">রক্তদানের পর ডোনারের আইডি স্বয়ংক্রিয়ভাবে ব্যাকএন্ড ডেট ক্যালকুলেটর দ্বারা ৯০ দিনের জন্য সার্চ থেকে হাইড রাখা হয়।</p>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">৯০ দিনের কুলডাউন লুপ</h4>
+                            <p class="text-xs text-slate-600">রক্তদানের পর ডোনারের আইডি স্বয়ংক্রিয়ভাবে ব্যাকএন্ড ডেট ক্যালকুলেটর দ্বারা ৯০ দিনের জন্য সার্চ থেকে হাইড রাখা হয়।</p>
                         </div>
                     </div>
-                    <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex gap-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex gap-3">
                         <span class="text-2xl mt-1">📊</span>
                         <div>
-                            <h4 class="font-bold text-white text-sm mb-1">এমএল ডিমান্ড ফোরকাস্ট</h4>
-                            <p class="text-xs text-zinc-400">ইনভেন্টরি ডেটা বিশ্লেষণ করে হাসপাতালের রক্ত সংকটের পূর্বাভাস গণনা করার জন্য ব্যাকএন্ডে একটি লিনিয়ার রিগ্রেশন এলগরিদম রান করে।</p>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">ডিমান্ড ও স্টক পরিসংখ্যান</h4>
+                            <p class="text-xs text-zinc-600">ইনভেন্টরি ডেটা এবং পূর্ববর্তী রিকোয়েস্টগুলোর পরিমাণ বিশ্লেষণ করে হাসপাতালের রক্ত সংকটের পরিসংখ্যান হিসাব করার কাস্টম ব্যাকএন্ড লজিক।</p>
                         </div>
                     </div>
                 </div>
@@ -268,16 +268,16 @@
 
             <!-- Slide 6: Code Examples -->
             <div id="slide-6" class="slide flex-1">
-                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 06 / 07</span>
-                <h2 class="text-2xl font-black text-white mb-4">কোড উদাহরণ ও টেকনিক্যাল ডেমো</h2>
+                <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 06 / 07</span>
+                <h2 class="text-2xl font-black text-slate-900 mb-4">কোড উদাহরণ ও টেকনিক্যাল ডেমো</h2>
                 
                 <div class="flex gap-4 mb-4 text-xs">
-                    <button onclick="showCodeTab('server-code')" id="tab-server-code" class="code-tab-btn active px-3.5 py-1.5 rounded-lg bg-zinc-800 text-white font-semibold">১. চ্যাট সার্ভার (WebSocket Node.js)</button>
-                    <button onclick="showCodeTab('map-code')" id="tab-map-code" class="code-tab-btn px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-white font-semibold">২. ইন্টারেক্টিভ ম্যাপ (React JSX)</button>
+                    <button onclick="showCodeTab('server-code')" id="tab-server-code" class="code-tab-btn active px-3.5 py-1.5 rounded-lg bg-slate-200 text-slate-900 font-semibold border border-slate-350">১. চ্যাট সার্ভার (WebSocket Node.js)</button>
+                    <button onclick="showCodeTab('map-code')" id="tab-map-code" class="code-tab-btn px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-semibold">২. ইন্টারেক্টিভ ম্যাপ (React JSX)</button>
                 </div>
 
                 <!-- Code Content Box -->
-                <div id="code-container" class="bg-zinc-950 border border-zinc-800/80 rounded-xl p-4 font-mono text-[11px] leading-relaxed text-zinc-300 overflow-x-auto max-h-72">
+                <div id="code-container" class="bg-slate-50 border border-slate-200 rounded-xl p-4 font-mono text-[11px] leading-relaxed text-slate-700 overflow-x-auto max-h-72">
                     <!-- Tab 1: WebSocket -->
                     <pre id="server-code-pre" class="code-pre">
 // server.js - WebSocket মেসেজ রাউটিং ও চ্যাট ডিস্ট্রিবিউশন
@@ -321,40 +321,40 @@ const handleDivisionClick = async (divisionName) => {
                 </div>
             </div>
 
-            <!-- Slide 7: Tech Stack & Rationale + Future Roadmap -->
+            <!-- Slide 7: Tech Stack & Roadmap -->
             <div id="slide-7" class="slide flex-1">
-                <span class="text-zinc-500 text-xs font-bold uppercase tracking-wider block mb-2">Slide 07 / 07</span>
-                <h2 class="text-2xl font-black text-white mb-6">প্রযুক্তির বিশ্লেষণ ও ভবিষ্যৎ রোডম্যাপ</h2>
+                <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 07 / 07</span>
+                <h2 class="text-2xl font-black text-slate-900 mb-6">প্রযুক্তির বিশ্লেষণ ও ভবিষ্যৎ রোডম্যাপ</h2>
                 
-                <div class="grid grid-cols-2 gap-6 mt-2 text-[12.5px] text-zinc-300">
+                <div class="grid grid-cols-2 gap-6 mt-2 text-[12.5px] text-slate-700">
                     <!-- Tech Stack Details -->
                     <div class="space-y-3">
-                        <h4 class="font-bold text-primary border-b border-zinc-800 pb-1 flex items-center gap-1.5">🛠️ ডেভেলপমেন্ট ল্যাঙ্গুয়েজ (Languages Used)</h4>
-                        <ul class="space-y-2 text-xs text-zinc-400">
-                            <li><strong class="text-white">Frontend:</strong> JavaScript (ES6+), React JSX, HTML5, CSS3</li>
-                            <li><strong class="text-white">Backend:</strong> Node.js, Express.js Web APIs, WS Protocol</li>
-                            <li><strong class="text-white">Framework & Styles:</strong> Next.js framework, Tailwind CSS utilities</li>
-                            <li><strong class="text-white">Data Engine:</strong> JSON Engine, SQL schema blueprints</li>
+                        <h4 class="font-bold text-primary border-b border-slate-200 pb-1 flex items-center gap-1.5">🛠️ ডেভেলপমেন্ট ল্যাঙ্গুয়েজ (Languages Used)</h4>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            <li><strong class="text-slate-900">Frontend:</strong> JavaScript (ES6+), React JSX, HTML5, CSS3</li>
+                            <li><strong class="text-white bg-slate-700 px-1.5 py-0.5 rounded">Backend:</strong> Node.js, Express.js Web APIs, WS Protocol</li>
+                            <li><strong class="text-slate-900">Framework & Styles:</strong> Next.js framework, Tailwind CSS utilities</li>
+                            <li><strong class="text-slate-900">Data Engine:</strong> JSON Engine, SQL schema blueprints</li>
                         </ul>
                     </div>
 
                     <!-- Roadmap -->
                     <div class="space-y-3">
-                        <h4 class="font-bold text-secondary border-b border-zinc-800 pb-1 flex items-center gap-1.5">🚀 ভবিষ্যৎ পরিকল্পনা (Future Roadmap)</h4>
-                        <ul class="space-y-2 text-xs text-zinc-400">
-                            <li><strong class="text-white">অফলাইন এসএমএস এলার্ট:</strong> প্রত্যন্ত অঞ্চলের ইন্টারনেটবিহীন রক্তদাতাদের জন্য সাধারণ এসএমএস মেসেজিং ইন্টিগ্রেশন।</li>
-                            <li><strong class="text-white">মোবাইল অ্যাপ্লিকেশন:</strong> রিঅ্যাক্ট নেটিভ দিয়ে মোবাইল অ্যাপ্লিকেশন রিলিজ।</li>
-                            <li><strong class="text-white">এনআইডি ভেরিফিকেশন:</strong> ভুয়া অ্যাকাউন্ট বন্ধ করতে জাতীয় পরিচয়পত্র ভেরিফিকেশন।</li>
+                        <h4 class="font-bold text-secondary border-b border-slate-200 pb-1 flex items-center gap-1.5">🚀 ভবিষ্যৎ পরিকল্পনা (Future Roadmap)</h4>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            <li><strong class="text-slate-900">অফলাইন এসএমএস এলার্ট:</strong> প্রত্যন্ত অঞ্চলের ইন্টারনেটবিহীন রক্তদাতাদের জন্য সাধারণ এসএমএস মেসেজিং ইন্টিগ্রেশন।</li>
+                            <li><strong class="text-slate-900">মোবাইল অ্যাপ্লিকেশন:</strong> রিঅ্যাক্ট নেটিভ দিয়ে ডেডিকেটেড মোবাইল অ্যাপ্লিকেশন রিলিজ।</li>
+                            <li><strong class="text-slate-900">এনআইডি ভেরিফিকেশন:</strong> ভুয়া অ্যাকাউন্ট বন্ধ করতে জাতীয় পরিচয়পত্র ভেরিফিকেশন।</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <!-- Bottom Navigation Bar inside Content Window -->
-            <div class="border-t border-zinc-800/80 pt-6 mt-8 flex justify-between items-center bg-zinc-950/20">
-                <button onclick="prevSlide()" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-5 py-2.5 rounded-xl font-bold hover:bg-zinc-800 hover:text-white transition-all text-sm">◀ Previous Slide</button>
-                <div class="text-xs text-zinc-500 font-bold" id="slide-indicator">Slide 1 of 7</div>
-                <button onclick="nextSlide()" class="bg-gradient-to-r from-primary to-rose-600 text-white px-6 py-2.5 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(255,59,92,0.4)] transition-all text-sm">Next Slide ▶</button>
+            <div class="border-t border-slate-200 pt-6 mt-8 flex justify-between items-center bg-slate-50/50">
+                <button onclick="prevSlide()" class="bg-white border border-slate-200 text-slate-600 px-5 py-2.5 rounded-xl font-bold hover:bg-slate-50 hover:text-slate-900 transition-all text-sm">◀ Previous Slide</button>
+                <div class="text-xs text-slate-500 font-bold" id="slide-indicator">Slide 1 of 7</div>
+                <button onclick="nextSlide()" class="bg-primary text-white px-6 py-2.5 rounded-xl font-bold hover:bg-red-700 transition-all text-sm">Next Slide ▶</button>
             </div>
 
         </section>
@@ -375,7 +375,7 @@ const handleDivisionClick = async (divisionName) => {
             // Hide all slides
             for (let i = 1; i <= totalSlides; i++) {
                 document.getElementById('slide-' + i).classList.remove('active');
-                document.getElementById('btn-slide-' + i).classList.remove('active', 'border-zinc-800', 'bg-zinc-900/40');
+                document.getElementById('btn-slide-' + i).classList.remove('active', 'bg-slate-100', 'text-slate-900', 'font-bold', 'border-slate-200');
                 document.getElementById('btn-slide-' + i).classList.add('border-transparent');
             }
 
@@ -385,7 +385,7 @@ const handleDivisionClick = async (divisionName) => {
             // Activate button style
             const activeBtn = document.getElementById('btn-slide-' + currentSlide);
             activeBtn.classList.remove('border-transparent');
-            activeBtn.classList.add('active', 'border-zinc-800', 'bg-zinc-900/40');
+            activeBtn.classList.add('active', 'bg-slate-100', 'text-slate-900', 'font-bold', 'border-slate-200');
 
             // Update indicator
             document.getElementById('slide-indicator').innerText = 'Slide ' + currentSlide + ' of ' + totalSlides;
@@ -410,13 +410,13 @@ const handleDivisionClick = async (divisionName) => {
         function showCodeTab(tabName) {
             // Manage button styles
             document.querySelectorAll('.code-tab-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-zinc-800', 'text-white');
-                btn.classList.add('text-zinc-400');
+                btn.classList.remove('active', 'bg-slate-200', 'text-slate-900', 'border-slate-350');
+                btn.classList.add('text-slate-500');
             });
             
             const activeBtn = document.getElementById('tab-' + tabName);
-            activeBtn.classList.add('active', 'bg-zinc-800', 'text-white');
-            activeBtn.classList.remove('text-zinc-400');
+            activeBtn.classList.add('active', 'bg-slate-200', 'text-slate-900', 'border-slate-350');
+            activeBtn.classList.remove('text-slate-500');
 
             // Manage pre styles
             document.querySelectorAll('.code-pre').forEach(pre => {
