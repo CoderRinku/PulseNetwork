@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PulseNetwork — Presentation Slide Deck</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -44,7 +43,6 @@
 </head>
 <body class="bg-bgMain text-slate-800 min-h-screen flex flex-col font-sans selection:bg-primary selection:text-white">
 
-    <!-- Top Header -->
     <header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -58,10 +56,7 @@
         </div>
     </header>
 
-    <!-- Main Workspace -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex gap-8">
-        
-        <!-- Sidebar Navigation (7 Slides) -->
         <aside class="w-80 shrink-0 flex flex-col gap-2 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm h-fit">
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">স্লাইডসমূহ (Slides)</div>
             
@@ -95,10 +90,8 @@
             </button>
         </aside>
 
-        <!-- Presentation Slides Content Window -->
         <section class="flex-1 bg-white border border-slate-200 rounded-3xl p-8 relative flex flex-col justify-between shadow-sm min-h-[560px]">
             
-            <!-- Slide 1: Title -->
             <div id="slide-1" class="slide active flex-1">
                 <div class="flex flex-col justify-center items-center text-center h-full pt-16">
                     <span class="text-6xl mb-6 select-none animate-bounce">🩸</span>
@@ -113,23 +106,20 @@
                 </div>
             </div>
 
-            <!-- Slide 2: Problem & Solution -->
             <div id="slide-2" class="slide flex-1">
                 <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 02 / 07</span>
                 <h2 class="text-2xl font-black text-slate-900 mb-6">প্রজেক্টটির প্রয়োজনীয়তা (Problem Statement vs Solution)</h2>
                 
                 <div class="grid grid-cols-2 gap-6 mt-2">
-                    <!-- The Problem -->
                     <div class="bg-red-50/50 border border-red-100 rounded-2xl p-5">
                         <h3 class="text-primary font-bold text-base mb-3 flex items-center gap-2">🚨 বর্তমান সমস্যাসমূহ (The Challenges)</h3>
                         <ul class="space-y-3 text-xs text-slate-600">
-                            <li class="flex gap-2"><span class="text-primary">•</span> রক্ত খোঁজার চিরাচরিত পদ্ধতিগুলো (যেমন: ফেসবুক পোস্ট, ডিরেক্টরি) ধীরগতির এবং অনেক সময় তথ্য ভুল থাকে।</li>
+                            <li class="flex gap-2"><span class="text-primary">•</span> রক্ত খোঁজার চিরাচরিত পদ্ধতিগুলো ধীরগতির এবং অনেক সময় তথ্য ভুল থাকে।</li>
                             <li class="flex gap-2"><span class="text-primary">•</span> রোগীরা মানচিত্রে ভৌগোলিকভাবে নিকটতম ডোনারদের অবস্থান দেখতে পারে না।</li>
-                            <li class="flex gap-2"><span class="text-primary">•</span> হাসপাতাল ও ব্লাড ব্যাংকগুলোর কাছে রক্তের স্টক কত ব্যাগ আছে তা লাইভ ট্র্যাক করার উপায় নেই।</li>
+                            <li class="flex gap-2"><span class="text-primary">•</span> hospital ও ব্লাড ব্যাংকগুলোর কাছে রক্তের স্টক কত ব্যাগ আছে তা লাইভ ট্র্যাক করার উপায় নেই।</li>
                         </ul>
                     </div>
 
-                    <!-- The Solution -->
                     <div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-5">
                         <h3 class="text-secondary font-bold text-base mb-3 flex items-center gap-2">✅ PulseNetwork-এর সমাধান (The Solution)</h3>
                         <p class="text-xs text-slate-600 leading-relaxed mb-4">
@@ -143,13 +133,11 @@
                 </div>
             </div>
 
-            <!-- Slide 3: System Architecture -->
             <div id="slide-3" class="slide flex-1">
                 <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 03 / 07</span>
                 <h2 class="text-2xl font-black text-slate-900 mb-5">সিস্টেম আর্কিটেকচার ও ডেটা ফ্লো (Architecture & Data Flow)</h2>
                 
                 <div class="mt-4 flex flex-col gap-6">
-                    <!-- Flow Diagram Grid -->
                     <div class="grid grid-cols-3 gap-4 text-center text-xs">
                         <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
                             <span class="text-lg block mb-1">🖥️</span>
@@ -169,33 +157,30 @@
                         </div>
                     </div>
 
-                    <!-- Flow Explanation -->
                     <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
-                        <h4 class="font-bold text-slate-800 text-xs mb-2">📊 কীভাবে ডেটা প্রবাহিত হয়? (How Data Flows)</h4>
+                        <h4 class="font-bold text-slate-800 text-xs mb-2">📊 কীভাবে ডেটা প্রবাহিত হয়?</h4>
                         <ol class="list-decimal list-inside space-y-1.5 text-[11.5px] text-slate-600">
                             <li>ইউজার ম্যাপে ক্লিক করলে বা ডোনার সার্চ করলে ব্রাউজার থেকে Express API-তে HTTP রিকোয়েস্ট যায়।</li>
-                            <li>Express সার্ভার `database.json` ফাইল রিড করে ইনস্ট্যান্ট রেসপন্স ফেরত পাঠায়।</li>
-                            <li>রোগী ডোনারকে মেসেজ পাঠালে তা **WebSocket Protocol** ব্যবহার করে সার্ভার সরাসরি কানেক্টেড ডোনারের স্ক্রিনে পৌঁছে দেয়।</li>
+                            <li>Express সার্ভার database.json ফাইল রিড করে ইনস্ট্যান্ট রেসপন্স ফেরত পাঠায়।</li>
+                            <li>রোগী ডোনারকে মেসেজ পাঠালে তা WebSocket Protocol ব্যবহার করে সার্ভার সরাসরি কানেক্টেড ডোনারের স্ক্রিনে পৌঁছে দেয়।</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 4: Database Schema -->
             <div id="slide-4" class="slide flex-1">
                 <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 04 / 07</span>
                 <h2 class="text-2xl font-black text-slate-900 mb-4">ডেটাবেজ ডিজাইন ও স্কিমা (Database Schema & Entities)</h2>
                 
                 <div class="mt-2 space-y-4 max-h-[300px] overflow-y-auto pr-2">
-                    <!-- Users and Donors Schema -->
                     <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
                         <h3 class="text-xs font-bold text-primary uppercase tracking-wider mb-2">1. Users Table (ব্যবহারকারী টেবিল)</h3>
                         <table class="w-full text-left text-xs text-slate-600">
                             <thead>
                                 <tr class="border-b border-slate-200 text-slate-900 font-bold">
-                                    <th class="pb-1.5 w-1/4">Field (ফিল্ড)</th>
-                                    <th class="pb-1.5 w-1/4">Type (টাইপ)</th>
-                                    <th class="pb-1.5">Description (বিবরণ)</th>
+                                    <th class="pb-1.5 w-1/4">Field</th>
+                                    <th class="pb-1.5 w-1/4">Type</th>
+                                    <th class="pb-1.5">Description</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,15 +192,14 @@
                         </table>
                     </div>
 
-                    <!-- Donors Table -->
                     <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
                         <h3 class="text-xs font-bold text-secondary uppercase tracking-wider mb-2">2. Donors Table (রক্তদাতা টেবিল)</h3>
                         <table class="w-full text-left text-xs text-slate-600">
                             <thead>
                                 <tr class="border-b border-slate-200 text-slate-900 font-bold">
-                                    <th class="pb-1.5 w-1/4">Field (ফিল্ড)</th>
-                                    <th class="pb-1.5 w-1/4">Type (টাইপ)</th>
-                                    <th class="pb-1.5">Description (বিবরণ)</th>
+                                    <th class="pb-1.5 w-1/4">Field</th>
+                                    <th class="pb-1.5 w-1/4">Type</th>
+                                    <th class="pb-1.5">Description</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -229,7 +213,6 @@
                 </div>
             </div>
 
-            <!-- Slide 5: Core Features -->
             <div id="slide-5" class="slide flex-1">
                 <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 05 / 07</span>
                 <h2 class="text-2xl font-black text-slate-900 mb-6">প্রধান ফিচারের কারিগরি দিক (Core Features & Implementation)</h2>
@@ -266,7 +249,6 @@
                 </div>
             </div>
 
-            <!-- Slide 6: Code Examples -->
             <div id="slide-6" class="slide flex-1">
                 <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 06 / 07</span>
                 <h2 class="text-2xl font-black text-slate-900 mb-4">কোড উদাহরণ ও টেকনিক্যাল ডেমো</h2>
@@ -276,11 +258,8 @@
                     <button onclick="showCodeTab('map-code')" id="tab-map-code" class="code-tab-btn px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-semibold">২. ইন্টারেক্টিভ ম্যাপ (React JSX)</button>
                 </div>
 
-                <!-- Code Content Box -->
                 <div id="code-container" class="bg-slate-50 border border-slate-200 rounded-xl p-4 font-mono text-[11px] leading-relaxed text-slate-700 overflow-x-auto max-h-72">
-                    <!-- Tab 1: WebSocket -->
                     <pre id="server-code-pre" class="code-pre">
-// server.js - WebSocket মেসেজ রাউটিং ও চ্যাট ডিস্ট্রিবিউশন
 ws.on('message', (message) => {
     const data = JSON.parse(message);
     if (data.type === 'CHAT_MSG') {
@@ -295,39 +274,35 @@ ws.on('message', (message) => {
         dbData.messages.push(messageObj);
         db.write(dbData);
 
-        // রিসিভার যদি অনলাইন থাকে, তাকে সরাসরি মেসেজটি পুশ করা
         const receiverSocket = CLIENTS[receiver_id];
         if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
             receiverSocket.send(JSON.stringify({ type: 'CHAT_MSG_INCOMING', message: messageObj }));
         }
     }
 });</pre>
-                    <!-- Tab 2: React click -->
+                    
                     <pre id="map-code-pre" class="code-pre hidden">
-// pages/index.jsx - React Interactive SVG Click Handler
 const handleDivisionClick = async (divisionName) => {
   setSelectedDivision(divisionName);
   try {
     const response = await fetch(`/api/donors?division=${divisionName}`);
     if (response.ok) {
       const donorsList = await response.json();
-      setSearchResults(donorsList); // রিঅ্যাক্ট স্টেট আপডেট
-      setCurrentView('search-results-view'); // সার্চ পেজে নেভিগেশন
+      setSearchResults(donorsList);
+      setCurrentView('search-results-view');
     }
   } catch (error) {
-    console.error("লাইভ ডোনার লোড করতে ব্যর্থ:", error);
+    console.error(error);
   }
 };</pre>
                 </div>
             </div>
 
-            <!-- Slide 7: Tech Stack & Roadmap -->
             <div id="slide-7" class="slide flex-1">
                 <span class="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Slide 07 / 07</span>
                 <h2 class="text-2xl font-black text-slate-900 mb-6">প্রযুক্তির বিশ্লেষণ ও ভবিষ্যৎ রোডম্যাপ</h2>
                 
                 <div class="grid grid-cols-2 gap-6 mt-2 text-[12.5px] text-slate-700">
-                    <!-- Tech Stack Details -->
                     <div class="space-y-3">
                         <h4 class="font-bold text-primary border-b border-slate-200 pb-1 flex items-center gap-1.5">🛠️ ডেভেলপমেন্ট ল্যাঙ্গুয়েজ (Languages Used)</h4>
                         <ul class="space-y-2 text-xs text-slate-600">
@@ -338,7 +313,6 @@ const handleDivisionClick = async (divisionName) => {
                         </ul>
                     </div>
 
-                    <!-- Roadmap -->
                     <div class="space-y-3">
                         <h4 class="font-bold text-secondary border-b border-slate-200 pb-1 flex items-center gap-1.5">🚀 ভবিষ্যৎ পরিকল্পনা (Future Roadmap)</h4>
                         <ul class="space-y-2 text-xs text-slate-600">
@@ -350,7 +324,6 @@ const handleDivisionClick = async (divisionName) => {
                 </div>
             </div>
 
-            <!-- Bottom Navigation Bar inside Content Window -->
             <div class="border-t border-slate-200 pt-6 mt-8 flex justify-between items-center bg-slate-50/50">
                 <button onclick="prevSlide()" class="bg-white border border-slate-200 text-slate-600 px-5 py-2.5 rounded-xl font-bold hover:bg-slate-50 hover:text-slate-900 transition-all text-sm">◀ Previous Slide</button>
                 <div class="text-xs text-slate-500 font-bold" id="slide-indicator">Slide 1 of 7</div>
@@ -360,34 +333,28 @@ const handleDivisionClick = async (divisionName) => {
         </section>
     </main>
 
-    <!-- Interactive Navigation Logic Scripts -->
     <script>
         let currentSlide = 1;
         const totalSlides = 7;
 
         function showSlide(index) {
-            // Validate limits
             if (index < 1) index = 1;
             if (index > totalSlides) index = totalSlides;
 
             currentSlide = index;
 
-            // Hide all slides
             for (let i = 1; i <= totalSlides; i++) {
                 document.getElementById('slide-' + i).classList.remove('active');
                 document.getElementById('btn-slide-' + i).classList.remove('active', 'bg-slate-100', 'text-slate-900', 'font-bold', 'border-slate-200');
                 document.getElementById('btn-slide-' + i).classList.add('border-transparent');
             }
 
-            // Show active slide
             document.getElementById('slide-' + currentSlide).classList.add('active');
             
-            // Activate button style
             const activeBtn = document.getElementById('btn-slide-' + currentSlide);
             activeBtn.classList.remove('border-transparent');
             activeBtn.classList.add('active', 'bg-slate-100', 'text-slate-900', 'font-bold', 'border-slate-200');
 
-            // Update indicator
             document.getElementById('slide-indicator').innerText = 'Slide ' + currentSlide + ' of ' + totalSlides;
         }
 
@@ -408,7 +375,6 @@ const handleDivisionClick = async (divisionName) => {
         }
 
         function showCodeTab(tabName) {
-            // Manage button styles
             document.querySelectorAll('.code-tab-btn').forEach(btn => {
                 btn.classList.remove('active', 'bg-slate-200', 'text-slate-900', 'border-slate-350');
                 btn.classList.add('text-slate-500');
@@ -418,14 +384,12 @@ const handleDivisionClick = async (divisionName) => {
             activeBtn.classList.add('active', 'bg-slate-200', 'text-slate-900', 'border-slate-350');
             activeBtn.classList.remove('text-slate-500');
 
-            // Manage pre styles
             document.querySelectorAll('.code-pre').forEach(pre => {
                 pre.classList.add('hidden');
             });
             document.getElementById(tabName + '-pre').classList.remove('hidden');
         }
 
-        // Listen for keyboard arrow keys
         document.addEventListener('keydown', function(event) {
             if (event.key === 'ArrowRight') {
                 nextSlide();

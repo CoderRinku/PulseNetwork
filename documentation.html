@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PulseNetwork — Technical Documentation & API Guide</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -30,7 +29,6 @@
 </head>
 <body class="bg-bgMain text-slate-800 min-h-screen flex flex-col font-sans">
 
-    <!-- Top Header -->
     <header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -44,10 +42,7 @@
         </div>
     </header>
 
-    <!-- Main Workspace -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex gap-8">
-        
-        <!-- Sidebar Navigation -->
         <aside class="w-80 shrink-0 flex flex-col gap-2 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm h-fit">
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">মেনু (Sections)</div>
             
@@ -73,14 +68,11 @@
             </button>
         </aside>
 
-        <!-- Documentation Content Window -->
         <section class="flex-1 bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-            
-            <!-- SECTION 1: Overview -->
             <div id="overview" class="doc-section active">
                 <h2 class="text-2xl font-black text-slate-900 mb-6">১. প্রজেক্ট পরিচিতি ও ফাইল স্ট্রাকচার</h2>
                 <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                    PulseNetwork-এর আর্কিটেকচার অত্যন্ত সহজ এবং মডার্ন। এটি মূলত একটি **Next.js (React) ফ্রন্টএন্ড** এবং একটি **Express.js (Node.js) ব্যাকএন্ড** সার্ভারের সমন্বয়ে তৈরি। এর সবচেয়ে বড় সুবিধা হলো, প্রজেক্টের পুরো কোডটি শুধুমাত্র একটি প্রোগ্রামিং ভাষা—**JavaScript (জাভাস্ক্রিপ্ট)** ব্যবহার করে লেখা হয়েছে।
+                    PulseNetwork-এর আর্কিটেকচার অত্যন্ত সহজ এবং মডার্ন। এটি মূলত একটি Next.js (React) ফ্রন্টএন্ড এবং একটি Express.js (Node.js) ব্যাকএন্ড সার্ভারের সমন্বয়ে তৈরি। এর সবচেয়ে বড় সুবিধা হলো, প্রজেক্টের পুরো কোডটি শুধুমাত্র একটি প্রোগ্রামিং ভাষা—JavaScript ব্যবহার করে লেখা হয়েছে।
                 </p>
                 
                 <h3 class="font-bold text-slate-800 mb-3 text-base">📂 গুরুত্বপূর্ণ ফাইল ও ফোল্ডারের তালিকা:</h3>
@@ -118,7 +110,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: APIs -->
             <div id="apis" class="doc-section">
                 <h2 class="text-2xl font-black text-slate-900 mb-6">২. এক্সপ্রেস এপিআই রাউট ডকস (API Documentation)</h2>
                 <p class="text-slate-600 text-sm leading-relaxed mb-6">
@@ -126,7 +117,6 @@
                 </p>
 
                 <div class="space-y-4">
-                    <!-- API Item 1 -->
                     <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="bg-red-100 text-red-700 text-[10px] px-2.5 py-1 rounded font-bold">POST</span>
@@ -138,7 +128,6 @@
                         </div>
                     </div>
 
-                    <!-- API Item 2 -->
                     <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="bg-red-100 text-red-700 text-[10px] px-2.5 py-1 rounded font-bold">POST</span>
@@ -150,7 +139,6 @@
                         </div>
                     </div>
 
-                    <!-- API Item 3 -->
                     <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="bg-blue-100 text-blue-700 text-[10px] px-2.5 py-1 rounded font-bold">GET</span>
@@ -162,7 +150,6 @@
                         </div>
                     </div>
 
-                    <!-- API Item 4 -->
                     <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="bg-blue-100 text-blue-700 text-[10px] px-2.5 py-1 rounded font-bold">GET</span>
@@ -173,16 +160,15 @@
                 </div>
             </div>
 
-            <!-- SECTION 3: Chat -->
             <div id="chat" class="doc-section">
                 <h2 class="text-2xl font-black text-slate-900 mb-6">৩. রিয়েল-টাইম চ্যাট ও ওয়েবসকেট লজিক</h2>
                 <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                    রক্তদাতার সাথে রোগীরা যেন তাৎক্ষণিকভাবে যোগাযোগ করতে পারেন, সেজন্য কোনো লেটেন্সি বা পেজ রিলোড ছাড়াই চ্যাট সিস্টেমটি সচল রাখতে **WebSocket Protocol (ws)** ব্যবহার করা হয়েছে।
+                    রক্তদাতার সাথে রোগীরা যেন তাৎক্ষণিকভাবে যোগাযোগ করতে পারেন, সেজন্য কোনো লেটেন্সি বা পেজ রিলোড ছাড়াই চ্যাট সিস্টেমটি সচল রাখতে WebSocket Protocol (ws) ব্যবহার করা হয়েছে।
                 </p>
                 <h3 class="font-bold text-slate-800 mb-3 text-base">💬 চ্যাট মেসেজ আদান-প্রদান লজিক:</h3>
                 <ol class="list-decimal list-inside space-y-3 text-xs text-slate-600">
                     <li>
-                        <strong>কানেকশন এস্টাব্লিশমেন্ট:</strong> ক্লায়েন্ট পেজ লোড হওয়ার সাথে সাথে তার সেশন টোকেন হেডার দিয়ে `ws://` প্রোটোকলে ব্যাকএন্ড সার্ভারের সাথে একটি পারসিস্টেন্ট TCP কানেকশন খোলে।
+                        <strong>কানেকশন এস্টাব্লিশমেন্ট:</strong> ক্লায়েন্ট পেজ লোড হওয়ার সাথে সাথে তার সেশন টোকেন হেডার দিয়ে ws:// প্রোটোকলে ব্যাকএন্ড সার্ভারের সাথে একটি পারসিস্টেন্ট TCP কানেকশন খোলে।
                     </li>
                     <li>
                         <strong>মেসেজ ডিসপ্যাচ:</strong> যখন কোনো ইউজার মেসেজ টাইপ করে সেন্ড করেন, তখন ফ্রন্টএন্ড থেকে একটি JSON স্ট্রিং `{ type: 'CHAT_MSG', receiver_id: 'xx', message: 'hello' }` সার্ভারে যায়।
@@ -193,31 +179,28 @@
                 </ol>
             </div>
 
-            <!-- SECTION 4: Map -->
             <div id="map" class="doc-section">
                 <h2 class="text-2xl font-black text-slate-900 mb-6">৪. ইন্টারেক্টিভ ম্যাপ ও স্থানাঙ্ক কোঅর্ডিনেশন</h2>
                 <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                    ম্যাপের ক্ষেত্রে আমরা বাংলাদেশের প্রকৃত ভৌগোলিক বাউন্ডারি ডেটা ব্যবহার করেছি। কোনো থার্ড পার্টি ম্যাপ প্রোভাইডার (যেমন গুগল ম্যাপস বা ওপেনস্ট্রিটম্যাপ) ব্যবহার না করে, শুধুমাত্র হালকা ভেক্টর ইমেজে ম্যাপ রেন্ডার করার জন্য SVG ব্যবহার করা হয়েছে।
+                    ম্যাপের ক্ষেত্রে আমরা বাংলাদেশের প্রকৃত ভৌগোলিক বাউন্ডারি ডেটা ব্যবহার করেছি। কোনো থার্ড পার্টি ম্যাপ প্রোভাইডার ব্যবহার না করে, শুধুমাত্র হালকা ভেক্টর ইমেজে ম্যাপ রেন্ডার করার জন্য SVG ব্যবহার করা হয়েছে।
                 </p>
                 
                 <h3 class="font-bold text-slate-800 mb-3 text-base">🗺️ কীভাবে মানচিত্রের কোড তৈরি করা হয়েছে?</h3>
                 <p class="text-slate-600 text-xs leading-relaxed mb-4">
-                    বাংলাদেশের অফিসিয়াল জিওগ্রাফিক কোঅর্ডিনেট GeoJSON ফাইল থেকে ৮টি বিভাগের সীমানা পয়েন্টগুলো রিড করা হয়েছে। এরপর অক্ষাংশ এবং দ্রাঘিমাংশ (Latitude/Longitude) ডাটাকে একটি কাস্টম প্রোজেকশন ম্যাথমেটিক্যাল ক্যালকুলেটরের মাধ্যমে SVG বাউন্ডিং বক্স সাইজ `0 0 437.8 601.2` এ কনভার্ট করে SVG `<path>` আকারে `pages/index.jsx` ফাইলে রেন্ডার করা হয়েছে।
+                    বাংলাদেশের অফিসিয়াল জিওগ্রাফিক কোঅর্ডিনেট GeoJSON ফাইল থেকে ৮টি বিভাগের সীমানা পয়েন্টগুলো রিড করা হয়েছে। এরপর অক্ষাংশ এবং দ্রাঘিমাংশ ডাটাকে একটি কাস্টম প্রোজেকশন ম্যাথমেটিক্যাল ক্যালকুলেটরের মাধ্যমে SVG বাউন্ডিং বক্স সাইজ `0 0 437.8 601.2` এ কনভার্ট করে SVG path আকারে রেন্ডার করা হয়েছে।
                 </p>
 
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 font-mono text-[10.5px] text-slate-700">
                     &lt;svg viewBox="0 0 437.8 601.2"&gt;<br>
-                    &nbsp;&nbsp;&lt;!-- Dhaka Division Path mapped with real geographic boundaries --&gt;<br>
                     &nbsp;&nbsp;&lt;path d="M 197.85,340.23 L 201.21,348.55 L 210.05,345.12 ..." /&gt;<br>
                     &lt;/svg&gt;
                 </div>
             </div>
 
-            <!-- SECTION 5: Credits -->
             <div id="credits" class="doc-section">
                 <h2 class="text-2xl font-black text-slate-900 mb-6">৫. সোর্স কোড লাইব্রেরি ও ক্রেডিট (Third Party & Credits)</h2>
                 <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                    প্রজেক্টটি ডেভলপ করতে ওপেন সোর্স কমিউনিটির যে সকল কোড লাইব্রেরি ও সোর্স ব্যবহার করা হয়েছে, তা নিচে বিশ্বস্ততার সাথে উল্লেখ করা হলো:
+                    প্রজেক্টটি ডেভলপ করতে ওপেন সোর্স কমিউনিটির যে সকল কোড লাইব্রেরি ও সোর্স ব্যবহার করা হয়েছে, তা নিচে উল্লেখ করা হলো:
                 </p>
 
                 <ul class="space-y-4 text-xs text-slate-600">
@@ -235,17 +218,15 @@
                     </li>
                     <li class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
                         <strong class="text-slate-800 block mb-1">💬 WebSocket Node.js (ws)</strong>
-                        সোর্স: NPM `ws` package। রিয়েল-টাইম কানেকশন এবং ইনস্ট্যান্ট মেসেজ রাউটিংয়ের লাইভ চ্যাট ব্যাকএন্ড হ্যান্ডেল করতে ব্যবহৃত হয়েছে।
+                        সোর্স: NPM ws package। রিয়েল-টাইম কানেকশন এবং ইনস্ট্যান্ট মেসেজ রাউটিংয়ের লাইভ চ্যাট ব্যাকএন্ড হ্যান্ডেল করতে ব্যবহৃত হয়েছে।
                     </li>
                 </ul>
             </div>
-
         </section>
     </main>
 
     <script>
         function showSection(sectionId) {
-            // Manage buttons
             document.querySelectorAll('.doc-nav-btn').forEach(btn => {
                 btn.classList.remove('active', 'bg-slate-100', 'text-slate-900', 'font-bold', 'border-slate-200');
                 btn.classList.add('border-transparent', 'text-slate-600');
@@ -254,7 +235,6 @@
             activeBtn.classList.remove('border-transparent', 'text-slate-600');
             activeBtn.classList.add('active', 'bg-slate-100', 'text-slate-900', 'font-bold', 'border-slate-200');
 
-            // Manage sections
             document.querySelectorAll('.doc-section').forEach(sec => {
                 sec.classList.remove('active');
             });

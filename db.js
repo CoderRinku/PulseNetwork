@@ -4,12 +4,10 @@ const bcrypt = require('bcryptjs');
 
 const DB_PATH = path.join(__dirname, 'data', 'database.json');
 
-// Ensure data folder exists
 if (!fs.existsSync(path.dirname(DB_PATH))) {
     fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 }
 
-// Bangladesh Divisions, Districts, and Thanas with latitude and longitude coordinates
 const GEOGRAPHY = {
     "Dhaka": {
         "Dhaka": {
@@ -77,7 +75,6 @@ const GEOGRAPHY = {
     }
 };
 
-// Pre-hashed password for testing: 'password123'
 const SEED_PASSWORD_HASH = bcrypt.hashSync('password123', 10);
 
 function getInitialData() {
@@ -173,7 +170,7 @@ function getInitialData() {
                 thana: "Mirpur",
                 lat: 23.8041,
                 lng: 90.3626,
-                last_donation_date: new Date(Date.now() - 95 * 24 * 60 * 60 * 1000).toISOString(), // 95 days ago (eligible)
+                last_donation_date: new Date(Date.now() - 95 * 24 * 60 * 60 * 1000).toISOString(),
                 is_eligible: true,
                 response_rate: 92,
                 activity_score: 85,
@@ -190,7 +187,7 @@ function getInitialData() {
                 thana: "Dhanmondi",
                 lat: 23.7461,
                 lng: 90.3742,
-                last_donation_date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days ago (ineligible)
+                last_donation_date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
                 is_eligible: false,
                 response_rate: 98,
                 activity_score: 95,
@@ -207,7 +204,7 @@ function getInitialData() {
                 thana: "Amberkhana",
                 lat: 24.9080,
                 lng: 91.8650,
-                last_donation_date: new Date(Date.now() - 110 * 24 * 60 * 60 * 1000).toISOString(), // 110 days ago (eligible)
+                last_donation_date: new Date(Date.now() - 110 * 24 * 60 * 60 * 1000).toISOString(),
                 is_eligible: true,
                 response_rate: 75,
                 activity_score: 70,
@@ -332,7 +329,6 @@ const db = {
             const content = fs.readFileSync(DB_PATH, 'utf8');
             return JSON.parse(content);
         } catch (error) {
-            console.error("Database read error, restoring defaults...", error);
             const data = getInitialData();
             this.write(data);
             return data;
@@ -344,7 +340,6 @@ const db = {
             fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 4), 'utf8');
             return true;
         } catch (error) {
-            console.error("Database write error:", error);
             return false;
         }
     },
@@ -355,8 +350,8 @@ const db = {
 
     getLatLng(division, district, thana) {
         try {
-            const coordinates = GEOGRAPHY[division]?.[district]?.[thana];
-            if (coordinates) return coordinates;
+            const coords = GEOGRAPHY[division]?.[district]?.[thana];
+            if (coords) return coords;
             return { lat: 23.8103, lng: 90.4125 };
         } catch (e) {
             return { lat: 23.8103, lng: 90.4125 };

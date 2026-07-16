@@ -4,21 +4,21 @@ const path = require('path');
 const srcDir = path.join(__dirname, '..', 'out');
 const destDir = path.join(__dirname, '..', 'public');
 
-function deleteFolderRecursive(directoryPath) {
-  if (fs.existsSync(directoryPath)) {
-    fs.readdirSync(directoryPath).forEach((file) => {
-      const curPath = path.join(directoryPath, file);
+function cleanDir(dirPath) {
+  if (fs.existsSync(dirPath)) {
+    fs.readdirSync(dirPath).forEach((file) => {
+      const curPath = path.join(dirPath, file);
       if (fs.lstatSync(curPath).isDirectory()) {
-        deleteFolderRecursive(curPath);
+        cleanDir(curPath);
       } else {
         fs.unlinkSync(curPath);
       }
     });
-    fs.rmdirSync(directoryPath);
+    fs.rmdirSync(dirPath);
   }
 }
 
-function copyFolderRecursive(src, dest) {
+function copyDir(src, dest) {
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(dest, { recursive: true });
   }
@@ -29,21 +29,19 @@ function copyFolderRecursive(src, dest) {
     const destPath = path.join(dest, entry.name);
 
     if (entry.isDirectory()) {
-      copyFolderRecursive(srcPath, destPath);
+      copyDir(srcPath, destPath);
     } else {
       fs.copyFileSync(srcPath, destPath);
     }
   }
 }
 
-function main() {
-  console.log('[Post-Build] Cleaning up public directory...');
-  // Delete all contents in public, but don't delete the directory itself
+function run() {
   if (fs.existsSync(destDir)) {
     fs.readdirSync(destDir).forEach((file) => {
       const curPath = path.join(destDir, file);
       if (fs.lstatSync(curPath).isDirectory()) {
-        deleteFolderRecursive(curPath);
+        cleanDir(curPath);
       } else {
         fs.unlinkSync(curPath);
       }
@@ -52,14 +50,11 @@ function main() {
     fs.mkdirSync(destDir, { recursive: true });
   }
 
-  console.log('[Post-Build] Copying compiled files from /out to /public...');
   if (fs.existsSync(srcDir)) {
-    copyFolderRecursive(srcDir, destDir);
-    console.log('[Post-Build] Copy complete! Static files are now ready.');
+    copyDir(srcDir, destDir);
   } else {
-    console.error('[Post-Build] Error: "/out" folder not found. Next.js export might have failed.');
     process.exit(1);
   }
 }
 
-main();
+run();

@@ -14,20 +14,13 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// In-memory sessions map (token -> user details)
 const SESSIONS = {};
-
-// Active WebSocket connections map (userId -> ws client socket)
 const CLIENTS = {};
 
-// ----------------------------------------------------
-// BACKGROUND WORKER: Auto-reset donor eligibility after 90 days
-// ----------------------------------------------------
-function checkDonorEligibilityCooldown() {
+function resetEligibility() {
     const data = db.read();
     let updated = false;
     const now = new Date();
@@ -35,13 +28,11 @@ function checkDonorEligibilityCooldown() {
     data.donors.forEach(donor => {
         if (!donor.is_eligible) {
             const lastDonation = new Date(donor.last_donation_date);
-            const diffTime = Math.abs(now - lastDonation);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const diffDays = Math.ceil(Math.abs(now - lastDonation) / (1000 * 60 * 60 * 24));
 
             if (diffDays >= 90) {
                 donor.is_eligible = true;
                 updated = true;
-                console.log(`[Auto-Cooldown] Donor ${donor.user_id} eligibility restored automatically. (90+ days reached).`);
             }
         }
     });
@@ -51,12 +42,10 @@ function checkDonorEligibilityCooldown() {
     }
 }
 
-// Run cooldown check immediately on startup and then every 30 seconds
-checkDonorEligibilityCooldown();
-setInterval(checkDonorEligibilityCooldown, 30000);
+resetEligibility();
+setInterval(resetEligibility, 30000);
 
-// Helper function to extract user from session
-function authenticateToken(req, res, next) {
+function authRequired(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -68,10 +57,6 @@ function authenticateToken(req, res, next) {
     req.user = sessionUser;
     next();
 }
-
-// ----------------------------------------------------
-// REST API: AUTHENTICATION & SECURITY
-// ----------------------------------------------------
 
 app.post('/api/auth/register', (req, res) => {
     const { name, email, password, role, phone, nid_birth_cert, division, district, thana, extra } = req.body;
@@ -96,7 +81,7 @@ app.post('/api/auth/register', (req, res) => {
         role,
         phone,
         nid_birth_cert,
-        status: (role === 'Blood Bank / Hospital') ? 'Pending' : 'Active', // Blood banks require approval
+        status: (role === 'Blood Bank / Hospital') ? 'Pending' : 'Active',
         created_at: new Date().toISOString()
     };
 
@@ -104,7 +89,6 @@ app.post('/api/auth/register', (req, res) => {
 
     const latLng = db.getLatLng(division, district, thana);
 
-    // Save sub-role configurations
     if (role === 'Donor') {
         const age = parseInt(extra?.age || 25);
         const weight = parseInt(extra?.weight || 70);
@@ -120,9 +104,9 @@ app.post('/api/auth/register', (req, res) => {
             division,
             district,
             thana,
-            lat: latLng.lat + (Math.random() - 0.5) * 0.02, // Add tiny dispersion for visual separation on maps
+            lat: latLng.lat + (Math.random() - 0.5) * 0.02,
             lng: latLng.lng + (Math.random() - 0.5) * 0.02,
-            last_donation_date: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000).toISOString(), // set default past date (100 days ago = eligible)
+            last_donation_date: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000).toISOString(),
             is_eligible: true,
             response_rate: 100,
             activity_score: 80,
@@ -141,7 +125,6 @@ app.post('/api/auth/register', (req, res) => {
             contact_no: phone
         });
 
-        // Initialize inventory with 0 units for each blood group
         const groups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
         groups.forEach(g => {
             data.blood_inventory.push({
@@ -155,7 +138,6 @@ app.post('/api/auth/register', (req, res) => {
 
     db.write(data);
 
-    // Auto log in if role is not Blood Bank (which requires Admin approval)
     if (newUser.status === 'Active') {
         const token = crypto.randomBytes(16).toString('hex');
         SESSIONS[token] = { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role };
@@ -198,15 +180,14 @@ app.post('/api/auth/login', (req, res) => {
     res.json({ message: "Login successful!", token, user: SESSIONS[token] });
 });
 
-app.post('/api/auth/logout', authenticateToken, (req, res) => {
-    // Delete session token
+app.post('/api/auth/logout', authRequired, (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (token) delete SESSIONS[token];
     res.json({ message: "Logout successful." });
 });
 
-app.get('/api/auth/me', authenticateToken, (req, res) => {
+app.get('/api/auth/me', authRequired, (req, res) => {
     const data = db.read();
     const user = data.users.find(u => u.id === req.user.id);
     if (!user) return res.status(404).json({ error: "User not found." });
@@ -224,16 +205,10 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
     res.json(response);
 });
 
-// ----------------------------------------------------
-// GEOGRAPHY DATA
-// ----------------------------------------------------
 app.get('/api/geography', (req, res) => {
     res.json(db.getGeography());
 });
 
-// ----------------------------------------------------
-// PUBLIC API: GET ALL ACTIVE DONORS FOR COVERAGE MAP
-// ----------------------------------------------------
 app.get('/api/donors/all', (req, res) => {
     const data = db.read();
     const result = data.donors.map(d => {
@@ -254,13 +229,11 @@ app.get('/api/donors/all', (req, res) => {
     res.json(result);
 });
 
-// ----------------------------------------------------
-// SEARCH FILTER & DISTANCE RANKING APIs
-// ----------------------------------------------------
-app.get('/api/donors/search', (req, res) => {
-    const { division, district, thana, bloodGroup, lat, lng } = req.query;
+app.get('/api/donors', (req, res) => {
+    const { division, district, thana, blood_group, bloodGroup, lat, lng } = req.query;
+    const bg = blood_group || bloodGroup;
 
-    if (!division || !district || !thana || !bloodGroup) {
+    if (!division || !district || !thana || !bg) {
         return res.status(400).json({ error: "Division, district, thana and blood group are required filters." });
     }
 
@@ -269,27 +242,48 @@ app.get('/api/donors/search', (req, res) => {
 
     const data = db.read();
     
-    // Perform standard search filters
     let searchResult = data.donors.filter(donor => {
         return donor.division === division &&
                donor.district === district &&
                donor.thana === thana;
     });
 
-    // Run ML Donor Ranking (calculates distance, compatibility, response rates)
-    const rankedResults = ml.rankDonors(bloodGroup, pLat, pLng, searchResult, data.users);
+    const rankedResults = ml.rankDonors(bg, pLat, pLng, searchResult, data.users);
 
     res.json(rankedResults);
 });
 
-app.post('/api/donors/toggle-status', authenticateToken, (req, res) => {
-    const { donorId, status } = req.body; // status: 'Active' or 'Inactive'
+app.get('/api/donors/search', (req, res) => {
+    const { division, district, thana, blood_group, bloodGroup, lat, lng } = req.query;
+    const bg = blood_group || bloodGroup;
+
+    if (!division || !district || !thana || !bg) {
+        return res.status(400).json({ error: "Division, district, thana and blood group are required filters." });
+    }
+
+    const pLat = parseFloat(lat || 23.8103);
+    const pLng = parseFloat(lng || 90.4125);
+
+    const data = db.read();
+    
+    let searchResult = data.donors.filter(donor => {
+        return donor.division === division &&
+               donor.district === district &&
+               donor.thana === thana;
+    });
+
+    const rankedResults = ml.rankDonors(bg, pLat, pLng, searchResult, data.users);
+
+    res.json(rankedResults);
+});
+
+app.post('/api/donors/toggle-status', authRequired, (req, res) => {
+    const { donorId, status } = req.body;
     const data = db.read();
 
     const targetUser = data.users.find(u => u.id === donorId);
     if (!targetUser) return res.status(404).json({ error: "Donor account not found." });
 
-    // Allow Admin to toggle, or Donor to toggle their own account
     if (req.user.role !== 'Admin' && req.user.id !== donorId) {
         return res.status(403).json({ error: "Unauthorized operation." });
     }
@@ -300,10 +294,9 @@ app.post('/api/donors/toggle-status', authenticateToken, (req, res) => {
     res.json({ message: `Donor status set to ${status} successfully.`, donorId, status });
 });
 
-app.post('/api/donors/log-donation', authenticateToken, (req, res) => {
+app.post('/api/donors/log-donation', authRequired, (req, res) => {
     const { donorId, unitsDonated, recipientId, recipientType } = req.body;
     
-    // Only Admin or Blood Bank can log a donation
     if (req.user.role !== 'Admin' && req.user.role !== 'Blood Bank / Hospital') {
         return res.status(403).json({ error: "Only admins and blood banks can log donations." });
     }
@@ -314,13 +307,11 @@ app.post('/api/donors/log-donation', authenticateToken, (req, res) => {
 
     const now = new Date().toISOString();
 
-    // 90 days cooldown updates automatically
     donor.last_donation_date = now;
     donor.is_eligible = false;
     donor.total_donations += parseInt(unitsDonated || 1);
-    donor.activity_score = Math.min(100, (donor.activity_score || 70) + 5); // Boost activity
+    donor.activity_score = Math.min(100, (donor.activity_score || 70) + 5);
 
-    // Log to history
     const historyId = `don-h-${crypto.randomBytes(4).toString('hex')}`;
     data.donation_history.push({
         id: historyId,
@@ -331,7 +322,6 @@ app.post('/api/donors/log-donation', authenticateToken, (req, res) => {
         units_donated: parseInt(unitsDonated || 1)
     });
 
-    // If recipient is a blood bank, add stock automatically
     if (recipientType === 'BloodBank' || req.user.role === 'Blood Bank / Hospital') {
         const bbId = recipientId || req.user.id;
         const stockItem = data.blood_inventory.find(i => i.blood_bank_id === bbId && i.blood_group === donor.blood_group);
@@ -345,13 +335,9 @@ app.post('/api/donors/log-donation', authenticateToken, (req, res) => {
     res.json({ message: "Donation logged successfully. Donor enters 90-day cooldown.", donor });
 });
 
-// ----------------------------------------------------
-// INVENTORY DASHBOARD
-// ----------------------------------------------------
 app.get('/api/inventory', (req, res) => {
     const data = db.read();
     
-    // Return aggregated stocks for patients/guests, or detailed stocks grouped by blood bank
     const result = data.blood_banks.map(bb => {
         const inventory = data.blood_inventory.filter(i => i.blood_bank_id === bb.user_id);
         return {
@@ -371,7 +357,7 @@ app.get('/api/inventory', (req, res) => {
     res.json(result);
 });
 
-app.post('/api/inventory/update', authenticateToken, (req, res) => {
+app.post('/api/inventory/update', authRequired, (req, res) => {
     const { bloodGroup, quantity } = req.body;
 
     if (req.user.role !== 'Blood Bank / Hospital') {
@@ -390,7 +376,6 @@ app.post('/api/inventory/update', authenticateToken, (req, res) => {
 
     db.write(data);
 
-    // Notify all clients of inventory updates via WebSockets
     broadcastMessage({
         type: 'INVENTORY_UPDATE',
         blood_bank_id: req.user.id,
@@ -401,13 +386,9 @@ app.post('/api/inventory/update', authenticateToken, (req, res) => {
     res.json({ message: "Inventory updated successfully.", stockItem });
 });
 
-// ----------------------------------------------------
-// EMERGENCY BLOOD REQUESTS & ALERTS
-// ----------------------------------------------------
 app.get('/api/requests', (req, res) => {
     const data = db.read();
     
-    // Sort Emergency Requests: Urgent level High first, then newest
     const sorted = [...data.emergency_requests].sort((a, b) => {
         if (a.urgency_level === 'High' && b.urgency_level !== 'High') return -1;
         if (a.urgency_level !== 'High' && b.urgency_level === 'High') return 1;
@@ -417,7 +398,7 @@ app.get('/api/requests', (req, res) => {
     res.json(sorted);
 });
 
-app.post('/api/requests/create', authenticateToken, (req, res) => {
+app.post('/api/requests/create', authRequired, (req, res) => {
     const { blood_group, units_needed, hospital_name, location_details, division, district, thana, urgency_level } = req.body;
 
     if (!blood_group || !units_needed || !hospital_name || !division || !district || !thana) {
@@ -448,7 +429,6 @@ app.post('/api/requests/create', authenticateToken, (req, res) => {
     data.emergency_requests.push(newRequest);
     db.write(data);
 
-    // Notify surrounding donors/blood banks based on location matching!
     broadcastMessage({
         type: 'EMERGENCY_ALERT',
         request: newRequest
@@ -457,10 +437,9 @@ app.post('/api/requests/create', authenticateToken, (req, res) => {
     res.json({ message: "Emergency blood request posted successfully!", request: newRequest });
 });
 
-app.post('/api/requests/status', authenticateToken, (req, res) => {
-    const { requestId, status } = req.body; // status: Pending, Approved, Completed, Cancelled
+app.post('/api/requests/status', authRequired, (req, res) => {
+    const { requestId, status } = req.body;
     
-    // Only Admin, Patient (creator), or Blood Bank staff can change status
     const data = db.read();
     const request = data.emergency_requests.find(r => r.id === requestId);
 
@@ -482,17 +461,13 @@ app.post('/api/requests/status', authenticateToken, (req, res) => {
     res.json({ message: `Request status changed to ${status}.`, request });
 });
 
-// ----------------------------------------------------
-// MACHINE LEARNING INSIGHTS & REPORTS
-// ----------------------------------------------------
-app.get('/api/ml/demand', authenticateToken, (req, res) => {
+app.get('/api/ml/demand', authRequired, (req, res) => {
     const data = db.read();
-    // Run the ML demand forecasting module
     const forecast = ml.predictBloodDemand(data.emergency_requests);
     res.json(forecast);
 });
 
-app.get('/api/ml/recommend', authenticateToken, (req, res) => {
+app.get('/api/ml/recommend', authRequired, (req, res) => {
     const { requestId } = req.query;
     if (!requestId) return res.status(400).json({ error: "requestId query parameter is required." });
 
@@ -500,7 +475,6 @@ app.get('/api/ml/recommend', authenticateToken, (req, res) => {
     const request = data.emergency_requests.find(r => r.id === requestId);
     if (!request) return res.status(404).json({ error: "Emergency request not found." });
 
-    // Run ML Donor ranking matching this request group and location
     const matchedDonors = data.donors.filter(d => {
         return d.division === request.division && d.district === request.district;
     });
@@ -509,14 +483,11 @@ app.get('/api/ml/recommend', authenticateToken, (req, res) => {
     
     res.json({
         request: request,
-        recommendations: recommendations.slice(0, 3) // Return top 3 matches
+        recommendations: recommendations.slice(0, 3)
     });
 });
 
-// ----------------------------------------------------
-// ADMIN ONLY OPERATIONS
-// ----------------------------------------------------
-app.get('/api/admin/users', authenticateToken, (req, res) => {
+app.get('/api/admin/users', authRequired, (req, res) => {
     if (req.user.role !== 'Admin') return res.status(403).json({ error: "Unauthorized." });
     
     const data = db.read();
@@ -527,16 +498,17 @@ app.get('/api/admin/users', authenticateToken, (req, res) => {
             userCopy.donorProfile = data.donors.find(d => d.user_id === u.id);
         } else if (u.role === 'Blood Bank / Hospital') {
             userCopy.bloodBankProfile = data.blood_banks.find(b => b.user_id === u.id);
+            userCopy.inventory = data.blood_inventory.filter(i => i.blood_bank_id === u.id);
         }
         return userCopy;
     });
     res.json(usersList);
 });
 
-app.post('/api/admin/approve-bb', authenticateToken, (req, res) => {
+app.post('/api/admin/approve-bb', authRequired, (req, res) => {
     if (req.user.role !== 'Admin') return res.status(403).json({ error: "Unauthorized." });
     
-    const { bloodBankId, action } = req.body; // action: 'Verify' or 'Reject'
+    const { bloodBankId, action } = req.body;
     const data = db.read();
 
     const user = data.users.find(u => u.id === bloodBankId);
@@ -556,12 +528,10 @@ app.post('/api/admin/approve-bb', authenticateToken, (req, res) => {
     res.json({ message: `Blood bank verified status set to ${bb.verification_status}.`, bloodBankId });
 });
 
-// Admin chat monitoring API
-app.get('/api/admin/chats', authenticateToken, (req, res) => {
+app.get('/api/admin/chats', authRequired, (req, res) => {
     if (req.user.role !== 'Admin') return res.status(403).json({ error: "Access denied." });
     
     const data = db.read();
-    // Group messages by pairs of communicators
     const conversations = {};
     data.messages.forEach(msg => {
         const key = [msg.sender_id, msg.receiver_id].sort().join(' & ');
@@ -582,21 +552,16 @@ app.get('/api/admin/chats', authenticateToken, (req, res) => {
     res.json(conversations);
 });
 
-// ----------------------------------------------------
-// REAL-TIME MESSAGING CHAT APIs
-// ----------------------------------------------------
-app.get('/api/chat/history/:partnerId', authenticateToken, (req, res) => {
+app.get('/api/chat/history/:partnerId', authRequired, (req, res) => {
     const { partnerId } = req.params;
     const currentUserId = req.user.id;
 
     const data = db.read();
-    // Fetch conversations between current user and partner
     const history = data.messages.filter(msg => {
         return (msg.sender_id === currentUserId && msg.receiver_id === partnerId) ||
                (msg.sender_id === partnerId && msg.receiver_id === currentUserId);
     }).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-    // Mark these messages as read
     let updated = false;
     data.messages.forEach(msg => {
         if (msg.sender_id === partnerId && msg.receiver_id === currentUserId && !msg.is_read) {
@@ -612,7 +577,7 @@ app.get('/api/chat/history/:partnerId', authenticateToken, (req, res) => {
     res.json(history);
 });
 
-app.get('/api/chat/unread', authenticateToken, (req, res) => {
+app.get('/api/chat/unread', authRequired, (req, res) => {
     const currentUserId = req.user.id;
     const data = db.read();
 
@@ -626,26 +591,19 @@ app.get('/api/chat/unread', authenticateToken, (req, res) => {
     res.json(counts);
 });
 
-// ----------------------------------------------------
-// WEBSOCKET SERVER LOGIC (Real-time Messaging)
-// ----------------------------------------------------
 wss.on('connection', (ws) => {
-    console.log('[WebSocket] Connection established.');
-
     let authenticatedUserId = null;
 
     ws.on('message', (messageStr) => {
         try {
             const data = JSON.parse(messageStr);
 
-            // 1. Connection Authentication
             if (data.type === 'REGISTER') {
                 const token = data.token;
                 const sessionUser = SESSIONS[token];
                 if (sessionUser) {
                     authenticatedUserId = sessionUser.id;
                     CLIENTS[authenticatedUserId] = ws;
-                    console.log(`[WebSocket] Registered user: ${sessionUser.name} (${authenticatedUserId})`);
                     ws.send(JSON.stringify({ type: 'REGISTER_OK' }));
                 } else {
                     ws.send(JSON.stringify({ type: 'ERROR', error: 'Authentication failed.' }));
@@ -653,7 +611,6 @@ wss.on('connection', (ws) => {
                 }
             }
 
-            // 2. Chat messaging flow
             if (data.type === 'CHAT_MSG') {
                 if (!authenticatedUserId) return;
 
@@ -662,7 +619,6 @@ wss.on('connection', (ws) => {
 
                 const dbData = db.read();
 
-                // Build message object
                 const messageObj = {
                     id: `msg-${crypto.randomBytes(4).toString('hex')}`,
                     sender_id: authenticatedUserId,
@@ -675,29 +631,24 @@ wss.on('connection', (ws) => {
                 dbData.messages.push(messageObj);
                 db.write(dbData);
 
-                // Send back to sender for confirmation
                 ws.send(JSON.stringify({ type: 'CHAT_MSG_CONFIRM', message: messageObj }));
 
-                // Dispatch to receiver if online
                 const receiverSocket = CLIENTS[receiver_id];
                 if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
                     receiverSocket.send(JSON.stringify({ type: 'CHAT_MSG_INCOMING', message: messageObj }));
                 }
             }
         } catch (err) {
-            console.error('[WebSocket] Message error:', err);
         }
     });
 
     ws.on('close', () => {
         if (authenticatedUserId) {
             delete CLIENTS[authenticatedUserId];
-            console.log(`[WebSocket] Connection closed for user: ${authenticatedUserId}`);
         }
     });
 });
 
-// Broadcast Helper
 function broadcastMessage(payload) {
     const msgStr = JSON.stringify(payload);
     Object.values(CLIENTS).forEach(client => {
@@ -707,12 +658,10 @@ function broadcastMessage(payload) {
     });
 }
 
-// Fallback to Index.html for Single Page Routing
 app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Spin up server
 server.listen(PORT, () => {
-    console.log(`[Express] Blood Donation System Server running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });

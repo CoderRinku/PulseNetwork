@@ -1,13 +1,6 @@
--- MySQL Database Schema & Seed Data
--- Database Name: blood_donation_system
--- Created for: Online Blood Donation & Blood Bank Finder System
-
 CREATE DATABASE IF NOT EXISTS `blood_donation_system` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `blood_donation_system`;
 
--- --------------------------------------------------------
--- Table structure for table `users`
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
   `id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(150) NOT NULL,
@@ -21,9 +14,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- Table structure for table `donors`
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `donors` (
   `user_id` VARCHAR(50) NOT NULL,
   `blood_group` ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NOT NULL,
@@ -44,9 +34,6 @@ CREATE TABLE IF NOT EXISTS `donors` (
   FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- Table structure for table `blood_banks`
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `blood_banks` (
   `user_id` VARCHAR(50) NOT NULL,
   `name` VARCHAR(150) NOT NULL,
@@ -61,9 +48,6 @@ CREATE TABLE IF NOT EXISTS `blood_banks` (
   FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- Table structure for table `blood_inventory`
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `blood_inventory` (
   `id` INT AUTO_INCREMENT,
   `blood_bank_id` VARCHAR(50) NOT NULL,
@@ -75,9 +59,6 @@ CREATE TABLE IF NOT EXISTS `blood_inventory` (
   FOREIGN KEY (`blood_bank_id`) REFERENCES `blood_banks` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- Table structure for table `emergency_requests`
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `emergency_requests` (
   `id` VARCHAR(50) NOT NULL,
   `patient_id` VARCHAR(50) NOT NULL,
@@ -97,9 +78,6 @@ CREATE TABLE IF NOT EXISTS `emergency_requests` (
   FOREIGN KEY (`patient_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- Table structure for table `messages`
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `messages` (
   `id` VARCHAR(50) NOT NULL,
   `sender_id` VARCHAR(50) NOT NULL,
@@ -112,9 +90,6 @@ CREATE TABLE IF NOT EXISTS `messages` (
   FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- Table structure for table `donation_history`
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `donation_history` (
   `id` VARCHAR(50) NOT NULL,
   `donor_id` VARCHAR(50) NOT NULL,
@@ -126,16 +101,9 @@ CREATE TABLE IF NOT EXISTS `donation_history` (
   FOREIGN KEY (`donor_id`) REFERENCES `donors` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
--- Geographic Coordinates and Index Optimization
--- --------------------------------------------------------
 CREATE INDEX `idx_geo_donor` ON `donors` (`division`, `district`, `thana`);
 CREATE INDEX `idx_geo_request` ON `emergency_requests` (`division`, `district`, `thana`, `urgency_level`);
 
--- --------------------------------------------------------
--- Seed Data Inserting
--- --------------------------------------------------------
--- Passwords below are encrypted using bcrypt representation of 'password123'
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `phone`, `nid_birth_cert`, `status`, `created_at`) VALUES
 ('user-admin', 'Super Administrator', 'admin@blooddonation.org', '$2a$10$U.yGzN7o.n9M19p0l.cT8eRz.WbZc/5qF4z6n.VfM3vWzHj1y45yO', 'Admin', '+8801711111111', '123456789012', 'Active', NOW() - INTERVAL 30 DAY),
 ('user-donor-1', 'Tanvir Rahman', 'tanvir@gmail.com', '$2a$10$U.yGzN7o.n9M19p0l.cT8eRz.WbZc/5qF4z6n.VfM3vWzHj1y45yO', 'Donor', '+8801722222222', '987654321098', 'Active', NOW() - INTERVAL 25 DAY),
