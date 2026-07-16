@@ -439,76 +439,78 @@ export default function Home() {
         <meta name="description" content="সরাসরি রক্তদাতা ও ব্লাড ব্যাংক ম্যাচিং প্লাটফর্ম" />
       </Head>
 
-      <div className="min-h-screen bg-[#07090e] text-[#f3f4f6] pb-16">
-        <header className="navbar bg-[#0b0f19]/80 backdrop-blur-xl border-b border-red-500/10 px-6 md:px-12 py-4 sticky top-0 z-40">
-          <div className="flex-1">
-            <a onClick={() => handleNavClick('home')} className="flex items-center gap-3 cursor-pointer select-none">
-              <div className="w-10 h-10 rounded-2xl bg-red-600/10 border border-red-500/20 flex items-center justify-center pulse-glow-red">
-                <span className="text-xl">🩸</span>
-              </div>
-              <span className="text-2xl font-black tracking-tight text-white">
-                Pulse<span className="text-red-500">Life</span>
-              </span>
-            </a>
-          </div>
-          <div className="flex-none gap-6">
-            <ul className="menu menu-horizontal px-1 font-medium gap-2 hidden md:flex text-sm text-slate-300">
-              <li>
-                <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'home' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('home')}>
-                  প্রচ্ছদ
-                </a>
-              </li>
-              <li>
-                <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'inventory' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('inventory')}>
-                  রক্তভাণ্ডার
-                </a>
-              </li>
-              <li>
-                <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'requests' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('requests')}>
-                  জরুরি সাড়া
-                </a>
-              </li>
-              {currentUser && currentUser.role === 'Donor' && (
-                <li>
-                  <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'dashboard-donor' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('dashboard-donor')}>
-                    সদস্য ড্যাশবোর্ড
-                  </a>
-                </li>
-              )}
-              {currentUser && currentUser.role === 'Admin' && (
-                <li>
-                  <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'dashboard-admin' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('dashboard-admin')}>
-                    অ্যাডমিন প্যানেল
-                  </a>
-                </li>
-              )}
-            </ul>
-            <div className="flex items-center gap-3">
-              {currentUser ? (
-                <div className="flex items-center gap-3 bg-[#111827] border border-slate-800 px-4 py-2 rounded-2xl">
-                  <div className="w-8 h-8 rounded-full bg-red-600/20 border border-red-500/30 flex items-center justify-center font-bold text-red-500 text-sm">
-                    {currentUser.name[0]}
-                  </div>
-                  <span className="text-sm font-semibold text-slate-350 hidden sm:inline">{currentUser.name}</span>
-                  <button className="btn btn-xs btn-ghost text-red-400 hover:bg-slate-800" onClick={handleSignOut}>
-                    লগআউট
-                  </button>
+      <div className="min-h-screen bg-[#07080d] text-[#f3f4f6] pb-16">
+        <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
+          <header className="max-w-7xl mx-auto navbar bg-[#0a0d16]/75 backdrop-blur-xl border border-white/5 px-6 py-2.5 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center justify-between">
+            <div className="flex-1">
+              <a onClick={() => handleNavClick('home')} className="flex items-center gap-3 cursor-pointer select-none">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-650 to-red-500 flex items-center justify-center shadow-lg shadow-red-500/20">
+                  <span className="text-xl">🩸</span>
                 </div>
-              ) : (
-                <>
-                  <button className="btn btn-sm btn-ghost hover:bg-slate-800 text-slate-300 rounded-xl" onClick={() => setAuthModal('login')}>
-                    লগইন
-                  </button>
-                  <button className="btn btn-sm btn-error text-white bg-red-600 hover:bg-red-750 border-none pulse-glow-red rounded-xl px-5" onClick={() => setAuthModal('register')}>
-                    নিবন্ধন করুন
-                  </button>
-                </>
-              )}
+                <span className="text-2xl font-black tracking-tight text-white">
+                  Pulse<span className="text-red-500">Life</span>
+                </span>
+              </a>
             </div>
-          </div>
-        </header>
+            <div className="flex-none gap-8">
+              <ul className="menu menu-horizontal px-1 font-semibold gap-3 hidden md:flex text-sm text-slate-350">
+                <li>
+                  <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'home' ? 'text-white bg-red-600/10 border border-red-500/20 shadow-sm' : 'hover:bg-white/5 border border-transparent'}`} onClick={() => handleNavClick('home')}>
+                    হোম
+                  </a>
+                </li>
+                <li>
+                  <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'inventory' ? 'text-white bg-red-600/10 border border-red-500/20 shadow-sm' : 'hover:bg-white/5 border border-transparent'}`} onClick={() => handleNavClick('inventory')}>
+                    মজুদ ভাণ্ডার
+                  </a>
+                </li>
+                <li>
+                  <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'requests' ? 'text-white bg-red-600/10 border border-red-500/20 shadow-sm' : 'hover:bg-white/5 border border-transparent'}`} onClick={() => handleNavClick('requests')}>
+                    জরুরি অনুরোধ
+                  </a>
+                </li>
+                {currentUser && currentUser.role === 'Donor' && (
+                  <li>
+                    <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'dashboard-donor' ? 'text-white bg-red-600/10 border border-red-500/20 shadow-sm' : 'hover:bg-white/5 border border-transparent'}`} onClick={() => handleNavClick('dashboard-donor')}>
+                      ড্যাশবোর্ড
+                    </a>
+                  </li>
+                )}
+                {currentUser && currentUser.role === 'Admin' && (
+                  <li>
+                    <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'dashboard-admin' ? 'text-white bg-red-600/10 border border-red-500/20 shadow-sm' : 'hover:bg-white/5 border border-transparent'}`} onClick={() => handleNavClick('dashboard-admin')}>
+                      অ্যাডমিন প্যানেল
+                    </a>
+                  </li>
+                )}
+              </ul>
+              <div className="flex items-center gap-3">
+                {currentUser ? (
+                  <div className="flex items-center gap-3 bg-white/5 border border-white/5 px-4 py-1.5 rounded-2xl">
+                    <div className="w-8 h-8 rounded-full bg-red-600/20 border border-red-500/30 flex items-center justify-center font-bold text-red-500 text-sm">
+                      {currentUser.name[0]}
+                    </div>
+                    <span className="text-sm font-semibold text-slate-300 hidden sm:inline">{currentUser.name}</span>
+                    <button className="btn btn-xs btn-ghost text-red-400 hover:bg-white/5 rounded-lg" onClick={handleSignOut}>
+                      লগআউট
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <button className="btn btn-sm btn-ghost hover:bg-white/5 text-slate-300 rounded-xl px-4" onClick={() => setAuthModal('login')}>
+                      লগইন
+                    </button>
+                    <button className="btn btn-sm bg-gradient-to-r from-red-600 to-rose-600 hover:brightness-110 text-white font-bold border-none rounded-xl px-5 shadow-lg shadow-red-500/20" onClick={() => setAuthModal('register')}>
+                      নিবন্ধন
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </header>
+        </div>
 
-        <main className="max-w-7xl mx-auto px-6 md:px-12 mt-12">
+        <main className="max-w-7xl mx-auto px-6 md:px-12 pt-28 mt-4">
           {currentView === 'home' && (
             <div className="space-y-16">
               
@@ -526,7 +528,7 @@ export default function Home() {
                     PulseLife Bangladesh একটি সম্পূর্ণ অলাভজনক ও উন্মুক্ত প্ল্যাটফর্ম। সরাসরি যাচাইকৃত রক্তদাতার সাথে যোগাযোগ করে বিনামূল্যে ও দ্রুত সংগ্রহ করুন জীবনরক্ষাকারী রক্ত।
                   </p>
                   <div className="flex flex-wrap gap-4 mt-2">
-                    <a href="#search-section" className="btn btn-error bg-red-600 hover:bg-red-700 text-white font-bold border-none px-8 py-3 rounded-2xl transition-all shadow-lg shadow-red-600/10 hover:shadow-red-600/25">
+                    <a href="#search-section" className="btn btn-error bg-red-600 hover:bg-red-700 text-white font-bold border-none px-8 py-3 rounded-2xl transition-all shadow-lg shadow-red-500/20">
                       রক্তদাতা অনুসন্ধান
                     </a>
                     <button onClick={() => setPostRequestModal(true)} className="btn btn-outline border-slate-700 text-slate-200 hover:bg-slate-800 hover:border-slate-600 px-8 py-3 rounded-2xl">
@@ -535,7 +537,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="lg:col-span-6 bg-[#0c101b]/80 border border-slate-850 p-6 rounded-3xl relative overflow-hidden shadow-2xl">
+                <div className="lg:col-span-6 bg-gradient-to-b from-[#0e1322] to-[#080a11] border border-white/5 p-6 rounded-3xl relative overflow-hidden shadow-2xl">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl -z-10"></div>
                   <div className="flex items-center justify-between mb-6">
                     <div>
@@ -562,7 +564,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div id="search-section" className="bg-[#0b0f1a] border border-slate-850 rounded-3xl p-8 shadow-2xl relative">
+              <div id="search-section" className="bg-gradient-to-b from-[#0a0d16] to-[#07090f] border border-white/5 rounded-3xl p-8 shadow-2xl relative">
                 <div className="max-w-3xl mb-8">
                   <h2 className="text-2xl font-black text-white">🔍 রক্তদাতা অনুসন্ধান করুন</h2>
                   <p className="text-xs text-slate-400 mt-1">সরাসরি বিভাগ, জেলা এবং থানা নির্বাচন করে ব্লাড গ্রুপ অনুযায়ী ডোনার খুঁজুন</p>
@@ -570,34 +572,34 @@ export default function Home() {
                 <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   <div className="form-control w-full">
                     <label className="label py-1.5"><span className="label-text text-slate-400 font-semibold text-xs">বিভাগ</span></label>
-                    <select value={searchDivision} onChange={(e) => { setSearchDivision(e.target.value); setSearchDistrict(''); setSearchThana(''); }} className="select select-bordered bg-[#111622] border-slate-800 text-slate-100 focus:border-red-500 rounded-2xl w-full">
+                    <select value={searchDivision} onChange={(e) => { setSearchDivision(e.target.value); setSearchDistrict(''); setSearchThana(''); }} className="select select-bordered bg-[#0e1322] border-white/5 text-slate-200 focus:border-red-500 rounded-2xl w-full">
                       <option value="">নির্বাচন করুন</option>
                       {divisionList.map(div => <option key={div} value={div}>{div}</option>)}
                     </select>
                   </div>
                   <div className="form-control w-full">
                     <label className="label py-1.5"><span className="label-text text-slate-400 font-semibold text-xs">জেলা</span></label>
-                    <select value={searchDistrict} onChange={(e) => { setSearchDistrict(e.target.value); setSearchThana(''); }} className="select select-bordered bg-[#111622] border-slate-800 text-slate-100 focus:border-red-500 rounded-2xl w-full" disabled={!searchDivision}>
+                    <select value={searchDistrict} onChange={(e) => { setSearchDistrict(e.target.value); setSearchThana(''); }} className="select select-bordered bg-[#0e1322] border-white/5 text-slate-200 focus:border-red-500 rounded-2xl w-full" disabled={!searchDivision}>
                       <option value="">নির্বাচন করুন</option>
                       {districtList.map(dist => <option key={dist} value={dist}>{dist}</option>)}
                     </select>
                   </div>
                   <div className="form-control w-full">
                     <label className="label py-1.5"><span className="label-text text-slate-400 font-semibold text-xs">থানা</span></label>
-                    <select value={searchThana} onChange={(e) => setSearchThana(e.target.value)} className="select select-bordered bg-[#111622] border-slate-800 text-slate-100 focus:border-red-500 rounded-2xl w-full" disabled={!searchDistrict}>
+                    <select value={searchThana} onChange={(e) => setSearchThana(e.target.value)} className="select select-bordered bg-[#0e1322] border-white/5 text-slate-200 focus:border-red-500 rounded-2xl w-full" disabled={!searchDistrict}>
                       <option value="">নির্বাচন করুন</option>
                       {thanaList.map(th => <option key={th} value={th}>{th}</option>)}
                     </select>
                   </div>
                   <div className="form-control w-full">
                     <label className="label py-1.5"><span className="label-text text-slate-400 font-semibold text-xs">রক্তের গ্রুপ</span></label>
-                    <select value={searchBloodGroup} onChange={(e) => setSearchBloodGroup(e.target.value)} required className="select select-bordered bg-[#111622] border-slate-800 text-slate-100 focus:border-red-500 rounded-2xl w-full">
+                    <select value={searchBloodGroup} onChange={(e) => setSearchBloodGroup(e.target.value)} required className="select select-bordered bg-[#0e1322] border-white/5 text-slate-200 focus:border-red-500 rounded-2xl w-full">
                       <option value="">নির্বাচন করুন</option>
                       {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(g => <option key={g} value={g}>{g}</option>)}
                     </select>
                   </div>
                   <div className="md:col-span-4 flex justify-end mt-2">
-                    <button type="submit" className="btn btn-error bg-red-600 hover:bg-red-700 text-white font-bold border-none px-12 py-3 rounded-2xl shadow-lg shadow-red-600/10">
+                    <button type="submit" className="btn btn-error bg-gradient-to-r from-red-650 to-red-500 hover:brightness-110 text-white font-bold border-none px-12 py-3 rounded-2xl shadow-lg shadow-red-600/10">
                       সার্চ করুন
                     </button>
                   </div>
@@ -605,17 +607,17 @@ export default function Home() {
               </div>
 
               {searchResults.length > 0 && (
-                <div className="bg-[#0b0f19] border border-slate-850 rounded-3xl p-8 shadow-xl">
+                <div className="bg-[#0a0d16] border border-white/5 rounded-3xl p-8 shadow-xl">
                   <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
                     ম্যাচিং রক্তদাতার তালিকা ({searchResults.length} জন)
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {searchResults.map(donor => (
-                      <div key={donor.user_id} className="bg-[#111622]/55 border border-slate-850 hover:border-red-500/20 transition-all rounded-3xl p-6 flex flex-col justify-between gap-5 shadow-lg">
+                      <div key={donor.user_id} className="bg-[#111622]/55 border border-white/5 hover:border-red-500/20 transition-all rounded-3xl p-6 flex flex-col justify-between gap-5 shadow-lg">
                         <div className="flex justify-between items-start gap-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center font-black text-red-500 text-lg">
+                           <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center font-black text-red-500 text-lg">
                               {donor.name[0]}
                             </div>
                             <div>
@@ -645,40 +647,44 @@ export default function Home() {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="bg-[#0b0f19] border border-slate-850 p-8 rounded-3xl hover:border-red-500/10 transition-all text-center flex flex-col justify-center items-center shadow-lg">
-                  <span className="text-3xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">❤️</span>
-                  <div className="text-3xl font-black text-white mt-4">{stats.livesSaved}</div>
-                  <div className="text-slate-400 text-xs mt-1.5 font-bold">জীবন বেঁচেছে</div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-[#0a0d16] border border-white/5 p-6 rounded-3xl relative overflow-hidden group hover:border-red-500/20 transition-all duration-300 shadow-xl text-center flex flex-col justify-center items-center">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 to-rose-500 opacity-80"></div>
+                  <span className="text-3xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.3)]">❤️</span>
+                  <div className="text-4xl font-extrabold text-white mt-4 tracking-tight">{stats.livesSaved}</div>
+                  <div className="text-slate-400 text-xs mt-2 font-bold tracking-wide uppercase">জীবন বেঁচেছে</div>
                 </div>
-                <div className="bg-[#0b0f19] border border-slate-850 p-8 rounded-3xl hover:border-red-500/10 transition-all text-center flex flex-col justify-center items-center shadow-lg">
-                  <span className="text-3xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">👥</span>
-                  <div className="text-3xl font-black text-white mt-4">{stats.activeDonors}</div>
-                  <div className="text-slate-400 text-xs mt-1.5 font-bold">সক্রিয় দাতা</div>
+                <div className="bg-[#0a0d16] border border-white/5 p-6 rounded-3xl relative overflow-hidden group hover:border-red-500/20 transition-all duration-300 shadow-xl text-center flex flex-col justify-center items-center">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 to-rose-500 opacity-80"></div>
+                  <span className="text-3xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.3)]">👥</span>
+                  <div className="text-4xl font-extrabold text-white mt-4 tracking-tight">{stats.activeDonors}</div>
+                  <div className="text-slate-400 text-xs mt-2 font-bold tracking-wide uppercase">সক্রিয় দাতা</div>
                 </div>
-                <div className="bg-[#0b0f19] border border-slate-850 p-8 rounded-3xl hover:border-red-500/10 transition-all text-center flex flex-col justify-center items-center shadow-lg">
-                  <span className="text-3xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">🏥</span>
-                  <div className="text-3xl font-black text-white mt-4">{stats.bloodBanks}</div>
-                  <div className="text-slate-400 text-xs mt-1.5 font-bold">ব্লাড ব্যাংক</div>
+                <div className="bg-[#0a0d16] border border-white/5 p-6 rounded-3xl relative overflow-hidden group hover:border-red-500/20 transition-all duration-300 shadow-xl text-center flex flex-col justify-center items-center">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 to-rose-500 opacity-80"></div>
+                  <span className="text-3xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.3)]">🏥</span>
+                  <div className="text-4xl font-extrabold text-white mt-4 tracking-tight">{stats.bloodBanks}</div>
+                  <div className="text-slate-400 text-xs mt-2 font-bold tracking-wide uppercase">ব্লাড ব্যাংক</div>
                 </div>
-                <div className="bg-[#0b0f19] border border-slate-850 p-8 rounded-3xl hover:border-red-500/10 transition-all text-center flex flex-col justify-center items-center shadow-lg">
-                  <span className="text-3xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">🚨</span>
-                  <div className="text-3xl font-black text-red-500 mt-4 filter drop-shadow-[0_0_8px_rgba(239,68,68,0.3)]">{stats.emergencyRequests}</div>
-                  <div className="text-slate-400 text-xs mt-1.5 font-bold">জরুরি রিকোয়েস্ট</div>
+                <div className="bg-[#0a0d16] border border-white/5 p-6 rounded-3xl relative overflow-hidden group hover:border-red-500/20 transition-all duration-300 shadow-xl text-center flex flex-col justify-center items-center">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 to-rose-500 opacity-80"></div>
+                  <span className="text-3xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.3)]">🚨</span>
+                  <div className="text-4xl font-extrabold text-red-500 mt-4 tracking-tight filter drop-shadow-[0_0_8px_rgba(239,68,68,0.2)]">{stats.emergencyRequests}</div>
+                  <div className="text-slate-400 text-xs mt-2 font-bold tracking-wide uppercase">জরুরি রিকোয়েস্ট</div>
                 </div>
               </div>
 
               {!currentUser && (
-                <div className="bg-[#0b0f19] border border-slate-850 p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 bg-gradient-to-r from-red-650/5 to-rose-650/5 shadow-xl">
+                <div className="bg-[#0a0d16] border border-white/5 p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 bg-gradient-to-r from-red-950/10 to-transparent shadow-xl">
                   <div>
                     <h3 className="font-bold text-white text-lg">সিস্টেম ফিচার দ্রুত টেস্ট করতে চান?</h3>
                     <p className="text-xs text-slate-400 mt-1">নিচের যেকোনো রোলে ক্লিক করে ডেমো অ্যাকাউন্ট দিয়ে অটো-লগইন করুন</p>
                   </div>
                   <div className="flex flex-wrap gap-2.5">
-                    <button onClick={() => handleQuickLogin('donor')} className="btn btn-sm btn-outline btn-error rounded-xl">রক্তদাতা ভিউ</button>
-                    <button onClick={() => handleQuickLogin('patient')} className="btn btn-sm btn-outline btn-error rounded-xl">রোগী ভিউ</button>
-                    <button onClick={() => handleQuickLogin('hospital')} className="btn btn-sm btn-outline btn-error rounded-xl">ব্লাড ব্যাংক ভিউ</button>
-                    <button onClick={() => handleQuickLogin('admin')} className="btn btn-sm btn-outline btn-error rounded-xl">অ্যাডমিন ভিউ</button>
+                    <button onClick={() => handleQuickLogin('donor')} className="btn btn-sm btn-outline border-white/10 hover:bg-white/5 text-slate-300 rounded-xl">রক্তদাতা ভিউ</button>
+                    <button onClick={() => handleQuickLogin('patient')} className="btn btn-sm btn-outline border-white/10 hover:bg-white/5 text-slate-300 rounded-xl">রোগী ভিউ</button>
+                    <button onClick={() => handleQuickLogin('hospital')} className="btn btn-sm btn-outline border-white/10 hover:bg-white/5 text-slate-300 rounded-xl">ব্লাড ব্যাংক ভিউ</button>
+                    <button onClick={() => handleQuickLogin('admin')} className="btn btn-sm btn-outline border-white/10 hover:bg-white/5 text-slate-300 rounded-xl">অ্যাডমিন ভিউ</button>
                   </div>
                 </div>
               )}
