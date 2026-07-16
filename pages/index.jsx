@@ -435,7 +435,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>PulseNetwork — রিয়েল-টাইম রক্তদান ও ব্লাড ব্যাংক নেটওয়ার্ক</title>
+        <title>PulseLife Bangladesh — লাইভ রক্তদাতা ও জীবনরক্ষাকারী নেটওয়ার্ক</title>
         <meta name="description" content="সরাসরি রক্তদাতা ও ব্লাড ব্যাংক ম্যাচিং প্লাটফর্ম" />
       </Head>
 
@@ -447,7 +447,7 @@ export default function Home() {
                 <span className="text-xl">🩸</span>
               </div>
               <span className="text-2xl font-black tracking-tight text-white">
-                Pulse<span className="text-red-500">Network</span>
+                Pulse<span className="text-red-500">Life</span>
               </span>
             </a>
           </div>
@@ -455,30 +455,30 @@ export default function Home() {
             <ul className="menu menu-horizontal px-1 font-medium gap-2 hidden md:flex text-sm text-slate-300">
               <li>
                 <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'home' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('home')}>
-                  হোম
+                  প্রচ্ছদ
                 </a>
               </li>
               <li>
                 <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'inventory' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('inventory')}>
-                  রক্ত মজুদ
+                  রক্তভাণ্ডার
                 </a>
               </li>
               <li>
                 <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'requests' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('requests')}>
-                  জরুরি আবেদন
+                  জরুরি সাড়া
                 </a>
               </li>
               {currentUser && currentUser.role === 'Donor' && (
                 <li>
                   <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'dashboard-donor' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('dashboard-donor')}>
-                    ড্যাশবোর্ড
+                    সদস্য ড্যাশবোর্ড
                   </a>
                 </li>
               )}
               {currentUser && currentUser.role === 'Admin' && (
                 <li>
                   <a className={`px-4 py-2 rounded-xl transition-all ${currentView === 'dashboard-admin' ? 'text-red-500 bg-red-500/10 font-bold' : 'hover:bg-slate-800/50'}`} onClick={() => handleNavClick('dashboard-admin')}>
-                    প্যানেল
+                    অ্যাডমিন প্যানেল
                   </a>
                 </li>
               )}
@@ -491,16 +491,16 @@ export default function Home() {
                   </div>
                   <span className="text-sm font-semibold text-slate-350 hidden sm:inline">{currentUser.name}</span>
                   <button className="btn btn-xs btn-ghost text-red-400 hover:bg-slate-800" onClick={handleSignOut}>
-                    সাইন আউট
+                    লগআউট
                   </button>
                 </div>
               ) : (
                 <>
                   <button className="btn btn-sm btn-ghost hover:bg-slate-800 text-slate-300 rounded-xl" onClick={() => setAuthModal('login')}>
-                    সাইন ইন
+                    লগইন
                   </button>
                   <button className="btn btn-sm btn-error text-white bg-red-600 hover:bg-red-750 border-none pulse-glow-red rounded-xl px-5" onClick={() => setAuthModal('register')}>
-                    নিবন্ধন
+                    নিবন্ধন করুন
                   </button>
                 </>
               )}
@@ -516,21 +516,21 @@ export default function Home() {
                 <div className="lg:col-span-6 flex flex-col gap-6 text-left">
                   <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 px-4 py-1.5 rounded-full text-red-500 font-bold text-xs w-fit">
                     <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                    রিয়েল-টাইম লাইভ ড্যাশবোর্ড
+                    🔴 জীবন বাঁচানোর জাতীয় নেটওয়ার্ক
                   </div>
                   <h1 className="text-4xl md:text-6xl font-black leading-tight text-white tracking-tight">
-                    রক্তদান হোক <br />
-                    <span className="bg-gradient-to-r from-red-500 to-rose-450 bg-clip-text text-transparent">সহজ ও সরাসরি</span>
+                    আপনার এক ফোঁটা রক্তে <br />
+                    <span className="bg-gradient-to-r from-red-500 to-rose-450 bg-clip-text text-transparent">বাঁচতে পারে একটি প্রাণ</span>
                   </h1>
                   <p className="text-slate-400 text-lg leading-relaxed">
-                    PulseNetwork বাংলাদেশের একটি আধুনিক রক্তদাতা ম্যাচিং প্ল্যাটফর্ম। কোনো মধ্যস্থতাকারী বা দালাল ছাড়াই সরাসরি রক্তদাতার সাথে যোগাযোগ করুন।
+                    PulseLife Bangladesh একটি সম্পূর্ণ অলাভজনক ও উন্মুক্ত প্ল্যাটফর্ম। সরাসরি যাচাইকৃত রক্তদাতার সাথে যোগাযোগ করে বিনামূল্যে ও দ্রুত সংগ্রহ করুন জীবনরক্ষাকারী রক্ত।
                   </p>
                   <div className="flex flex-wrap gap-4 mt-2">
                     <a href="#search-section" className="btn btn-error bg-red-600 hover:bg-red-700 text-white font-bold border-none px-8 py-3 rounded-2xl transition-all shadow-lg shadow-red-600/10 hover:shadow-red-600/25">
-                      রক্তদাতা খুঁজুন
+                      রক্তদাতা অনুসন্ধান
                     </a>
                     <button onClick={() => setPostRequestModal(true)} className="btn btn-outline border-slate-700 text-slate-200 hover:bg-slate-800 hover:border-slate-600 px-8 py-3 rounded-2xl">
-                      রক্তের আবেদন
+                      জরুরি রক্তের রিকুয়েস্ট
                     </button>
                   </div>
                 </div>
