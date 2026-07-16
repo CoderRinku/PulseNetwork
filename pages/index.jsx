@@ -510,7 +510,7 @@ export default function Home() {
           </header>
         </div>
 
-        <main className="max-w-7xl mx-auto px-6 md:px-12 pt-28 mt-4">
+        <main className="max-w-7xl mx-auto px-6 md:px-12 pt-36 md:pt-40 pb-16">
           {currentView === 'home' && (
             <div className="space-y-16">
               
@@ -520,11 +520,11 @@ export default function Home() {
                     <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
                     🔴  জীবন বাঁচানোর জাতীয় নেটওয়ার্ক
                   </div>
-                  <h1 className="text-4xl md:text-6xl font-black leading-tight text-slate-900 tracking-tight">
+                  <h1 className="text-4xl md:text-6xl font-black leading-normal md:leading-relaxed text-slate-900 tracking-tight">
                     আপনার এক ফোঁটা রক্তে <br />
                     <span className="text-red-600">বাঁচতে পারে একটি প্রাণ</span>
                   </h1>
-                  <p className="text-slate-600 text-lg leading-relaxed">
+                  <p className="text-slate-600 text-lg leading-relaxed mt-2">
                     PulseLife Bangladesh একটি সম্পূর্ণ অলাভজনক ও উন্মুক্ত প্ল্যাটফর্ম। সরাসরি যাচাইকৃত রক্তদাতার সাথে যোগাযোগ করে বিনামূল্যে ও দ্রুত সংগ্রহ করুন জীবনরক্ষাকারী রক্ত।
                   </p>
                   <div className="flex flex-wrap gap-4 mt-2">
@@ -537,29 +537,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="lg:col-span-6 bg-slate-50 border border-slate-200 p-6 rounded-3xl relative overflow-hidden shadow-sm">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900">বিভাগীয় লাইভ ম্যাপ</h3>
-                      <p className="text-xs text-slate-500 mt-0.5">মানচিত্রে ক্লিক করে সরাসরি বিভাগের রক্তদাতাদের খুঁজুন</p>
-                    </div>
-                    {searchDivision && (
-                      <button className="btn btn-xs btn-outline btn-error rounded-lg" onClick={() => setSearchDivision('')}>Clear</button>
-                    )}
-                  </div>
-                  <div className="flex justify-center items-center bg-white rounded-2xl p-4 border border-slate-200">
-                    <svg viewBox="0 0 437.8 601.2" className="w-full max-h-[380px]">
-                      {MAP_PATHS.map(path => (
-                        <path
-                          key={path.id}
-                          d={path.d}
-                          title={path.title}
-                          className={`map-division-path ${searchDivision === path.title ? 'active' : ''}`}
-                          onClick={() => handleMapClick(path.title)}
-                        />
-                      ))}
-                    </svg>
-                  </div>
+                <div className="lg:col-span-6 bg-slate-50 border border-slate-200 p-6 rounded-3xl relative overflow-hidden shadow-sm flex flex-col items-center justify-center min-h-[420px]">
+                  <img src="/blood_donation.png" alt="Blood Donation" className="w-full max-h-[340px] object-contain rounded-2xl" />
                 </div>
               </div>
 
