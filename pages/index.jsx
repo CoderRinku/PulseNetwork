@@ -653,21 +653,6 @@ export default function Home() {
                   <div className="text-slate-500 text-xs mt-2 font-bold tracking-wide uppercase">জরুরি রিকোয়েস্ট</div>
                 </div>
               </div>
-
-              {!currentUser && (
-                <div className="bg-slate-50 border border-slate-200 p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-lg">সিস্টেম ফিচার দ্রুত টেস্ট করতে চান?</h3>
-                    <p className="text-xs text-slate-500 mt-1">নিচের যেকোনো রোলে ক্লিক করে ডেমো অ্যাকাউন্ট দিয়ে অটো-লগইন করুন</p>
-                  </div>
-                  <div className="flex flex-wrap gap-2.5">
-                    <button onClick={() => handleQuickLogin('donor')} className="btn btn-sm btn-outline border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl">রক্তদাতা ভিউ</button>
-                    <button onClick={() => handleQuickLogin('patient')} className="btn btn-sm btn-outline border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl">রোগী ভিউ</button>
-                    <button onClick={() => handleQuickLogin('hospital')} className="btn btn-sm btn-outline border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl">ব্লাড ব্যাংক ভিউ</button>
-                    <button onClick={() => handleQuickLogin('admin')} className="btn btn-sm btn-outline border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl">অ্যাডমিন ভিউ</button>
-                  </div>
-                </div>
-              )}
             </div>
           )}
 
