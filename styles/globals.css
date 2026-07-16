@@ -6,8 +6,8 @@
 
 html, body {
   font-family: 'Outfit', sans-serif;
-  background-color: #0b0f19;
-  color: #f3f4f6;
+  background-color: #ffffff;
+  color: #0f172a;
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
@@ -18,7 +18,7 @@ html, body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
   background: #ef4444;
@@ -29,14 +29,14 @@ html, body {
 }
 
 .blood-glass {
-  background: rgba(15, 23, 42, 0.65);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
 .neon-border-red {
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.25);
-  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .pulse-glow-red {
@@ -45,31 +45,31 @@ html, body {
 
 @keyframes pulseRed {
   0% {
-    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
   }
   100% {
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.3);
   }
 }
 
 .map-division-path {
-  fill: #1e293b;
-  stroke: #475569;
+  fill: #e2e8f0;
+  stroke: #cbd5e1;
   stroke-width: 0.8;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .map-division-path:hover {
-  fill: rgba(239, 68, 68, 0.15);
+  fill: rgba(239, 68, 68, 0.1);
   stroke: #ef4444;
-  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.5));
+  filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.2));
 }
 
 .map-division-path.active {
-  fill: rgba(239, 68, 68, 0.35);
+  fill: rgba(239, 68, 68, 0.25);
   stroke: #ef4444;
   stroke-width: 1.5;
-  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.7));
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.3));
 }
 
