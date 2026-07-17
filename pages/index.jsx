@@ -441,73 +441,61 @@ export default function Home() {
 
       <div className="min-h-screen bg-white text-slate-900 pb-16">
         <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
-          <header className="max-w-7xl mx-auto navbar bg-white border border-slate-200 px-4 md:px-6 py-2.5 rounded-3xl shadow-sm flex flex-row items-center justify-between gap-2 md:gap-4 overflow-x-auto scrollbar-none">
+          <header className="max-w-7xl mx-auto bg-white border border-slate-200 px-4 md:px-6 py-2.5 rounded-3xl shadow-sm flex flex-row items-center justify-between gap-3 md:gap-6 flex-nowrap overflow-x-auto scrollbar-none">
             <div className="flex-shrink-0">
               <a onClick={() => handleNavClick('home')} className="flex items-center gap-2 cursor-pointer select-none">
                 <div className="w-9 h-9 rounded-xl bg-red-600 flex items-center justify-center shadow-md">
                   <span className="text-lg">🩸</span>
                 </div>
-                <span className="text-xl font-black tracking-tight text-slate-900">
+                <span className="text-xl font-black tracking-tight text-slate-900 whitespace-nowrap">
                   Pulse<span className="text-red-600">Life</span>
                 </span>
               </a>
             </div>
-            
-            <div className="flex flex-row items-center gap-2 md:gap-6 flex-nowrap">
-              <ul className="menu menu-horizontal px-1 font-semibold gap-1 md:gap-2 text-xs md:text-sm text-slate-700 flex-nowrap">
-                <li>
-                  <a className={`px-2.5 py-1.5 rounded-xl transition-all ${currentView === 'home' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('home')}>
-                    হোম
-                  </a>
-                </li>
-                <li>
-                  <a className={`px-2.5 py-1.5 rounded-xl transition-all ${currentView === 'inventory' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('inventory')}>
-                    মজুদ
-                  </a>
-                </li>
-                <li>
-                  <a className={`px-2.5 py-1.5 rounded-xl transition-all ${currentView === 'requests' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('requests')}>
-                    অনুরোধ
-                  </a>
-                </li>
-                {currentUser && currentUser.role === 'Donor' && (
-                  <li>
-                    <a className={`px-2.5 py-1.5 rounded-xl transition-all ${currentView === 'dashboard-donor' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('dashboard-donor')}>
-                      ড্যাশবোর্ড
-                    </a>
-                  </li>
-                )}
-                {currentUser && currentUser.role === 'Admin' && (
-                  <li>
-                    <a className={`px-2.5 py-1.5 rounded-xl transition-all ${currentView === 'dashboard-admin' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('dashboard-admin')}>
-                      অ্যাডমিন
-                    </a>
-                  </li>
-                )}
-              </ul>
-              
-              <div className="flex items-center gap-1 md:gap-2 flex-nowrap flex-shrink-0">
-                {currentUser ? (
-                  <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1 rounded-xl text-xs md:text-sm">
-                    <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center font-bold text-white text-[10px]">
-                      {currentUser.name[0]}
-                    </div>
-                    <span className="font-semibold text-slate-800 hidden sm:inline max-w-[80px] truncate">{currentUser.name}</span>
-                    <button className="btn btn-link btn-xs text-red-600 hover:text-red-700 p-0 normal-case no-underline" onClick={handleSignOut}>
-                      লগআউট
-                    </button>
+
+            <div className="flex flex-row items-center gap-1.5 md:gap-3 text-xs md:text-sm font-bold text-slate-700 flex-nowrap">
+              <button className={`px-2.5 py-1.5 rounded-xl transition-all whitespace-nowrap ${currentView === 'home' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('home')}>
+                হোম
+              </button>
+              <button className={`px-2.5 py-1.5 rounded-xl transition-all whitespace-nowrap ${currentView === 'inventory' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('inventory')}>
+                মজুদ
+              </button>
+              <button className={`px-2.5 py-1.5 rounded-xl transition-all whitespace-nowrap ${currentView === 'requests' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('requests')}>
+                অনুরোধ
+              </button>
+              {currentUser && currentUser.role === 'Donor' && (
+                <button className={`px-2.5 py-1.5 rounded-xl transition-all whitespace-nowrap ${currentView === 'dashboard-donor' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('dashboard-donor')}>
+                  ড্যাশবোর্ড
+                </button>
+              )}
+              {currentUser && currentUser.role === 'Admin' && (
+                <button className={`px-2.5 py-1.5 rounded-xl transition-all whitespace-nowrap ${currentView === 'dashboard-admin' ? 'text-white bg-red-600 shadow-sm font-semibold' : 'hover:bg-slate-100 text-slate-700'}`} onClick={() => handleNavClick('dashboard-admin')}>
+                  অ্যাডমিন
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-1.5 md:gap-2 flex-nowrap flex-shrink-0">
+              {currentUser ? (
+                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1 rounded-xl text-xs md:text-sm whitespace-nowrap">
+                  <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center font-bold text-white text-[10px]">
+                    {currentUser.name[0]}
                   </div>
-                ) : (
-                  <>
-                    <button className="btn btn-xs md:btn-sm btn-ghost hover:bg-slate-100 text-slate-700 rounded-xl px-2 md:px-4 text-xs" onClick={() => setAuthModal('login')}>
-                      লগইন
-                    </button>
-                    <button className="btn btn-xs md:btn-sm bg-red-600 hover:bg-red-700 text-white font-bold border-none rounded-xl px-3 md:px-5 shadow-sm text-xs" onClick={() => setAuthModal('register')}>
-                      নিবন্ধন
-                    </button>
-                  </>
-                )}
-              </div>
+                  <span className="font-semibold text-slate-800 hidden sm:inline max-w-[80px] truncate">{currentUser.name}</span>
+                  <button className="btn btn-link btn-xs text-red-600 hover:text-red-700 p-0 normal-case no-underline font-semibold" onClick={handleSignOut}>
+                    লগআউট
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button className="btn btn-xs md:btn-sm btn-ghost hover:bg-slate-100 text-slate-700 rounded-xl px-2.5 md:px-4 text-xs whitespace-nowrap font-bold" onClick={() => setAuthModal('login')}>
+                    লগইন
+                  </button>
+                  <button className="btn btn-xs md:btn-sm bg-red-600 hover:bg-red-700 text-white font-bold border-none rounded-xl px-3 md:px-5 shadow-sm text-xs whitespace-nowrap" onClick={() => setAuthModal('register')}>
+                    নিবন্ধন
+                  </button>
+                </>
+              )}
             </div>
           </header>
         </div>
