@@ -537,7 +537,7 @@ export default function Home() {
                   <h2 className="text-2xl font-black text-slate-900">🔍  রক্তদাতা অনুসন্ধান করুন</h2>
                   <p className="text-xs text-slate-500 mt-1">সরাসরি বিভাগ, জেলা এবং থানা নির্বাচন করে ব্লাড গ্রুপ অনুযায়ী ডোনার খুঁজুন</p>
                 </div>
-                <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-5 gap-6 items-end">
                   <div className="form-control w-full">
                     <label className="label py-1.5"><span className="label-text text-slate-600 font-semibold text-xs">বিভাগ</span></label>
                     <select value={searchDivision} onChange={(e) => { setSearchDivision(e.target.value); setSearchDistrict(''); setSearchThana(''); }} className="select select-bordered bg-white border-slate-200 text-slate-800 focus:border-red-650 rounded-2xl w-full">
@@ -554,20 +554,20 @@ export default function Home() {
                   </div>
                   <div className="form-control w-full">
                     <label className="label py-1.5"><span className="label-text text-slate-600 font-semibold text-xs">থানা</span></label>
-                    <select value={searchThana} onChange={(e) => setSearchThana(e.target.value)} className="select select-bordered bg-white border-slate-200 text-slate-800 focus:border-red-650" disabled={!searchDistrict}>
+                    <select value={searchThana} onChange={(e) => setSearchThana(e.target.value)} className="select select-bordered bg-white border-slate-200 text-slate-800 focus:border-red-650 rounded-2xl w-full" disabled={!searchDistrict}>
                       <option value="">নির্বাচন করুন</option>
                       {thanaList.map(th => <option key={th} value={th}>{th}</option>)}
                     </select>
                   </div>
                   <div className="form-control w-full">
                     <label className="label py-1.5"><span className="label-text text-slate-600 font-semibold text-xs">রক্তের গ্রুপ</span></label>
-                    <select value={searchBloodGroup} onChange={(e) => setSearchBloodGroup(e.target.value)} required className="select select-bordered bg-white border-slate-200 text-slate-800 focus:border-red-655">
+                    <select value={searchBloodGroup} onChange={(e) => setSearchBloodGroup(e.target.value)} required className="select select-bordered bg-white border-slate-200 text-slate-800 focus:border-red-655 rounded-2xl w-full">
                       <option value="">নির্বাচন করুন</option>
                       {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(g => <option key={g} value={g}>{g}</option>)}
                     </select>
                   </div>
-                  <div className="md:col-span-4 flex justify-end mt-2">
-                    <button type="submit" className="btn bg-red-600 hover:bg-red-700 text-white font-bold border-none px-12 py-3 rounded-2xl shadow-sm">
+                  <div className="form-control w-full">
+                    <button type="submit" className="btn bg-red-600 hover:bg-red-700 text-white font-bold border-none w-full rounded-2xl shadow-sm h-[3rem]">
                       সার্চ করুন
                     </button>
                   </div>
